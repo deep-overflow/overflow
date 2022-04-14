@@ -41,15 +41,11 @@ void Shape::T()
 
     for (int i = 0; i < dim; i++)
     {
-        shape_[i] = shape[i];
+        shape_[i] = shape[dim - 1 - i];
     }
 
-    for (int i = 0; i < dim; i++)
-    {
-        shape[i] = shape_[dim - 1 - i];
-    }
-
-    delete[] shape_;
+    delete[] shape;
+    shape = shape_;
 }
 
 void Shape::print()
@@ -100,16 +96,22 @@ double Tensor::index(int i, int j)
 }
 
 void Tensor::T()
-{ // not generalized
+{ // not generalized: for matrix
+
+    double *data_;
+    data_ = new double[tensor_shape.size];
+
+    for (int i = 0; i < tensor_shape.shape[0]; i++) {
+        for (int j = 0; j < tensor_shape.shape[1]; j++) {
+            int index_ = j * tensor_shape.shape[0] + i;
+            data_[index_] = index(i, j);
+        }
+    }
 
     tensor_shape.T();
-    std::cout << "void Tensor::T()" << std::endl;
 
-    for (int i = 0; i < tensor_shape.size; i++)
-    {
-        std::cout << data[i] << ' ';
-    }
-    std::cout << std::endl;
+    delete[] data;
+    data = data_;
 }
 
 void Tensor::print()
