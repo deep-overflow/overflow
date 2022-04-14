@@ -106,22 +106,27 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
 
 void Tensor::operator=(const Tensor &a)
 {
-    if (tensor_shape.size == a.tensor_shape.size) {
+    if (tensor_shape.size == a.tensor_shape.size)
+    {
         tensor_shape.init(a.tensor_shape.shape, a.tensor_shape.dim);
     }
-    else {
+    else
+    {
         tensor_shape.init(a.tensor_shape.shape, a.tensor_shape.dim);
-        
-        if (data == NULL) {
+
+        if (data == NULL)
+        {
             data = new double[tensor_shape.size];
         }
-        else {
+        else
+        {
             delete[] data;
             data = new double[tensor_shape.size];
         }
     }
 
-    for (int i = 0; i < tensor_shape.size; i++) {
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
         data[i] = a.data[i];
     }
 }
@@ -134,7 +139,6 @@ double Tensor::index(int i, int j)
 
 void Tensor::dot(const Tensor &a)
 { // not generalized: for matrix
-
 }
 
 void Tensor::T()
@@ -174,8 +178,10 @@ void Tensor::print()
     std::cout << std::endl;
 }
 
-Tensor dot(Tensor a, Tensor b) {
-    if (a.tensor_shape.shape[1] != b.tensor_shape.shape[0]) {
+Tensor dot(Tensor a, Tensor b)
+{
+    if (a.tensor_shape.shape[1] != b.tensor_shape.shape[0])
+    {
         std::cerr << "Dimension Error in dot function" << std::endl;
     }
 
@@ -188,10 +194,13 @@ Tensor dot(Tensor a, Tensor b) {
 
     Tensor c(0.0, shape_, 2);
 
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < k; j++) {
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < k; j++)
+        {
             double value = 0;
-            for (int t = 0; t < n; t++) {
+            for (int t = 0; t < n; t++)
+            {
                 value += a.index(i, t) * b.index(t, j);
             }
             int index_ = i * c.tensor_shape.shape[1] + j;
