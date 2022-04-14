@@ -24,9 +24,24 @@ Shape::Shape(const int *shape_, const int dim_)
 
 void Shape::init(const int *shape_, const int dim_)
 {
-    dim = dim_;
-    size = 1;
-    shape = new int[dim];
+    if (shape == NULL)
+    {
+        dim = dim_;
+        size = 1;
+        shape = new int[dim_];
+    }
+    else if (dim != dim_)
+    {
+        dim = dim_;
+        size = 1;
+        delete[] shape;
+        shape = new int[dim_];
+    }
+    else
+    {
+        size = 1;
+    }
+
     for (int i = 0; i < dim; i++)
     {
         shape[i] = shape_[i];
@@ -89,10 +104,37 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
     }
 }
 
+void Tensor::operator=(const Tensor &a)
+{
+    if (tensor_shape.size == a.tensor_shape.size) {
+        tensor_shape.init(a.tensor_shape.shape, a.tensor_shape.dim);
+    }
+    else {
+        tensor_shape.init(a.tensor_shape.shape, a.tensor_shape.dim);
+        
+        if (data == NULL) {
+            data = new double[tensor_shape.size];
+        }
+        else {
+            delete[] data;
+            data = new double[tensor_shape.size];
+        }
+    }
+
+    for (int i = 0; i < tensor_shape.size; i++) {
+        data[i] = a.data[i];
+    }
+}
+
 double Tensor::index(int i, int j)
 {
     int index_ = tensor_shape.shape[1] * i + j;
     return data[index_];
+}
+
+void Tensor::dot(const Tensor &a)
+{ // not generalized: for matrix
+
 }
 
 void Tensor::T()
@@ -101,8 +143,10 @@ void Tensor::T()
     double *data_;
     data_ = new double[tensor_shape.size];
 
-    for (int i = 0; i < tensor_shape.shape[0]; i++) {
-        for (int j = 0; j < tensor_shape.shape[1]; j++) {
+    for (int i = 0; i < tensor_shape.shape[0]; i++)
+    {
+        for (int j = 0; j < tensor_shape.shape[1]; j++)
+        {
             int index_ = j * tensor_shape.shape[0] + i;
             data_[index_] = index(i, j);
         }
@@ -129,6 +173,10 @@ void Tensor::print()
     }
     std::cout << std::endl;
 }
+
+// Tensor dot(const Tensor a, const Tensor b) {
+//     return Tensor();
+// }
 
 // Shape ##################################################
 

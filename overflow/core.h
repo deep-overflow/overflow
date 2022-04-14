@@ -29,8 +29,11 @@ public:
     Tensor(const double *data_, const int *shape_, const int dim_);
     Tensor(const double data_, const int *shape_, const int dim_);
 
+    void operator=(const Tensor& a);
+
     double index(int i, int j); // for matrix
 
+    void dot(const Tensor& a);
     void T();
 
     void print();
@@ -39,6 +42,8 @@ public:
     double *data;
     Shape tensor_shape;
 };
+
+//Tensor dot(const Tensor& a, const Tensor& b);
 
 class Function
 {
