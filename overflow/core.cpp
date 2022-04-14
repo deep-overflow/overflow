@@ -23,13 +23,16 @@ Shape::Shape(const int *shape_, const int dim_)
 
 void Shape::operator=(const Shape &a)
 {
-    if (dim == a.dim) {
+    if (dim == a.dim)
+    {
         size = 1;
     }
-    else {
+    else
+    {
         dim = a.dim;
         size = 1;
-        if (shape != NULL) {
+        if (shape != NULL)
+        {
             delete[] shape;
         }
         shape = new int[dim];
@@ -54,8 +57,10 @@ bool Shape::operator==(const Shape &a)
         return false;
     }
 
-    for (int i = 0; i < dim; i++) {
-        if (shape[i] != a.shape[i]) {
+    for (int i = 0; i < dim; i++)
+    {
+        if (shape[i] != a.shape[i])
+        {
             return false;
         }
     }
@@ -121,6 +126,8 @@ void Shape::print()
 Tensor::Tensor()
 {
     data = NULL;
+    grad = NULL;
+    func = NULL;
 }
 
 Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
@@ -128,10 +135,14 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
     tensor_shape.init(shape_, dim_);
 
     data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
+
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = data_[i];
+        grad[i] = 0;
     }
+    func = NULL;
 }
 
 Tensor::Tensor(const double data_, const int *shape_, const int dim_)
@@ -139,47 +150,58 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
     tensor_shape.init(shape_, dim_);
 
     data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
+
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = data_;
+        grad[i] = 0;
     }
+    func = NULL;
 }
 
-Tensor::Tensor(const double data_, const Shape& shape_)
+Tensor::Tensor(const double data_, const Shape &shape_)
 {
     tensor_shape = shape_;
 
     data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = data_;
+        grad[i] = 0;
     }
+    func = NULL;
 }
 
 void Tensor::operator=(const Tensor &a)
 {
-    if (!(tensor_shape == a.tensor_shape)) {
+    if (!(tensor_shape == a.tensor_shape))
+    {
         tensor_shape = a.tensor_shape;
     }
 
     if (data == NULL)
     {
         data = new double[tensor_shape.size];
+        grad = new double[tensor_shape.size];
     }
     else
     {
         delete[] data;
         data = new double[tensor_shape.size];
+        grad = new double[tensor_shape.size];
     }
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = a.data[i];
+        grad[i] = 0;
     }
 }
 
-Tensor Tensor::operator+(const Tensor& a)
+Tensor Tensor::operator+(const Tensor &a)
 {
     if (!(tensor_shape == a.tensor_shape))
     {
@@ -196,15 +218,53 @@ Tensor Tensor::operator+(const Tensor& a)
     return c;
 }
 
+void Tensor::init(const double data_, const int *shape_, const int dim_)
+{
+    tensor_shape.init(shape_, dim_);
+
+    if (data == NULL)
+    {
+        data = new double[tensor_shape.size];
+        grad = new double[tensor_shape.size];
+    }
+    else
+    {
+        delete[] data;
+        delete[] grad;
+
+        data = new double[tensor_shape.size];
+        grad = new double[tensor_shape.size];
+    }
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data[i] = data_;
+        grad[i] = 0;
+    }
+}
+
 double Tensor::index(int i, int j) const
 { // not generalized: for matrix
     int index_ = tensor_shape.shape[1] * i + j;
     return data[index_];
 }
 
+void Tensor::backward()
+{
+    if (func != NULL) {
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            grad[i] = 1;
+        }
+        
+        func->backward();
+    }
+}
+
 void Tensor::dot(const Tensor &a)
 { // not generalized: for matrix
-    if (tensor_shape.shape[1] != a.tensor_shape.shape[0]) {
+    if (tensor_shape.shape[1] != a.tensor_shape.shape[0])
+    {
         std::cerr << "Dimension Error in dot function" << std::endl;
     }
 
@@ -214,15 +274,15 @@ void Tensor::dot(const Tensor &a)
     int k = a.tensor_shape.shape[1];
 
     int shape_[] = {m, k};
-    
+
     double *data_ = new double[m * k];
 
-    for (int i = 0; i < m; i++) 
+    for (int i = 0; i < m; i++)
     {
-        for (int j = 0; j < k; j++) 
+        for (int j = 0; j < k; j++)
         {
             double value = 0;
-            for (int t = 0; t < n; t++) 
+            for (int t = 0; t < n; t++)
             {
                 value += index(i, t) * a.index(t, j);
             }
@@ -310,7 +370,28 @@ Tensor dot(const Tensor &a, const Tensor &b)
     return c;
 }
 
-// Shape ##################################################
+// Function ###############################################
+
+Function::Function()
+{
+    input = NULL;
+    output = NULL;
+}
+
+Tensor *Function::operator()(Tensor *input_) 
+{
+    std::cerr << "Not Implemented Error" << std::endl;
+}
+
+void Function::backward()
+{
+    std::cerr << "Not Implemented Error" << std::endl;
+}
+
+void Function::print()
+{
+    std::cerr << "Not Implemented Error" << std::endl;
+}
 
 // Shape ##################################################
 

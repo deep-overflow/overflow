@@ -1,3 +1,6 @@
+#ifndef __OPTIM_H__
+#define __OPTIM_H__
+
 #include <iostream>
 
 
@@ -15,3 +18,5 @@ class SGD
 {
 public:
 };
+
+#endif
