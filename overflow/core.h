@@ -10,6 +10,8 @@ public:
     Shape();
     Shape(const int *shape_, const int dim_);
 
+    bool operator==(const Shape &a);
+
     void init(const int *shape_, const int dim_);
 
     void T();
@@ -30,10 +32,12 @@ public:
     Tensor(const double data_, const int *shape_, const int dim_);
 
     void operator=(const Tensor& a);
+    Tensor operator+(const Tensor& a);
+    // void operator*(const Tensor& c);
 
     double index(int i, int j); // for matrix
 
-    void dot(const Tensor& a);
+    void dot(Tensor a);
     void T();
 
     void print();
