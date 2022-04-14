@@ -29,6 +29,8 @@ public:
     Tensor(const double *data_, const int *shape_, const int dim_);
     Tensor(const double data_, const int *shape_, const int dim_);
 
+    double index(int i, int j); // for matrix
+
     void T();
 
     void print();
