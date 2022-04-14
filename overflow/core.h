@@ -10,6 +10,7 @@ public:
     Shape();
     Shape(const int *shape_, const int dim_);
 
+    void operator=(const Shape &a);
     bool operator==(const Shape &a);
 
     void init(const int *shape_, const int dim_);
@@ -30,14 +31,15 @@ public:
     Tensor();
     Tensor(const double *data_, const int *shape_, const int dim_);
     Tensor(const double data_, const int *shape_, const int dim_);
+    Tensor(const double data_, const Shape& shape_);
 
-    void operator=(const Tensor& a);
+    void operator=(const Tensor &a);
     Tensor operator+(const Tensor& a);
     // void operator*(const Tensor& c);
 
-    double index(int i, int j); // for matrix
+    double index(int i, int j) const; // for matrix
 
-    void dot(Tensor a);
+    void dot(const Tensor &a);
     void T();
 
     void print();
@@ -47,7 +49,7 @@ public:
     Shape tensor_shape;
 };
 
-Tensor dot(Tensor a, Tensor b);
+Tensor dot(const Tensor &a, const Tensor &b);
 
 class Function
 {

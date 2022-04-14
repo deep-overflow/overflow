@@ -22,6 +22,25 @@ Shape::Shape(const int *shape_, const int dim_)
     }
 }
 
+void Shape::operator=(const Shape &a)
+{
+    if (dim == a.dim) {
+        size = 1;
+    }
+    else {
+        dim = a.dim;
+        size = 1;
+        delete[] shape;
+        shape = new int[dim];
+    }
+
+    for (int i = 0; i < dim; i++)
+    {
+        shape[i] = a.shape[i];
+        size *= shape[i];
+    }
+}
+
 bool Shape::operator==(const Shape &a)
 {
     if (dim != a.dim)
@@ -125,6 +144,18 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
     }
 }
 
+Tensor::Tensor(const double data_, const Shape& shape_)
+{
+    tensor_shape = shape_;
+
+    data = new double[tensor_shape.size];
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data[i] = data_;
+    }
+}
+
 void Tensor::operator=(const Tensor &a)
 {
     if (tensor_shape.size == a.tensor_shape.size)
@@ -152,17 +183,30 @@ void Tensor::operator=(const Tensor &a)
     }
 }
 
-Tensor Tensor::operator+(const Tensor& a) {
+Tensor Tensor::operator+(const Tensor& a)
+{
+    if (!(tensor_shape == a.tensor_shape))
+    {
+        std::cerr << "Dimension Error in element-wise sum" << std::endl;
+    }
 
+    Tensor c(0.0, tensor_shape);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        c.data[i] = data[i] + a.data[i];
+    }
+
+    return c;
 }
 
-double Tensor::index(int i, int j)
+double Tensor::index(int i, int j) const
 {
     int index_ = tensor_shape.shape[1] * i + j;
     return data[index_];
 }
 
-void Tensor::dot(Tensor a)
+void Tensor::dot(const Tensor &a)
 { // not generalized: for matrix
     if (tensor_shape.shape[1] != a.tensor_shape.shape[0]) {
         std::cerr << "Dimension Error in dot function" << std::endl;
@@ -234,7 +278,7 @@ void Tensor::print()
     std::cout << std::endl;
 }
 
-Tensor dot(Tensor a, Tensor b)
+Tensor dot(const Tensor &a, const Tensor &b)
 { // not generalized: for matrix
 
     if (a.tensor_shape.shape[1] != b.tensor_shape.shape[0])
@@ -258,7 +302,9 @@ Tensor dot(Tensor a, Tensor b)
             double value = 0;
             for (int t = 0; t < n; t++)
             {
-                value += a.index(i, t) * b.index(t, j);
+                double a_ = a.index(i, t);
+                double b_ = b.index(t, j);
+                value += a_ * b_;
             }
             int index_ = i * c.tensor_shape.shape[1] + j;
             c.data[index_] = value;
