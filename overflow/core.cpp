@@ -4,7 +4,6 @@
 
 Shape::Shape()
 {
-    std::cout << "Shape::Shape()" << std::endl;
     shape = NULL;
     dim = 0;
     size = 0;
@@ -30,7 +29,9 @@ void Shape::operator=(const Shape &a)
     else {
         dim = a.dim;
         size = 1;
-        delete[] shape;
+        if (shape != NULL) {
+            delete[] shape;
+        }
         shape = new int[dim];
     }
 
@@ -158,23 +159,18 @@ Tensor::Tensor(const double data_, const Shape& shape_)
 
 void Tensor::operator=(const Tensor &a)
 {
-    if (tensor_shape.size == a.tensor_shape.size)
+    if (!(tensor_shape == a.tensor_shape)) {
+        tensor_shape = a.tensor_shape;
+    }
+
+    if (data == NULL)
     {
-        tensor_shape.init(a.tensor_shape.shape, a.tensor_shape.dim);
+        data = new double[tensor_shape.size];
     }
     else
     {
-        tensor_shape.init(a.tensor_shape.shape, a.tensor_shape.dim);
-
-        if (data == NULL)
-        {
-            data = new double[tensor_shape.size];
-        }
-        else
-        {
-            delete[] data;
-            data = new double[tensor_shape.size];
-        }
+        delete[] data;
+        data = new double[tensor_shape.size];
     }
 
     for (int i = 0; i < tensor_shape.size; i++)
@@ -201,7 +197,7 @@ Tensor Tensor::operator+(const Tensor& a)
 }
 
 double Tensor::index(int i, int j) const
-{
+{ // not generalized: for matrix
     int index_ = tensor_shape.shape[1] * i + j;
     return data[index_];
 }
