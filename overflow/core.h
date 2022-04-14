@@ -43,7 +43,7 @@ public:
     Shape tensor_shape;
 };
 
-//Tensor dot(const Tensor& a, const Tensor& b);
+Tensor dot(Tensor a, Tensor b);
 
 class Function
 {

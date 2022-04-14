@@ -174,9 +174,33 @@ void Tensor::print()
     std::cout << std::endl;
 }
 
-// Tensor dot(const Tensor a, const Tensor b) {
-//     return Tensor();
-// }
+Tensor dot(Tensor a, Tensor b) {
+    if (a.tensor_shape.shape[1] != b.tensor_shape.shape[0]) {
+        std::cerr << "Dimension Error in dot function" << std::endl;
+    }
+
+    // (m x n) * (n x k) = m x k
+    int m = a.tensor_shape.shape[0];
+    int n = a.tensor_shape.shape[1]; // = b.tensor_shape.shape[0]
+    int k = b.tensor_shape.shape[1];
+
+    int shape_[] = {m, k};
+
+    Tensor c(0.0, shape_, 2);
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < k; j++) {
+            double value = 0;
+            for (int t = 0; t < n; t++) {
+                value += a.index(i, t) * b.index(t, j);
+            }
+            int index_ = i * c.tensor_shape.shape[1] + j;
+            c.data[index_] = value;
+        }
+    }
+
+    return c;
+}
 
 // Shape ##################################################
 
