@@ -38,6 +38,7 @@ public:
 
     void operator=(const Tensor &a);
     Tensor operator+(const Tensor& a);
+    Tensor operator-(const Tensor& a);
     // void operator*(const Tensor& c);
 
     void init(const double data_, const int *shape_, const int dim_);

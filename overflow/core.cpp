@@ -209,7 +209,7 @@ Tensor Tensor::operator+(const Tensor &a)
 {
     if (!(tensor_shape == a.tensor_shape))
     {
-        std::cerr << "Dimension Error in element-wise sum" << std::endl;
+        std::cerr << "Dimension Error in element-wise add" << std::endl;
     }
 
     Tensor c(0.0, tensor_shape);
@@ -217,6 +217,23 @@ Tensor Tensor::operator+(const Tensor &a)
     for (int i = 0; i < tensor_shape.size; i++)
     {
         c.data[i] = data[i] + a.data[i];
+    }
+
+    return c;
+}
+
+Tensor Tensor::operator-(const Tensor &a)
+{
+    if (!(tensor_shape == a.tensor_shape))
+    {
+        std::cerr << "Dimension Error in element-wise substract" << std::endl;
+    }
+
+    Tensor c(0.0, tensor_shape);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        c.data[i] = data[i] - a.data[i];
     }
 
     return c;
