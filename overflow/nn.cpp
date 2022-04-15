@@ -25,7 +25,18 @@ Tensor *Linear::operator()(Tensor *input_)
 
 void Linear::backward()
 {
-    // 여기서부터 다시 해보자.
+    std::cout << "Linear::backward()" << std::endl;
+    output->print();
+    input->print();
+
+    if (params.requires_grad) {
+        
+    }
+    
+    if (input->func == NULL)
+    {
+        std::cout << "input->func == NULL" << std::endl;
+    }
 }
 
 void Linear::print()

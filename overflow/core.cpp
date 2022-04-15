@@ -128,6 +128,7 @@ Tensor::Tensor()
     data = NULL;
     grad = NULL;
     func = NULL;
+    requires_grad = true;
 }
 
 Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
@@ -140,9 +141,10 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = data_[i];
-        grad[i] = 0;
+        grad[i] = 1;
     }
     func = NULL;
+    requires_grad = true;
 }
 
 Tensor::Tensor(const double data_, const int *shape_, const int dim_)
@@ -155,9 +157,10 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = data_;
-        grad[i] = 0;
+        grad[i] = 1;
     }
     func = NULL;
+    requires_grad = true;
 }
 
 Tensor::Tensor(const double data_, const Shape &shape_)
@@ -170,9 +173,10 @@ Tensor::Tensor(const double data_, const Shape &shape_)
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = data_;
-        grad[i] = 0;
+        grad[i] = 1;
     }
     func = NULL;
+    requires_grad = true;
 }
 
 void Tensor::operator=(const Tensor &a)
@@ -249,6 +253,12 @@ double Tensor::index(int i, int j) const
     return data[index_];
 }
 
+double Tensor::grad_index(int i, int j) const
+{ // not generalized: for matrix
+    int index_ = tensor_shape.shape[1] * i + j;
+    return grad[index_];
+}
+
 void Tensor::backward()
 {
     if (func != NULL) {
@@ -297,11 +307,50 @@ void Tensor::dot(const Tensor &a)
     data = data_;
 }
 
+void Tensor::grad_dot(const Tensor &a)
+{ // not generalized: for matrix
+    if (tensor_shape.shape[1] != a.tensor_shape.shape[0])
+    {
+        std::cerr << "Dimension Error in dot function" << std::endl;
+    }
+
+    // (m x n) * (n x k) = m x k
+    int m = tensor_shape.shape[0];
+    int n = tensor_shape.shape[1]; // =a.tensor_shape.shape[0]
+    int k = a.tensor_shape.shape[1];
+
+    int shape_[] = {m, k};
+
+    double *grad_ = new double[m * k];
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < k; j++)
+        {
+            double value = 0;
+            for (int t = 0; t < n; t++)
+            {
+                value += grad_index(i, t) * a.grad_index(t, j);
+            }
+            int index_ = i * k + j;
+            grad_[index_] = value;
+        }
+    }
+
+    tensor_shape.init(shape_, 2);
+
+    delete[] grad;
+    grad = grad_;
+}
+
 void Tensor::T()
 { // not generalized: for matrix
 
     double *data_;
+    double *grad_;
+
     data_ = new double[tensor_shape.size];
+    grad_ = new double[tensor_shape.size];
 
     for (int i = 0; i < tensor_shape.shape[0]; i++)
     {
@@ -309,13 +358,16 @@ void Tensor::T()
         {
             int index_ = j * tensor_shape.shape[0] + i;
             data_[index_] = index(i, j);
+            grad_[index_] = grad_index(i, j);
         }
     }
 
     tensor_shape.T();
 
     delete[] data;
+    delete[] grad;
     data = data_;
+    grad = grad_;
 }
 
 void Tensor::print()

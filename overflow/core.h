@@ -44,10 +44,12 @@ public:
     // void init(); // randomized initialization
 
     double index(int i, int j) const; // for matrix
+    double grad_index(int i, int j) const; // for matrix
 
     void backward();
 
     void dot(const Tensor &a);
+    void grad_dot(const Tensor &a);
     void T();
 
     void print();
@@ -56,6 +58,7 @@ public:
     double *data;
     double *grad;
     Shape tensor_shape;
+    bool requires_grad;
 
     Function *func;
 };
