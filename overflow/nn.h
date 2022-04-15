@@ -39,7 +39,7 @@ class MSELoss : public Function
 public:
     MSELoss();
 
-    virtual Tensor *operator()(Tensor *input_);
+    virtual Tensor *operator()(Tensor *input_1, Tensor *input_2);
 
     virtual void backward();
 

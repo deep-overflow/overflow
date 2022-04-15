@@ -201,7 +201,7 @@ void Tensor::operator=(const Tensor &a)
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = a.data[i];
-        grad[i] = 0;
+        grad[i] = 1;
     }
 }
 
@@ -239,6 +239,23 @@ Tensor Tensor::operator-(const Tensor &a)
     return c;
 }
 
+Tensor Tensor::operator^(int k)
+{
+    Tensor c(0.0, tensor_shape);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        double value = 1;
+        for (int j = 0; j < k; j++)
+        {
+            value *= data[i];
+        }
+        c.data[i] = value;
+    }
+
+    return c;
+}
+
 void Tensor::init(const double data_, const int *shape_, const int dim_)
 {
     tensor_shape.init(shape_, dim_);
@@ -260,8 +277,20 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = data_;
-        grad[i] = 0;
+        grad[i] = 1;
     }
+}
+
+double Tensor::sum(int axis = -1)
+{
+    // axis에 대한 수정 필요.
+    double value = 0;
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        value += data[i];
+    }
+
+    return value;
 }
 
 double Tensor::index(int i, int j) const
@@ -459,6 +488,12 @@ Function::Function()
 }
 
 Tensor *Function::operator()(Tensor *input_) 
+{
+    std::cerr << "Not Implemented Error" << std::endl;
+    return NULL;
+}
+
+Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)
 {
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;

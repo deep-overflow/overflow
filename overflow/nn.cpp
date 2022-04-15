@@ -148,6 +148,50 @@ void ReLU::print()
 
 // MSELoss ################################################
 
+MSELoss::MSELoss()
+{
+    std::cout << "MSELoss::MSELoss()" << std::endl;
+}
+
+Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
+{
+    if (output == NULL)
+    {
+        output = new Tensor;
+    }
+
+    *output = (*input_1 - *input_2) ^ 2;
+    output->func = this;
+
+    input = input_1;
+    input2 = input_2;
+
+    return output;
+}
+
+void MSELoss::backward()
+{
+    for (int i = 0; i < output->tensor_shape.size; i++)
+    {
+        input->grad[i] = 2 * (input->data[i] - input2->data[i]);
+        input2->grad[i] = 2 * (input2->data[i] - input->data[i]);
+    }
+
+    if (input->func != NULL)
+    {
+        input->backward();
+    }
+    if (input2->func != NULL)
+    {
+        input2->backward();
+    }
+}
+
+void MSELoss::print()
+{
+    std::cout << "===== MSELoss class =====" << std::endl;
+}
+
 // Shape ##################################################
 
 // Shape ##################################################

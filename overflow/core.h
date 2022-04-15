@@ -37,13 +37,15 @@ public:
     Tensor(const double data_, const Shape& shape_);
 
     void operator=(const Tensor &a);
-    Tensor operator+(const Tensor& a);
-    Tensor operator-(const Tensor& a);
+    Tensor operator+(const Tensor &a);
+    Tensor operator-(const Tensor &a);
+    Tensor operator^(int k);
     // void operator*(const Tensor& c);
 
     void init(const double data_, const int *shape_, const int dim_);
     // void init(); // randomized initialization
 
+    double sum(int axis = -1);
     double index(int i, int j) const; // for matrix
     double grad_index(int i, int j) const; // for matrix
 
@@ -72,6 +74,7 @@ public:
     Function();
 
     virtual Tensor *operator()(Tensor *input_);
+    virtual Tensor *operator()(Tensor *input_1, Tensor *input_2);
 
     virtual void backward();
     
@@ -79,6 +82,7 @@ public:
 
     // variable
     Tensor *input;
+    Tensor *input2;
     Tensor *output;
 };
 
