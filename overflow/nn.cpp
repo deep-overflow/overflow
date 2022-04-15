@@ -24,18 +24,63 @@ Tensor *Linear::operator()(Tensor *input_)
 }
 
 void Linear::backward()
-{
-    std::cout << "Linear::backward()" << std::endl;
-    output->print();
-    input->print();
+{ // not generalized: for matrix
+    /*
+    P : params, n x m
+    I : input, m x k
+    O : output, n x k
+    O = PI : (n x m) * (m x k) -> n x k
+    
+    P.grad = O.grad I^T : (n x k) * (k x m) -> n x m
+    I.grad = P^T O.grad : (m x n) * (n x k) -> m x k
+    */
+    int n = params.tensor_shape.shape[0];
+    int m = params.tensor_shape.shape[1];
+    int m_ = input->tensor_shape.shape[0];
+    int k = input->tensor_shape.shape[1];
 
+    // compute params.grad
     if (params.requires_grad) {
-        
+        input->T();
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                double value = 0;
+                for (int t = 0; t < k; t++)
+                {
+                    // (n x k) * (k x m) -> n x m
+                    value += output->grad_index(i, t) * input->index(t, j);
+                }
+                int index_ = i * m + j;
+                params.grad[index_] = value;
+            }
+        }
+        input->T();
     }
     
-    if (input->func == NULL)
+    // compute input->grad
+    params.T();
+    for (int i = 0; i < m; i++)
     {
-        std::cout << "input->func == NULL" << std::endl;
+        for (int j = 0; j < k; j++)
+        {
+            double value = 0;
+            for (int t = 0; t < n;  t++)
+            {
+                // (m x n) * (n x k) -> m x k
+                value += params.index(i, t) * output->grad_index(t, j);
+            }
+            int index_ = i * k + j;
+            input->grad[index_] = value;
+        }
+    }
+    params.T();
+    
+    // execute input->backward()
+    if (input->func != NULL)
+    {
+        input->backward();
     }
 }
 

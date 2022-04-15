@@ -384,6 +384,17 @@ void Tensor::print()
         std::cout << std::endl;
     }
     std::cout << std::endl;
+
+    std::cout << "grad : " << std::endl;
+    for (int i = 0 ; i < tensor_shape.shape[0]; i++)
+    {
+        for (int j = 0; j < tensor_shape.shape[1]; j++)
+        {
+            std::cout << grad_index(i, j) << ' ';
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 Tensor dot(const Tensor &a, const Tensor &b)
@@ -433,6 +444,7 @@ Function::Function()
 Tensor *Function::operator()(Tensor *input_) 
 {
     std::cerr << "Not Implemented Error" << std::endl;
+    return NULL;
 }
 
 void Function::backward()
