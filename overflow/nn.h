@@ -22,14 +22,28 @@ public:
     Tensor params;
 };
 
-class ReLU
+class ReLU : public Function
 {
 public:
+    ReLU();
+
+    virtual Tensor *operator()(Tensor *input_);
+
+    virtual void backward();
+
+    virtual void print();
 };
 
-class MSELoss
+class MSELoss : public Function
 {
 public:
+    MSELoss();
+
+    virtual Tensor *operator()(Tensor *input_);
+
+    virtual void backward();
+
+    virtual void print();
 };
 
 #endif

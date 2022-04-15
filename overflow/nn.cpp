@@ -11,7 +11,8 @@ Linear::Linear(int in_features_, int out_features_)
 
 Tensor *Linear::operator()(Tensor *input_)
 {
-    if (output == NULL) {
+    if (output == NULL)
+    {
         output = new Tensor;
     }
 
@@ -30,7 +31,7 @@ void Linear::backward()
     I : input, m x k
     O : output, n x k
     O = PI : (n x m) * (m x k) -> n x k
-    
+
     P.grad = O.grad I^T : (n x k) * (k x m) -> n x m
     I.grad = P^T O.grad : (m x n) * (n x k) -> m x k
     */
@@ -40,7 +41,8 @@ void Linear::backward()
     int k = input->tensor_shape.shape[1];
 
     // compute params.grad
-    if (params.requires_grad) {
+    if (params.requires_grad)
+    {
         input->T();
         for (int i = 0; i < n; i++)
         {
@@ -58,7 +60,7 @@ void Linear::backward()
         }
         input->T();
     }
-    
+
     // compute input->grad
     params.T();
     for (int i = 0; i < m; i++)
@@ -66,7 +68,7 @@ void Linear::backward()
         for (int j = 0; j < k; j++)
         {
             double value = 0;
-            for (int t = 0; t < n;  t++)
+            for (int t = 0; t < n; t++)
             {
                 // (m x n) * (n x k) -> m x k
                 value += params.index(i, t) * output->grad_index(t, j);
@@ -76,7 +78,7 @@ void Linear::backward()
         }
     }
     params.T();
-    
+
     // execute input->backward()
     if (input->func != NULL)
     {
@@ -90,9 +92,61 @@ void Linear::print()
     params.print();
 }
 
-// Shape ##################################################
+// ReLU ###################################################
 
-// Shape ##################################################
+ReLU::ReLU()
+{
+    std::cout << "ReLU::ReLU()" << std::endl;
+}
+
+Tensor *ReLU::operator()(Tensor *input_)
+{
+    if (output == NULL)
+    {
+        output = new Tensor;
+    }
+    
+    *output = *input_;
+    for (int i = 0; i < output->tensor_shape.size; i++)
+    {
+        if (output->data[i] < 0)
+        {
+            output->data[i] = 0;
+        }
+    }
+    output->func = this;
+    
+    input = input_;
+
+    return output;
+}
+
+void ReLU::backward()
+{
+    for (int i = 0; i < output->tensor_shape.size; i++)
+    {
+        if (output->data[i] > 0)
+        {
+            input->grad[i] = output->grad[i];
+        }
+        else
+        {
+            input->grad[i] = 0;
+        }
+    }
+
+    if (input->func != NULL)
+    {
+        input->backward();
+    }
+}
+
+void ReLU::print()
+{
+    std::cout << "===== ReLU class =====" << std::endl;
+}
+
+// MSELoss ################################################
 
 // Shape ##################################################
 
