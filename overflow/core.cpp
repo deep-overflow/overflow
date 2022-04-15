@@ -281,7 +281,7 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
     }
 }
 
-double Tensor::sum(int axis = -1)
+double Tensor::sum(int axis)
 {
     // axis에 대한 수정 필요.
     double value = 0;
