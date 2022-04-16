@@ -35,9 +35,6 @@ void Linear::backward()
     P.grad = O.grad I^T : (n x k) * (k x m) -> n x m
     I.grad = P^T O.grad : (m x n) * (n x k) -> m x k
     */
-
-    std::cout << "Linear::backward()" << std::endl;
-
     int n = params.tensor_shape.shape[0];
     int m = params.tensor_shape.shape[1];
     int m_ = input->tensor_shape.shape[0];
@@ -89,6 +86,16 @@ void Linear::backward()
     }
 }
 
+void Linear::zero_grad()
+{
+    delete output;
+
+    input->zero_grad();
+
+    output = NULL;
+    input = NULL;
+}
+
 void Linear::print()
 {
     std::cout << "===== Linear class =====" << std::endl;
@@ -126,8 +133,6 @@ Tensor *ReLU::operator()(Tensor *input_)
 
 void ReLU::backward()
 {
-    std::cout << "ReLU::backward()" << std::endl;
-
     for (int i = 0; i < output->tensor_shape.size; i++)
     {
         if (output->data[i] > 0)
@@ -144,6 +149,16 @@ void ReLU::backward()
     {
         input->backward();
     }
+}
+
+void ReLU::zero_grad()
+{
+    delete output;
+
+    input->zero_grad();
+
+    output = NULL;
+    input = NULL;
 }
 
 void ReLU::print()
@@ -195,6 +210,18 @@ void MSELoss::backward()
     {
         input2->backward();
     }
+}
+
+void MSELoss::zero_grad()
+{
+    delete output;
+
+    input->zero_grad();
+    input2->zero_grad();
+
+    output = NULL;
+    input = NULL;
+    input2 = NULL;
 }
 
 void MSELoss::print()

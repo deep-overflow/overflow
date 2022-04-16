@@ -35,6 +35,7 @@ public:
     Tensor(const double *data_, const int *shape_, const int dim_);
     Tensor(const double data_, const int *shape_, const int dim_);
     Tensor(const double data_, const Shape& shape_);
+    ~Tensor();
 
     void operator=(const Tensor &a);
     Tensor operator+(const Tensor &a);
@@ -50,6 +51,7 @@ public:
     double grad_index(int i, int j) const; // for matrix
 
     void backward();
+    void zero_grad();
 
     void dot(const Tensor &a);
     void grad_dot(const Tensor &a);
@@ -77,6 +79,7 @@ public:
     virtual Tensor *operator()(Tensor *input_1, Tensor *input_2);
 
     virtual void backward();
+    virtual void zero_grad();
     
     virtual void print();
 

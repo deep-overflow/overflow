@@ -179,6 +179,19 @@ Tensor::Tensor(const double data_, const Shape &shape_)
     requires_grad = true;
 }
 
+Tensor::~Tensor()
+{
+    if (data != NULL)
+    {
+        delete[] data;
+    }
+
+    if (grad != NULL)
+    {
+        delete[] grad;
+    }
+}
+
 void Tensor::operator=(const Tensor &a)
 {
     if (!(tensor_shape == a.tensor_shape))
@@ -307,8 +320,17 @@ double Tensor::grad_index(int i, int j) const
 
 void Tensor::backward()
 {
-    if (func != NULL) {
+    if (func != NULL)
+    {
         func->backward();
+    }
+}
+
+void Tensor::zero_grad()
+{
+    if (func != NULL)
+    {
+        func->zero_grad();
     }
 }
 
@@ -427,7 +449,7 @@ void Tensor::print()
     std::cout << std::endl;
 
     std::cout << "grad : " << std::endl;
-    for (int i = 0 ; i < tensor_shape.shape[0]; i++)
+    for (int i = 0; i < tensor_shape.shape[0]; i++)
     {
         for (int j = 0; j < tensor_shape.shape[1]; j++)
         {
@@ -482,7 +504,7 @@ Function::Function()
     output = NULL;
 }
 
-Tensor *Function::operator()(Tensor *input_) 
+Tensor *Function::operator()(Tensor *input_)
 {
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;
@@ -495,6 +517,11 @@ Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)
 }
 
 void Function::backward()
+{
+    std::cerr << "Not Implemented Error" << std::endl;
+}
+
+void Function::zero_grad()
 {
     std::cerr << "Not Implemented Error" << std::endl;
 }
