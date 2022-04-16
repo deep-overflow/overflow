@@ -12,14 +12,21 @@ class Optimizer
 public:
     Optimizer();
 
+    virtual void step();
+
     // variable
     Tensor *params;
+    int num_params;
 };
 
 class SGD : Optimizer
 {
 public:
-    SGD(double lr = 0.001);
+    SGD(Tensor *params_, int num_params_, double lr_ = 0.001);
+
+    virtual void step();
+
+    double lr;
 };
 
 #endif

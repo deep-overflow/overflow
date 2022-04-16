@@ -308,11 +308,6 @@ double Tensor::grad_index(int i, int j) const
 void Tensor::backward()
 {
     if (func != NULL) {
-        for (int i = 0; i < tensor_shape.size; i++)
-        {
-            grad[i] = 1;
-        }
-        
         func->backward();
     }
 }
