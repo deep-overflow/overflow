@@ -14,3 +14,14 @@
 3. optim.h
 - class Optimizer
 - class SGD
+
+DEV Plan
+- datasets
+- random initialization
+- datasets for mnist
+- cnn
+- image classification with mnist
+
+4. datasets.h
+- class Dataset
+- class Sin

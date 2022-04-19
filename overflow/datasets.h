@@ -4,5 +4,16 @@
 #include <iostream>
 
 class Dataset;
+class Sin;
+
+class Dataset
+{
+public:
+};
+
+class Sin : public Dataset
+{
+public:
+};
 
 #endif
