@@ -2,11 +2,18 @@
 
 // Linear #################################################
 
-Linear::Linear(int in_features_, int out_features_)
+Linear::Linear(int in_features_, int out_features_, char init_)
 {
+    init = init_;
+
     int shape_[] = {out_features_, in_features_};
 
     params.init(1.0, shape_, 2);
+
+    if (init)
+    {
+        params.random_init(init);
+    }
 }
 
 Tensor *Linear::operator()(Tensor *input_)

@@ -95,6 +95,38 @@ void Shape::init(const int *shape_, const int dim_)
     }
 }
 
+// void Tensor::random_init(const int *shape_, const int dim_, char init_)
+// {
+    
+// }
+
+void Tensor::random_init(char init_)
+{
+    // init_ == 'n' : normal distribution
+    // init_ == 'u' : uniform distribution
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    if (init_ == 'n')
+    {
+        std::normal_distribution<double> normal(0, 1);
+        
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = normal(rng);
+        }
+    }
+    else if (init_ == 'u')
+    {
+        std::uniform_real_distribution<double> uniform(-1, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = uniform(rng);
+        }
+    }
+}
+
 void Shape::T()
 {
     int *shape_;

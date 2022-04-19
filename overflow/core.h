@@ -2,6 +2,7 @@
 #define __CORE_H__
 
 #include <iostream>
+#include <random>
 
 class Shape;
 class Tensor;
@@ -44,6 +45,8 @@ public:
     // void operator*(const Tensor& c);
 
     void init(const double data_, const int *shape_, const int dim_);
+    //void random_init(const int *shape_, const int dim_, char init_);
+    void random_init(char init_);
     // void init(); // randomized initialization
 
     double sum(int axis = -1);
