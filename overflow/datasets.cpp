@@ -46,7 +46,7 @@ DataLoader::DataLoader(Dataset *dataset_, int batch_size_, bool shuffle_)
 
 Tensor DataLoader::batch(int idx)
 {
-    Tensor *batch = new Tensor[batch_size];
+    // Tensor에 indexing 기능을 추가해야 한다.
 }
 
 // Optimizer ##############################################
