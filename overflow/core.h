@@ -3,10 +3,22 @@
 
 #include <iostream>
 #include <random>
+#include <cstdarg>
 
+class Axis;
 class Shape;
 class Tensor;
 class Function;
+
+class Axis
+{
+public:
+    Axis(int start_, int end_, int stride_) : start(start_), end(end_), stride(stride_) {}
+    int start;
+    int end;
+    int stride;
+    int n_elements;
+};
 
 class Shape
 {
@@ -35,7 +47,7 @@ public:
     Tensor();
     Tensor(const double *data_, const int *shape_, const int dim_);
     Tensor(const double data_, const int *shape_, const int dim_);
-    Tensor(const double data_, const Shape& shape_);
+    Tensor(const double data_, const Shape &shape_);
     ~Tensor();
 
     void operator=(const Tensor &a);
@@ -45,12 +57,14 @@ public:
     // void operator*(const Tensor& c);
 
     void init(const double data_, const int *shape_, const int dim_);
-    //void random_init(const int *shape_, const int dim_, char init_);
+    // void random_init(const int *shape_, const int dim_, char init_);
     void random_init(char init_);
     // void init(); // randomized initialization
 
     double sum(int axis = -1);
     double index(int i, int j) const; // for matrix
+
+    // Tensor indexing(int dim_, ...) const;  // general
     double grad_index(int i, int j) const; // for matrix
 
     void backward();
@@ -83,7 +97,7 @@ public:
 
     virtual void backward();
     virtual void zero_grad();
-    
+
     virtual void print();
 
     // variable

@@ -343,7 +343,76 @@ double Tensor::index(int i, int j) const
     int index_ = tensor_shape.shape[1] * i + j;
     return data[index_];
 }
+/*
+Tensor Tensor::indexing(int dim_, ...) const
+{
+    // indexing rule
+    // - two type of indexing expression
+    //     1. start:end:stride
+    //     2. -1
+    // - The maximum number of axis is 4,
+    // - So there is 4 Axis class.
+    
+    va_list list;
+    va_start(list, dim_);
 
+    Axis *k[4];
+
+    for (int i = 0; i < 4; i++)
+    {
+        k[i] = NULL;
+    }
+
+    for (int i = 0; i < dim_; i++)
+    {
+        int arg1 = va_arg(list, int);
+        int arg2, arg3;
+        
+        if (arg1 == -1)
+        {
+            arg1 = 0;
+            arg2 = -1;
+            arg3 = 1;
+        }
+        else
+        {
+            arg2 = va_arg(list, int);
+            arg3 = va_arg(list, int);
+
+            i += 2;
+        }
+
+        k[i] = new Axis(arg1, arg2, arg3);
+
+        int range = arg2 - arg1;
+
+        if (range % arg3 == 0)
+        {
+            k[i]->n_elements = range / arg3;
+        }
+        else
+        {
+            k[i]->n_elements = range / arg3 + 1;
+        }
+    }
+
+    int *shape_ = new int[dim_];
+
+    for (int i = 0; i < dim_; i++)
+    {
+        shape_[i] = k[i]->n_elements;
+    }
+
+    Tensor tensor(0.0, shape_, dim_);
+
+    for (int i = 0; i < dim_; i++)
+    {
+
+    }
+
+    return tensor;
+}
+*/
 double Tensor::grad_index(int i, int j) const
 { // not generalized: for matrix
     int index_ = tensor_shape.shape[1] * i + j;
