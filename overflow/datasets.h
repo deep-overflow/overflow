@@ -34,12 +34,13 @@ class DataLoader
 public:
     DataLoader(Dataset *dataset_, int batch_size_, bool shuffle_);
 
-    Tensor operator()();
-
-    Tensor batch(int *idx);
+    void batching(); // shuffle에 따른 방식으로 batch를 생성한다.
+    Tensor input(); // batching에서 생성된 input Tensor를 반환한다.
+    Tensor label(); // batching에서 생성된 label Tensor를 반환한다.
 
     Dataset *dataset;
     int batch_size;
+    int *batch_idx;
     bool shuffle;
 };
 

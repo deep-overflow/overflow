@@ -22,11 +22,12 @@ public:
 class SGD : Optimizer
 {
 public:
-    SGD(Tensor **params_, int num_params_, double lr_ = 0.001);
+    SGD(Tensor **params_, int num_params_, double lr_ = 0.001, bool l2_reg_ = true);
 
     virtual void step();
 
     double lr;
+    bool l2_reg;
 };
 
 #endif

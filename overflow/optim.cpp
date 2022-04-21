@@ -15,11 +15,12 @@ void Optimizer::step()
 
 // SGD ####################################################
 
-SGD::SGD(Tensor **params_, int num_params_, double lr_)
+SGD::SGD(Tensor **params_, int num_params_, double lr_, bool l2_reg_)
 {
     params = params_;
     num_params = num_params_;
     lr = lr_;
+    l2_reg = l2_reg_;
 }
 
 void SGD::step()
@@ -31,15 +32,15 @@ void SGD::step()
 
         for (int j = 0; j < param->tensor_shape.size; j++)
         {
-            param->data[j] -= lr * param->grad[j];
+            double grad = param->grad[j];
+            
+            if (l2_reg)
+            {
+                grad += param->data[j];
+            }
+
+            param->data[j] -= lr * grad;
         }
     }
+
 }
-
-// Linear #################################################
-
-// Linear #################################################
-
-// Linear #################################################
-
-// Linear #################################################

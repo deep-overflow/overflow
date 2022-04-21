@@ -14,6 +14,8 @@ Linear::Linear(int in_features_, int out_features_, char init_)
     {
         params.random_init(init);
     }
+
+    has_params = true;
 }
 
 Tensor *Linear::operator()(Tensor *input_)
@@ -97,10 +99,17 @@ void Linear::zero_grad()
 {
     delete output;
 
+    params.zero_grad();
+    
     input->zero_grad();
 
     output = NULL;
     input = NULL;
+}
+
+Tensor *Linear::return_params()
+{
+    return &params;
 }
 
 void Linear::print()
@@ -114,6 +123,7 @@ void Linear::print()
 ReLU::ReLU()
 {
     std::cout << "ReLU::ReLU()" << std::endl;
+    has_params = false;
 }
 
 Tensor *ReLU::operator()(Tensor *input_)
@@ -178,6 +188,7 @@ void ReLU::print()
 MSELoss::MSELoss()
 {
     std::cout << "MSELoss::MSELoss()" << std::endl;
+    has_params = false;
 }
 
 Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)

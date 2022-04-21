@@ -1,5 +1,53 @@
 #include "core.h"
 
+// Module #################################################
+
+Module::Module()
+{
+    func = NULL;
+    params = NULL;
+    n_func = 0;
+    n_params = 0;
+}
+
+Tensor *Module::operator()(Tensor *input_)
+{
+    Tensor *output;
+    Function *f = func[0];
+    output = f->operator()(input_);
+
+    for (int i = 1; i < n_func; i++)
+    {
+        f = func[i];
+        output = f->operator()(output);
+    }
+    return output;
+}
+
+void Module::add_params()
+{
+    int idx = 0;
+    for (int i = 0; i < n_func; i++)
+    {
+        if (func[i]->has_params)
+        {
+            params[idx] = func[i]->return_params();
+            idx++;
+        }
+    }
+}
+
+void Module::print()
+{
+    std::cout << "==================== params ====================" << std::endl;
+    for (int i = 0; i < n_params; i++)
+    {
+        std::cout << i + 1 << "th param" << std::endl;
+        params[i]->print();
+    }
+    std::cout << "==================== finish ====================" << std::endl;
+}
+
 // Shape ##################################################
 
 Shape::Shape()
@@ -401,11 +449,21 @@ void Tensor::append(const Tensor &a)
         grad_[i] = 1;
     }
 
-    tensor_shape.shape[0] = tensor_shape.shape[0] + a.tensor_shape.shape[0];
-    tensor_shape.init(tensor_shape.shape, tensor_shape.dim);
+    if (tensor_shape.dim == 0)
+    {
+        tensor_shape = a.tensor_shape;
+    }
+    else
+    {
+        tensor_shape.shape[0] = tensor_shape.shape[0] + a.tensor_shape.shape[0];
+        tensor_shape.init(tensor_shape.shape, tensor_shape.dim);
+    }
 
-    delete[] data;
-    delete[] grad;
+    if (data != NULL)
+    {
+        delete[] data;
+        delete[] grad;
+    }
 
     data = data_;
     grad = grad_;
@@ -432,12 +490,13 @@ Tensor Tensor::index_(int arg_num, ...) const
         size *= tensor_shape.shape[i];
     }
 
-    int dim_ = tensor_shape.dim - arg_num;
+    int dim_ = tensor_shape.dim - arg_num + 1;
     int *shape_ = new int[dim_]; // result의 shape
 
-    for (int i = 0; i < dim_; i++)
+    shape_[0] = 1;
+    for (int i = 1; i < dim_; i++)
     {
-        shape_[i] = tensor_shape.shape[arg_num + i];
+        shape_[i] = tensor_shape.shape[arg_num + i - 1];
     }
 
     result.init(1.0, shape_, dim_);
@@ -536,6 +595,11 @@ void Tensor::backward()
 
 void Tensor::zero_grad()
 {
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        grad[i] = 1;
+    }
+    
     if (func != NULL)
     {
         func->zero_grad();
@@ -768,6 +832,14 @@ void Function::backward()
 void Function::zero_grad()
 {
     std::cerr << "Not Implemented Error" << std::endl;
+}
+
+Tensor *Function::return_params()
+{
+    std::cerr << "Not Implemented Error" << std::endl;
+
+    Tensor *a;
+    return a;
 }
 
 void Function::print()

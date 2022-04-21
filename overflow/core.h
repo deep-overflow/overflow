@@ -5,9 +5,27 @@
 #include <random>
 #include <cstdarg>
 
+class Module;
 class Shape;
 class Tensor;
 class Function;
+
+class Module
+{
+public:
+    Module();
+
+    Tensor *operator()(Tensor *input_);
+
+    void add_params();
+
+    void print();
+
+    Function **func;
+    Tensor **params;
+    int n_func;
+    int n_params;
+};
 
 class Shape
 {
@@ -87,12 +105,15 @@ public:
     virtual void backward();
     virtual void zero_grad();
 
+    virtual Tensor *return_params();
+
     virtual void print();
 
     // variable
     Tensor *input;
     Tensor *input2;
     Tensor *output;
+    bool has_params;
 };
 
 #endif
