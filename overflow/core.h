@@ -5,20 +5,9 @@
 #include <random>
 #include <cstdarg>
 
-class Axis;
 class Shape;
 class Tensor;
 class Function;
-
-class Axis
-{
-public:
-    Axis(int start_, int end_, int stride_) : start(start_), end(end_), stride(stride_) {}
-    int start;
-    int end;
-    int stride;
-    int n_elements;
-};
 
 class Shape
 {
@@ -57,15 +46,15 @@ public:
     // void operator*(const Tensor& c);
 
     void init(const double data_, const int *shape_, const int dim_);
-    // void random_init(const int *shape_, const int dim_, char init_);
+    void random_init(const int *shape_, const int dim_, char init_);
     void random_init(char init_);
     // void init(); // randomized initialization
 
     double sum(int axis = -1);
-    double index(int i, int j) const; // for matrix
-
-    // Tensor indexing(int dim_, ...) const;  // general
-    double grad_index(int i, int j) const; // for matrix
+    void append(const Tensor &a);
+    Tensor index_(int arg, ...) const; // 구현해야 함.
+    double index(int arg, ...) const; // general
+    double grad_index(int arg, ...) const; // general
 
     void backward();
     void zero_grad();
@@ -74,7 +63,7 @@ public:
     void grad_dot(const Tensor &a);
     void T();
 
-    void print();
+    void print(); // general
 
     // variable
     double *data;

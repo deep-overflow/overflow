@@ -100,33 +100,6 @@ void Shape::init(const int *shape_, const int dim_)
     
 // }
 
-void Tensor::random_init(char init_)
-{
-    // init_ == 'n' : normal distribution
-    // init_ == 'u' : uniform distribution
-    std::random_device rd;
-    std::mt19937 rng(rd());
-
-    if (init_ == 'n')
-    {
-        std::normal_distribution<double> normal(0, 1);
-        
-        for (int i = 0; i < tensor_shape.size; i++)
-        {
-            data[i] = normal(rng);
-        }
-    }
-    else if (init_ == 'u')
-    {
-        std::uniform_real_distribution<double> uniform(-1, 1);
-
-        for (int i = 0; i < tensor_shape.size; i++)
-        {
-            data[i] = uniform(rng);
-        }
-    }
-}
-
 void Shape::T()
 {
     int *shape_;
@@ -326,6 +299,78 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
     }
 }
 
+void Tensor::random_init(const int *shape_, const int dim_, char init_)
+{
+    tensor_shape.init(shape_, dim_);
+
+    if (data == NULL)
+    {
+        data = new double[tensor_shape.size];
+        grad = new double[tensor_shape.size];
+    }
+    else
+    {
+        delete[] data;
+        delete[] grad;
+
+        data = new double[tensor_shape.size];
+        data = new double[tensor_shape.size];
+    }
+
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    if (init_ == 'n')
+    {
+        std::normal_distribution<double> normal(0, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = normal(rng);
+            grad[i] = 1;
+        }
+    }
+    else if (init_ == 'u')
+    {
+        std::uniform_real_distribution<double> uniform(-1, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = uniform(rng);
+            grad[i] = 1;
+        }
+    }
+}
+
+void Tensor::random_init(char init_)
+{
+    // init_ == 'n' : normal distribution
+    // init_ == 'u' : uniform distribution
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    if (init_ == 'n')
+    {
+        std::normal_distribution<double> normal(0, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = normal(rng);
+            grad[i] = 1;
+        }
+    }
+    else if (init_ == 'u')
+    {
+        std::uniform_real_distribution<double> uniform(-1, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = uniform(rng);
+            grad[i] = 1;
+        }
+    }
+}
+
 double Tensor::sum(int axis)
 {
     // axis에 대한 수정 필요.
@@ -338,13 +383,87 @@ double Tensor::sum(int axis)
     return value;
 }
 
-double Tensor::index(int i, int j) const
-{ // not generalized: for matrix
-    int index_ = tensor_shape.shape[1] * i + j;
-    return data[index_];
+void Tensor::append(const Tensor &a)
+{
+    int size = tensor_shape.size + a.tensor_shape.size;
+    double *data_ = new double[size];
+    double *grad_ = new double[size];
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data_[i] = data[i];
+        grad_[i] = 1;
+    }
+
+    for (int i = tensor_shape.size; i < size; i++)
+    {
+        data_[i] = a.data[i - tensor_shape.size];
+        grad_[i] = 1;
+    }
+
+    tensor_shape.shape[0] = tensor_shape.shape[0] + a.tensor_shape.shape[0];
+    tensor_shape.init(tensor_shape.shape, tensor_shape.dim);
+
+    delete[] data;
+    delete[] grad;
+
+    data = data_;
+    grad = grad_;
 }
-/*
-Tensor Tensor::indexing(int dim_, ...) const
+
+Tensor Tensor::index_(int arg_num, ...) const
+{
+    va_list list;
+    va_start(list, arg_num);
+
+    int *arg = new int[arg_num];
+
+    for (int i = 0; i < arg_num; i++)
+    {
+        arg[i] = va_arg(list, int); // 인덱싱
+    }
+
+    Tensor result;
+
+    int size = 1; // result.data의 크기
+
+    for (int i = arg_num; i < tensor_shape.dim; i++)
+    {
+        size *= tensor_shape.shape[i];
+    }
+
+    int dim_ = tensor_shape.dim - arg_num;
+    int *shape_ = new int[dim_]; // result의 shape
+
+    for (int i = 0; i < dim_; i++)
+    {
+        shape_[i] = tensor_shape.shape[arg_num + i];
+    }
+
+    result.init(1.0, shape_, dim_);
+
+    int start = arg[0];
+    
+    for (int i = 1; i < tensor_shape.dim; i++)
+    {
+        start *= tensor_shape.shape[i];
+        if (i < arg_num)
+        {
+            start += arg[i];
+        }
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        result.data[i] = data[start + i];
+    }
+
+    va_end(list);
+
+    return result;
+}
+
+double Tensor::index(int arg, ...) const
 {
     // indexing rule
     // - two type of indexing expression
@@ -354,68 +473,56 @@ Tensor Tensor::indexing(int dim_, ...) const
     // - So there is 4 Axis class.
     
     va_list list;
-    va_start(list, dim_);
+    va_start(list, arg);
 
-    Axis *k[4];
+    int *idx = new int[tensor_shape.dim];
 
-    for (int i = 0; i < 4; i++)
+    idx[0] = arg;
+
+    for (int i = 1; i < tensor_shape.dim; i++)
     {
-        k[i] = NULL;
+        idx[i] = va_arg(list, int);
     }
 
-    for (int i = 0; i < dim_; i++)
+    int index_ = idx[0];
+    for (int i = 1; i < tensor_shape.dim; i++)
     {
-        int arg1 = va_arg(list, int);
-        int arg2, arg3;
-        
-        if (arg1 == -1)
-        {
-            arg1 = 0;
-            arg2 = -1;
-            arg3 = 1;
-        }
-        else
-        {
-            arg2 = va_arg(list, int);
-            arg3 = va_arg(list, int);
-
-            i += 2;
-        }
-
-        k[i] = new Axis(arg1, arg2, arg3);
-
-        int range = arg2 - arg1;
-
-        if (range % arg3 == 0)
-        {
-            k[i]->n_elements = range / arg3;
-        }
-        else
-        {
-            k[i]->n_elements = range / arg3 + 1;
-        }
+        index_ *= tensor_shape.shape[i];
+        index_ += idx[i];
     }
 
-    int *shape_ = new int[dim_];
+    va_end(list);
 
-    for (int i = 0; i < dim_; i++)
-    {
-        shape_[i] = k[i]->n_elements;
-    }
+    delete[] idx;
 
-    Tensor tensor(0.0, shape_, dim_);
-
-    for (int i = 0; i < dim_; i++)
-    {
-
-    }
-
-    return tensor;
+    return data[index_];
 }
-*/
-double Tensor::grad_index(int i, int j) const
-{ // not generalized: for matrix
-    int index_ = tensor_shape.shape[1] * i + j;
+
+double Tensor::grad_index(int arg, ...) const
+{
+    va_list list;
+    va_start(list, arg);
+
+    int *idx = new int[tensor_shape.dim];
+
+    idx[0] = arg;
+
+    for (int i = 1; i < tensor_shape.dim; i++)
+    {
+        idx[i] = va_arg(list, int);
+    }
+
+    int index_ = idx[0];
+    for (int i = 1; i < tensor_shape.dim; i++)
+    {
+        index_ *= tensor_shape.shape[i];
+        index_ += idx[i];
+    }
+
+    va_end(list);
+
+    delete[] idx;
+
     return grad[index_];
 }
 
@@ -539,24 +646,60 @@ void Tensor::print()
     tensor_shape.print();
 
     std::cout << "data : " << std::endl;
-    for (int i = 0; i < tensor_shape.shape[0]; i++)
+    for (int i = 0; i < tensor_shape.size; i++)
     {
-        for (int j = 0; j < tensor_shape.shape[1]; j++)
+        std::cout << data[i] << ' ';
+
+        int k = 1;
+        for (int j = 0; j < tensor_shape.dim; j++)
         {
-            std::cout << index(i, j) << ' ';
+            k *= tensor_shape.shape[tensor_shape.dim - 1 - j];
+
+            int cnt = 0;
+            if ((i + 1) % k == 0)
+            {
+                cnt++;
+            }
+
+            if (cnt == 1)
+            {
+                std::cout << std::endl;
+            }
+            else if (cnt > 1)
+            {
+                std::cout << std::endl
+                          << std::endl;
+            }
         }
-        std::cout << std::endl;
     }
     std::cout << std::endl;
 
     std::cout << "grad : " << std::endl;
-    for (int i = 0; i < tensor_shape.shape[0]; i++)
+    for (int i = 0; i < tensor_shape.size; i++)
     {
-        for (int j = 0; j < tensor_shape.shape[1]; j++)
+        std::cout << grad[i] << ' ';
+
+        int k = 1;
+        for (int j = 0; j < tensor_shape.dim; j++)
         {
-            std::cout << grad_index(i, j) << ' ';
+            k *= tensor_shape.shape[tensor_shape.dim - 1 - j];
+
+            int cnt = 0;
+            if ((i + 1) % k == 0)
+            {
+                cnt++;
+            }
+
+            if (cnt == 1)
+            {
+                std::cout << std::endl;
+            }
+            else if (cnt > 1)
+            {
+                std::cout << std::endl
+                          << std::endl;
+            }
         }
-        std::cout << std::endl;
     }
     std::cout << std::endl;
 }
@@ -631,17 +774,3 @@ void Function::print()
 {
     std::cerr << "Not Implemented Error" << std::endl;
 }
-
-// Shape ##################################################
-
-// Shape ##################################################
-
-// Shape ##################################################
-
-// Shape ##################################################
-
-// Shape ##################################################
-
-// Shape ##################################################
-
-// Shape ##################################################

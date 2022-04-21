@@ -38,17 +38,41 @@ DataLoader::DataLoader(Dataset *dataset_, int batch_size_, bool shuffle_)
     dataset = dataset_;
     batch_size = batch_size_;
     shuffle = shuffle_;
-
-    if (shuffle)
-    {
-    }
 }
 
-Tensor DataLoader::batch(int idx)
+Tensor DataLoader::operator()()
+{
+    std::random_device rd;
+
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<int> dis(0, dataset->n_samples - 1);
+
+    int *batch_idx = new int[batch_size];
+
+    for (int i = 0; i < batch_size; i++)
+    {
+        batch_idx[i] = dis(gen);
+    }
+
+    return batch(batch_idx);
+}
+
+Tensor DataLoader::batch(int *idx)
 {
     // Tensor에 indexing 기능을 추가해야 한다.
+    Shape shape = dataset->input->tensor_shape;
+    shape.shape[0] = batch_size;
+
+    Tensor batch;
+
+    for (int i = 0; i < batch_size; i++)
+    {
+        int batch_idx = idx[i];
+
+        // 구현해야 함.
+        batch.append(dataset->input->index_(batch_idx));
+    }
+
+    return batch;
 }
-
-// Optimizer ##############################################
-
-// Optimizer ##############################################

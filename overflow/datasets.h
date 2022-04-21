@@ -34,7 +34,9 @@ class DataLoader
 public:
     DataLoader(Dataset *dataset_, int batch_size_, bool shuffle_);
 
-    Tensor batch(int idx);
+    Tensor operator()();
+
+    Tensor batch(int *idx);
 
     Dataset *dataset;
     int batch_size;
