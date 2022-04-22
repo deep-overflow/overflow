@@ -450,19 +450,14 @@ Tensor Tensor::index_(int arg_num, ...) const
     Tensor result;
 
     int size = 1; // result.data의 크기
-
-    for (int i = arg_num; i < tensor_shape.dim; i++)
-    {
-        size *= tensor_shape.shape[i];
-    }
-
     int dim_ = tensor_shape.dim - arg_num + 1;
     int *shape_ = new int[dim_]; // result의 shape
 
     shape_[0] = 1;
-    for (int i = 1; i < dim_; i++)
+    for (int i = arg_num; i < tensor_shape.dim; i++)
     {
-        shape_[i] = tensor_shape.shape[arg_num + i - 1];
+        shape_[i + 1 - arg_num] = tensor_shape.shape[i];
+        size *= tensor_shape.shape[i];
     }
 
     result.init(1.0, shape_, dim_);
@@ -484,6 +479,9 @@ Tensor Tensor::index_(int arg_num, ...) const
     }
 
     va_end(list);
+
+    delete[] arg;
+    delete[] shape_;
 
     return result;
 }
@@ -581,7 +579,7 @@ void Tensor::dot(const Tensor &a)
 
     // (m x n) * (n x k) = m x k
     int m = tensor_shape.shape[0];
-    int n = tensor_shape.shape[1]; // =a.tensor_shape.shape[0]
+    int n = tensor_shape.shape[1]; // = a.tensor_shape.shape[0]
     int k = a.tensor_shape.shape[1];
 
     int shape_[] = {m, k};
@@ -675,6 +673,30 @@ void Tensor::print()
 { // not generalized: for matrix
     tensor_shape.print();
 
+    std::cout << "requires_grad : ";
+    if (requires_grad)
+    {
+        std::cout << "true" << std::endl
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "false" << std::endl
+                  << std::endl;
+    }
+
+    std::cout << "func : ";
+    if (func)
+    {
+        std::cout << func->name << std::endl
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "NULL" << std::endl
+                  << std::endl;
+    }
+
     std::cout << "data : " << std::endl;
     for (int i = 0; i < tensor_shape.size; i++)
     {
@@ -708,6 +730,8 @@ void Tensor::print()
             }
         }
     }
+
+    
 }
 
 Tensor dot(const Tensor &a, const Tensor &b)

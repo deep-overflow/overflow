@@ -2,6 +2,7 @@
 #define __CORE_H__
 
 #include <iostream>
+#include <string>
 #include <random>
 #include <cstdarg>
 
@@ -70,7 +71,7 @@ public:
 
     double sum(int axis = -1); // 수정해야 됨.
     void append(const Tensor &a);
-    Tensor index_(int arg, ...) const;
+    Tensor index_(int arg_num, ...) const;
     double index(int arg, ...) const; // general
     double grad_index(int arg, ...) const; // general
 
@@ -114,6 +115,7 @@ public:
     Tensor *input2;
     Tensor *output;
     bool has_params;
+    std::string name;
 };
 
 #endif
