@@ -16,6 +16,12 @@ Linear::Linear(int in_features_, int out_features_, char init_)
     }
 
     has_params = true;
+
+    input = NULL;
+    input2 = NULL;
+    output = NULL;
+
+    name = "linear";
 }
 
 Tensor *Linear::operator()(Tensor *input_)
@@ -114,7 +120,7 @@ Tensor *Linear::return_params()
 
 void Linear::print()
 {
-    std::cout << "===== Linear class =====" << std::endl;
+    std::cout << name << std::endl;
     params.print();
 }
 
@@ -122,8 +128,13 @@ void Linear::print()
 
 ReLU::ReLU()
 {
-    std::cout << "ReLU::ReLU()" << std::endl;
     has_params = false;
+
+    input = NULL;
+    input2 = NULL;
+    output = NULL;
+
+    name = "relu";
 }
 
 Tensor *ReLU::operator()(Tensor *input_)
@@ -180,15 +191,20 @@ void ReLU::zero_grad()
 
 void ReLU::print()
 {
-    std::cout << "===== ReLU class =====" << std::endl;
+    std::cout << name << std::endl;
 }
 
 // MSELoss ################################################
 
 MSELoss::MSELoss()
 {
-    std::cout << "MSELoss::MSELoss()" << std::endl;
     has_params = false;
+
+    input = NULL;
+    input2 = NULL;
+    output = NULL;
+
+    name = "mseloss";
 }
 
 Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
@@ -244,13 +260,5 @@ void MSELoss::zero_grad()
 
 void MSELoss::print()
 {
-    std::cout << "===== MSELoss class =====" << std::endl;
+    std::cout << name << std::endl;
 }
-
-// Shape ##################################################
-
-// Shape ##################################################
-
-// Shape ##################################################
-
-// Shape ##################################################
