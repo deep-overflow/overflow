@@ -12,21 +12,20 @@ Module::Module()
 
 Tensor *Module::operator()(Tensor *input_)
 {
-    Tensor *output;
-    Function *f = func[0];
-    output = f->operator()(input_);
+    Tensor *output = input_;
 
-    for (int i = 1; i < n_func; i++)
+    for (int i = 0; i < n_func; i++)
     {
-        f = func[i];
-        output = f->operator()(output);
+        output = (*func[i])(output);
     }
+
     return output;
 }
 
 void Module::add_params()
 {
     int idx = 0;
+
     for (int i = 0; i < n_func; i++)
     {
         if (func[i]->has_params)
@@ -39,22 +38,23 @@ void Module::add_params()
 
 void Module::print()
 {
-    std::cout << "==================== params ====================" << std::endl;
-    for (int i = 0; i < n_params; i++)
+    std::cout << "==================== funcs ====================" << std::endl;
+    std::cout << n_func << " functions & " << n_params << " parameters" << std::endl;
+    for (int i = 0; i < n_func; i++)
     {
-        std::cout << i + 1 << "th param" << std::endl;
-        params[i]->print();
+        std::cout << i + 1 << "th function" << std::endl;
+        func[i]->print();
     }
-    std::cout << "==================== finish ====================" << std::endl;
+    std::cout << "==================== ***** ====================" << std::endl;
 }
 
 // Shape ##################################################
 
 Shape::Shape()
 {
-    shape = NULL;
     dim = 0;
     size = 0;
+    shape = new int[dim];
 }
 
 Shape::Shape(const int *shape_, const int dim_)
@@ -79,10 +79,7 @@ void Shape::operator=(const Shape &a)
     {
         dim = a.dim;
         size = 1;
-        if (shape != NULL)
-        {
-            delete[] shape;
-        }
+        delete[] shape;
         shape = new int[dim];
     }
 
@@ -118,22 +115,16 @@ bool Shape::operator==(const Shape &a)
 
 void Shape::init(const int *shape_, const int dim_)
 {
-    if (shape == NULL)
+    if (dim == dim_)
     {
-        dim = dim_;
         size = 1;
-        shape = new int[dim_];
     }
-    else if (dim != dim_)
+    else
     {
         dim = dim_;
         size = 1;
         delete[] shape;
-        shape = new int[dim_];
-    }
-    else
-    {
-        size = 1;
+        shape = new int[dim];
     }
 
     for (int i = 0; i < dim; i++)
@@ -142,11 +133,6 @@ void Shape::init(const int *shape_, const int dim_)
         size *= shape[i];
     }
 }
-
-// void Tensor::random_init(const int *shape_, const int dim_, char init_)
-// {
-    
-// }
 
 void Shape::T()
 {
@@ -171,15 +157,16 @@ void Shape::print()
     {
         std::cout << shape[i] << " ";
     }
-    std::cout << "]" << std::endl;
+    std::cout << "]" << std::endl
+              << std::endl;
 }
 
 // Tensor #################################################
 
 Tensor::Tensor()
 {
-    data = NULL;
-    grad = NULL;
+    data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
     func = NULL;
     requires_grad = true;
 }
@@ -252,23 +239,19 @@ void Tensor::operator=(const Tensor &a)
         tensor_shape = a.tensor_shape;
     }
 
-    if (data == NULL)
-    {
-        data = new double[tensor_shape.size];
-        grad = new double[tensor_shape.size];
-    }
-    else
-    {
-        delete[] data;
-        data = new double[tensor_shape.size];
-        grad = new double[tensor_shape.size];
-    }
+    delete[] data;
+    delete[] grad;
+    data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
         data[i] = a.data[i];
         grad[i] = 1;
     }
+
+    func = NULL;
+    requires_grad = true;
 }
 
 Tensor Tensor::operator+(const Tensor &a)
@@ -326,19 +309,10 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
 {
     tensor_shape.init(shape_, dim_);
 
-    if (data == NULL)
-    {
-        data = new double[tensor_shape.size];
-        grad = new double[tensor_shape.size];
-    }
-    else
-    {
-        delete[] data;
-        delete[] grad;
-
-        data = new double[tensor_shape.size];
-        grad = new double[tensor_shape.size];
-    }
+    delete[] data;
+    delete[] grad;
+    data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
@@ -351,19 +325,11 @@ void Tensor::random_init(const int *shape_, const int dim_, char init_)
 {
     tensor_shape.init(shape_, dim_);
 
-    if (data == NULL)
-    {
-        data = new double[tensor_shape.size];
-        grad = new double[tensor_shape.size];
-    }
-    else
-    {
-        delete[] data;
-        delete[] grad;
+    delete[] data;
+    delete[] grad;
 
-        data = new double[tensor_shape.size];
-        data = new double[tensor_shape.size];
-    }
+    data = new double[tensor_shape.size];
+    data = new double[tensor_shape.size];
 
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -719,24 +685,12 @@ void Tensor::print()
         {
             k *= tensor_shape.shape[tensor_shape.dim - 1 - j];
 
-            int cnt = 0;
             if ((i + 1) % k == 0)
-            {
-                cnt++;
-            }
-
-            if (cnt == 1)
             {
                 std::cout << std::endl;
             }
-            else if (cnt > 1)
-            {
-                std::cout << std::endl
-                          << std::endl;
-            }
         }
     }
-    std::cout << std::endl;
 
     std::cout << "grad : " << std::endl;
     for (int i = 0; i < tensor_shape.size; i++)
@@ -748,24 +702,12 @@ void Tensor::print()
         {
             k *= tensor_shape.shape[tensor_shape.dim - 1 - j];
 
-            int cnt = 0;
             if ((i + 1) % k == 0)
-            {
-                cnt++;
-            }
-
-            if (cnt == 1)
             {
                 std::cout << std::endl;
             }
-            else if (cnt > 1)
-            {
-                std::cout << std::endl
-                          << std::endl;
-            }
         }
     }
-    std::cout << std::endl;
 }
 
 Tensor dot(const Tensor &a, const Tensor &b)
@@ -809,7 +751,9 @@ Tensor dot(const Tensor &a, const Tensor &b)
 Function::Function()
 {
     input = NULL;
+    input2 = NULL;
     output = NULL;
+    has_params = false;
 }
 
 Tensor *Function::operator()(Tensor *input_)
@@ -838,8 +782,7 @@ Tensor *Function::return_params()
 {
     std::cerr << "Not Implemented Error" << std::endl;
 
-    Tensor *a;
-    return a;
+    return NULL;
 }
 
 void Function::print()

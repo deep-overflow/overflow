@@ -68,9 +68,9 @@ public:
     void random_init(char init_);
     // void init(); // randomized initialization
 
-    double sum(int axis = -1);
+    double sum(int axis = -1); // 수정해야 됨.
     void append(const Tensor &a);
-    Tensor index_(int arg, ...) const; // 구현해야 함.
+    Tensor index_(int arg, ...) const;
     double index(int arg, ...) const; // general
     double grad_index(int arg, ...) const; // general
 

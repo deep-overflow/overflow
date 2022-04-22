@@ -16,8 +16,8 @@
 - class SGD
 
 DEV Plan
-- datasets
-- random initialization
+- datasets [done]
+- random initialization [done]
 - datasets for mnist
 - cnn
 - image classification with mnist
