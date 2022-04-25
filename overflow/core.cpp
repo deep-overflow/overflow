@@ -221,8 +221,13 @@ Tensor::Tensor()
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
 
-    data[0] = 1; // random init 하고 싶다.
-    grad[0] = 1; // random init 하고 싶다.
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    std::normal_distribution<double> normal(0, 1);
+
+    data[0] = normal(rng);
+    grad[0] = 1;
 
     func = NULL;
     requires_grad = true;
