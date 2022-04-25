@@ -11,7 +11,7 @@ class MSELoss;
 class Linear : public Function
 {
 public:
-    Linear(int in_features_, int out_features_, char init_ = 0);
+    Linear(int in_features_, int out_features_, char init_ = 'n');
 
     virtual Tensor *operator()(Tensor *input_);
 

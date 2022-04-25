@@ -4,15 +4,20 @@
 
 Linear::Linear(int in_features_, int out_features_, char init_)
 {
+    /*
+        O [batch, out_features] = I [batch, in_features] * P [in_features, out_features]
+    */
     init = init_;
 
-    int shape_[] = {out_features_, in_features_};
-
-    params.init(1.0, shape_, 2);
+    int shape_[] = {in_features_, out_features_};
 
     if (init)
     {
-        params.random(init);
+        params.random(shape_, 2, init);
+    }
+    else
+    {
+        params.init(1.0, shape_, 2);
     }
 
     has_params = true;
