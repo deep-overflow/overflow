@@ -144,7 +144,7 @@ bool Shape::operator!=(const Shape &a)
     {
         return false;
     }
-    
+
     return true;
 }
 
@@ -393,6 +393,30 @@ Tensor Tensor::operator-(const Tensor &a)
     for (int i = 0; i < tensor_shape.size; i++)
     {
         c.data[i] = data[i] - a.data[i];
+    }
+
+    return c;
+}
+
+Tensor Tensor::operator^(const Tensor &a)
+{
+    if (a.tensor_shape.dim != 0)
+    {
+        std::cerr << "Dimension Error : a's dimension has to be 0." << std::endl;
+    }
+
+    int k = (int)(a.data[0]);
+
+    Tensor c(0.0, tensor_shape);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        double value = 1;
+        for (int j = 0; j < k; j++)
+        {
+            value *= data[i];
+        }
+        c.data[i] = value;
     }
 
     return c;
