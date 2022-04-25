@@ -138,6 +138,16 @@ bool Shape::operator==(const Shape &a)
     return true;
 }
 
+bool Shape::operator!=(const Shape &a)
+{
+    if (operator==(a))
+    {
+        return false;
+    }
+    
+    return true;
+}
+
 void Shape::reshape(const int *shape_, const int dim_)
 {
     /*
