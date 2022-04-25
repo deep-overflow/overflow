@@ -63,6 +63,12 @@ Shape::Shape()
 
 Shape::Shape(const int *shape_, const int dim_)
 {
+    /*
+        This Initializer is for dim_ dimension Tensor.
+        If dim_ = 1, Vector.
+        If dim_ = 2, Matrix.
+        If dim_ >= 3, Tensor.
+    */
     dim = dim_;
     size = 1;
     shape = new int[dim];
@@ -75,6 +81,9 @@ Shape::Shape(const int *shape_, const int dim_)
 
 void Shape::operator=(const Shape &a)
 {
+    /*
+        No Memory Share.
+    */
     if (dim == a.dim)
     {
         size = 1;
@@ -117,8 +126,11 @@ bool Shape::operator==(const Shape &a)
     return true;
 }
 
-void Shape::init(const int *shape_, const int dim_)
+void Shape::reshape(const int *shape_, const int dim_)
 {
+    /*
+        No Memory Share.
+    */
     if (dim == dim_)
     {
         size = 1;
@@ -169,7 +181,10 @@ void Shape::print()
 
 Tensor::Tensor()
 {
-    tensor_shape.print();
+    /*
+        This Initializer is for 0 dimension Tensor,
+        which means scalar.
+    */
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
     func = NULL;
@@ -178,7 +193,7 @@ Tensor::Tensor()
 
 Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
 {
-    tensor_shape.init(shape_, dim_);
+    tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -194,7 +209,7 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
 
 Tensor::Tensor(const double data_, const int *shape_, const int dim_)
 {
-    tensor_shape.init(shape_, dim_);
+    tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -312,7 +327,7 @@ Tensor Tensor::operator^(int k)
 
 void Tensor::init(const double data_, const int *shape_, const int dim_)
 {
-    tensor_shape.init(shape_, dim_);
+    tensor_shape.reshape(shape_, dim_);
 
     delete[] data;
     delete[] grad;
@@ -328,7 +343,7 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
 
 void Tensor::random_init(const int *shape_, const int dim_, char init_)
 {
-    tensor_shape.init(shape_, dim_);
+    tensor_shape.reshape(shape_, dim_);
 
     delete[] data;
     delete[] grad;
@@ -427,7 +442,7 @@ void Tensor::append(const Tensor &a)
     else
     {
         tensor_shape.shape[0] = tensor_shape.shape[0] + a.tensor_shape.shape[0];
-        tensor_shape.init(tensor_shape.shape, tensor_shape.dim);
+        tensor_shape.reshape(tensor_shape.shape, tensor_shape.dim);
     }
 
     if (data != NULL)

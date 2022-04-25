@@ -37,7 +37,7 @@ public:
     void operator=(const Shape &a);
     bool operator==(const Shape &a);
 
-    void init(const int *shape_, const int dim_);
+    void reshape(const int *shape_, const int dim_);
 
     void T();
 
