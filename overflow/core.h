@@ -44,7 +44,7 @@ public:
     void T();
     Shape index(int s, int e) const;
 
-    void print();
+    void print() const;
 
     // ===== variable =====
     int *shape;

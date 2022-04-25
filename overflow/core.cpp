@@ -140,12 +140,9 @@ bool Shape::operator==(const Shape &a) const
 
 bool Shape::operator!=(const Shape &a) const
 {
-    if (operator==(a))
-    {
-        return false;
-    }
+    bool check = Shape::operator==(a);
 
-    return true;
+    return !check;
 }
 
 void Shape::reshape(const int *shape_, const int dim_)
@@ -214,6 +211,16 @@ Shape Shape::index(int s, int e) const
         e = dim;
     }
 
+    if (s >= e)
+    {
+        std::cerr << "Argument Error : s must be larger than e." << std::endl;
+    }
+
+    if (s >= dim || e >= dim)
+    {
+        std::cerr << "Argument Error : s and e must be smaller than dim." << std::endl;
+    }
+
     int dim_ = e - s;
     int *shape_ = new int[dim_];
 
@@ -227,7 +234,7 @@ Shape Shape::index(int s, int e) const
     return c;
 }
 
-void Shape::print()
+void Shape::print() const
 {
     std::cout << "dim : " << dim << std::endl;
     std::cout << "size : " << size << std::endl;
@@ -783,9 +790,12 @@ void Tensor::append(const Tensor &a, bool new_axis)
         new_axis가 true이면, batch를 사용한다.
     */
 
-    if (a.tensor_shape == tensor_shape.index(1, -1))
+    if (tensor_shape.dim > 1)
     {
-        std::cerr << "Dimension Error : Unmatching Dimension for append" << std::endl;
+        if (a.tensor_shape != tensor_shape.index(1, -1))
+        {
+            std::cerr << "Dimension Error : Unmatching Dimension for append" << std::endl;
+        }
     }
 
     int size = tensor_shape.size + a.tensor_shape.size;
@@ -827,13 +837,13 @@ void Tensor::append(const Tensor &a, bool new_axis)
     {
         if (new_axis)
         {
-            int dim_ = tensor_shape.dim + 1;
+            int dim_ = tensor_shape.dim;
             int *shape_ = new int[dim_];
 
             shape_[0] = tensor_shape.shape[0] + 1;
             for (int i = 1; i < dim_; i++)
             {
-                shape_[i] = tensor_shape.shape[i - 1];
+                shape_[i] = tensor_shape.shape[i];
             }
 
             tensor_shape.reshape(shape_, dim_);
@@ -852,6 +862,8 @@ void Tensor::append(const Tensor &a, bool new_axis)
             tensor_shape.reshape(shape_, dim_);
         }
     }
+    std::cout << "tensor_shape" << std::endl;
+    tensor_shape.print();
 
     if (data != NULL)
     {
