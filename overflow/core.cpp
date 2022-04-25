@@ -207,6 +207,21 @@ void Shape::T()
     shape = shape_;
 }
 
+Shape Shape::index(int s, int e)
+{
+    int dim_ = e - s;
+    int *shape_ = new int[dim_];
+    
+    for (int i = s; i < e; i++)
+    {
+        shape_[i - s] = shape[i];
+    }
+
+    Shape c(shape_, dim_);
+
+    return c;
+}
+
 void Shape::print()
 {
     std::cout << "dim : " << dim << std::endl;
@@ -563,82 +578,10 @@ void Tensor::random(char init_)
 {
     // init_ == 'n' : normal distribution
     // init_ == 'u' : uniform distribution
-    std::random_device rd;
-    std::mt19937 rng(rd());
-
-    if (init_ == 'n')
-    {
-        std::normal_distribution<double> normal(0, 1);
-
-        for (int i = 0; i < tensor_shape.size; i++)
-        {
-            data[i] = normal(rng);
-            grad[i] = 1;
-        }
-    }
-    else if (init_ == 'u')
-    {
-        std::uniform_real_distribution<double> uniform(-1, 1);
-
-        for (int i = 0; i < tensor_shape.size; i++)
-        {
-            data[i] = uniform(rng);
-            grad[i] = 1;
-        }
-    }
+    random(tensor_shape, init_);
 }
 
-double Tensor::sum(int axis)
-{
-    // axis에 대한 수정 필요.
-    double value = 0;
-    for (int i = 0; i < tensor_shape.size; i++)
-    {
-        value += data[i];
-    }
-
-    return value;
-}
-
-void Tensor::append(const Tensor &a)
-{
-    int size = tensor_shape.size + a.tensor_shape.size;
-    double *data_ = new double[size];
-    double *grad_ = new double[size];
-
-    for (int i = 0; i < tensor_shape.size; i++)
-    {
-        data_[i] = data[i];
-        grad_[i] = 1;
-    }
-
-    for (int i = tensor_shape.size; i < size; i++)
-    {
-        data_[i] = a.data[i - tensor_shape.size];
-        grad_[i] = 1;
-    }
-
-    if (tensor_shape.dim == 0)
-    {
-        tensor_shape = a.tensor_shape;
-    }
-    else
-    {
-        tensor_shape.shape[0] = tensor_shape.shape[0] + a.tensor_shape.shape[0];
-        tensor_shape.reshape(tensor_shape.shape, tensor_shape.dim);
-    }
-
-    if (data != NULL)
-    {
-        delete[] data;
-        delete[] grad;
-    }
-
-    data = data_;
-    grad = grad_;
-}
-
-Tensor Tensor::index_(int arg_num, ...) const
+Tensor Tensor::index(int arg_num, ...) const
 {
     va_list list;
     va_start(list, arg_num);
@@ -653,10 +596,9 @@ Tensor Tensor::index_(int arg_num, ...) const
     Tensor result;
 
     int size = 1; // result.data의 크기
-    int dim_ = tensor_shape.dim - arg_num + 1;
+    int dim_ = tensor_shape.dim - arg_num;
     int *shape_ = new int[dim_]; // result의 shape
 
-    shape_[0] = 1;
     for (int i = arg_num; i < tensor_shape.dim; i++)
     {
         shape_[i + 1 - arg_num] = tensor_shape.shape[i];
@@ -666,7 +608,7 @@ Tensor Tensor::index_(int arg_num, ...) const
     result.init(1.0, shape_, dim_);
 
     int start = arg[0];
-    
+
     for (int i = 1; i < tensor_shape.dim; i++)
     {
         start *= tensor_shape.shape[i];
@@ -689,7 +631,7 @@ Tensor Tensor::index_(int arg_num, ...) const
     return result;
 }
 
-double Tensor::index(int arg, ...) const
+double Tensor::index_(int arg, ...) const
 {
     // indexing rule
     // - two type of indexing expression
@@ -697,7 +639,7 @@ double Tensor::index(int arg, ...) const
     //     2. -1
     // - The maximum number of axis is 4,
     // - So there is 4 Axis class.
-    
+
     va_list list;
     va_start(list, arg);
 
@@ -752,6 +694,118 @@ double Tensor::grad_index(int arg, ...) const
     return grad[index_];
 }
 
+double Tensor::sum_(int axis, ...)
+{
+    if (axis == -1)
+    {
+        double value = 0;
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            value += data[i];
+        }
+
+        return value;
+    }
+    return 1.0;
+}
+
+// Tensor Tensor::sum(int axis)
+// {
+//     Tensor c;
+
+//     if (axis == -1)
+//     {
+//         c.data[0] = 
+//     }
+//     else
+//     {
+
+//     }
+// }
+
+void Tensor::append(const Tensor &a, bool new_axis)
+{
+    /*
+        new_axis가 true이면, batch를 사용한다.
+    */
+
+    
+
+    int size = tensor_shape.size + a.tensor_shape.size;
+    double *data_ = new double[size];
+    double *grad_ = new double[size];
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data_[i] = data[i];
+        grad_[i] = 1;
+    }
+
+    for (int i = tensor_shape.size; i < size; i++)
+    {
+        data_[i] = a.data[i - tensor_shape.size];
+        grad_[i] = 1;
+    }
+
+    if (tensor_shape.dim == 0)
+    {
+        if (new_axis)
+        {
+            int dim_ = a.tensor_shape.dim + 1;
+            int *shape_ = new int[dim_];
+
+            shape_[0] = 1;
+            for (int i = 1; i < dim_; i++)
+            {
+                shape_[i] = a.tensor_shape.shape[i - 1];
+            }
+
+            tensor_shape.reshape(shape_, dim_);
+        }
+        else{
+            tensor_shape = a.tensor_shape;
+        }
+    }
+    else
+    {
+        if (new_axis)
+        {
+            int dim_ = tensor_shape.dim + 1;
+            int *shape_ = new int[dim_];
+
+            shape_[0] = tensor_shape.shape[0] + 1;
+            for (int i = 1; i < dim_; i++)
+            {
+                shape_[i] = tensor_shape.shape[i - 1];
+            }
+
+            tensor_shape.reshape(shape_, dim_);
+        }
+        else
+        {
+            int dim_ = tensor_shape.dim;
+            int *shape_ = new int[dim_];
+
+            shape_[0] = tensor_shape.shape[0] + a.tensor_shape.shape[0];
+            for (int i = 1; i < dim_; i++)
+            {
+                shape_[i] = tensor_shape.shape[i - 1];
+            }
+
+            tensor_shape.reshape(shape_, dim_);
+        }
+    }
+
+    if (data != NULL)
+    {
+        delete[] data;
+        delete[] grad;
+    }
+
+    data = data_;
+    grad = grad_;
+}
+
 void Tensor::backward()
 {
     if (func != NULL)
@@ -796,7 +850,7 @@ void Tensor::dot(const Tensor &a)
             double value = 0;
             for (int t = 0; t < n; t++)
             {
-                value += index(i, t) * a.index(t, j);
+                value += index_(i, t) * a.index_(t, j);
             }
             int index_ = i * k + j;
             data_[index_] = value;
@@ -834,8 +888,8 @@ void Tensor::grad_dot(const Tensor &a)
             {
                 value += grad_index(i, t) * a.grad_index(t, j);
             }
-            int index_ = i * k + j;
-            grad_[index_] = value;
+            int idx_ = i * k + j;
+            grad_[idx_] = value;
         }
     }
 
@@ -858,9 +912,9 @@ void Tensor::T()
     {
         for (int j = 0; j < tensor_shape.shape[1]; j++)
         {
-            int index_ = j * tensor_shape.shape[0] + i;
-            data_[index_] = index(i, j);
-            grad_[index_] = grad_index(i, j);
+            int idx_ = j * tensor_shape.shape[0] + i;
+            data_[idx_] = index_(i, j);
+            grad_[idx_] = grad_index(i, j);
         }
     }
 
@@ -916,6 +970,7 @@ void Tensor::print()
             }
         }
     }
+    std::cout << std::endl;
 
     std::cout << "grad : " << std::endl;
     for (int i = 0; i < tensor_shape.size; i++)
@@ -933,8 +988,7 @@ void Tensor::print()
             }
         }
     }
-
-    
+    std::cout << std::endl;
 }
 
 Tensor dot(const Tensor &a, const Tensor &b)
@@ -961,8 +1015,8 @@ Tensor dot(const Tensor &a, const Tensor &b)
             double value = 0;
             for (int t = 0; t < n; t++)
             {
-                double a_ = a.index(i, t);
-                double b_ = b.index(t, j);
+                double a_ = a.index_(i, t);
+                double b_ = b.index_(t, j);
                 value += a_ * b_;
             }
             int index_ = i * c.tensor_shape.shape[1] + j;

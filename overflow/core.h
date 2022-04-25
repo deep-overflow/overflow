@@ -42,6 +42,7 @@ public:
     void reshape(const int *shape_, const int dim_);
     void reshape(const Shape &a);
     void T();
+    Shape index(int s, int e);
 
     void print();
 
@@ -76,13 +77,14 @@ public:
     void random(const int *shape_, const int dim_, char init_='n');
     void random(const Shape &shape_, char init_='n');
     void random(char init_='n');
-    // void init(); // randomized initialization
 
-    double sum(int axis = -1); // 수정해야 됨.
-    void append(const Tensor &a); // shape이 일치하는 지 확인하는 부분 필요.
-    Tensor index_(int arg_num, ...) const;
-    double index(int arg, ...) const; // general
+    Tensor index(int arg_num, ...) const; // not general 수정 필요.
+    double index_(int arg, ...) const; // general
     double grad_index(int arg, ...) const; // general
+
+    double sum_(int axis = -1, ...); // 수정해야 됨.
+    Tensor sum(int axis = -1); // 수정해야 됨.
+    void append(const Tensor &a, bool new_axis = true); // shape이 일치하는 지 확인하는 부분 필요.
 
     void backward();
     void zero_grad();
