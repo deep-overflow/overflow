@@ -162,6 +162,27 @@ void Shape::reshape(const int *shape_, const int dim_)
     }
 }
 
+void Shape::reshape(const Shape &a)
+{
+    if (dim == a.dim)
+    {
+        size = 1;
+    }
+    else
+    {
+        dim = a.dim;
+        size = 1;
+        delete[] shape;
+        shape = new int[dim];
+    }
+
+    for (int i = 0; i < dim; i++)
+    {
+        shape[i] = a.shape[i];
+        size *= shape[i];
+    }
+}
+
 void Shape::T()
 {
     int *shape_;
