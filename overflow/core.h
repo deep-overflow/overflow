@@ -70,7 +70,7 @@ public:
     // void init(); // randomized initialization
 
     double sum(int axis = -1); // 수정해야 됨.
-    void append(const Tensor &a);
+    void append(const Tensor &a); // shape이 일치하는 지 확인하는 부분 필요.
     Tensor index_(int arg_num, ...) const;
     double index(int arg, ...) const; // general
     double grad_index(int arg, ...) const; // general

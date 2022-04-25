@@ -52,8 +52,12 @@ void Module::print()
 
 Shape::Shape()
 {
+    /*
+        This Initializer is for 0 dimension Tensor,
+        which means scalar.
+    */
     dim = 0;
-    size = 0;
+    size = 1;
     shape = new int[dim];
 }
 
@@ -165,6 +169,7 @@ void Shape::print()
 
 Tensor::Tensor()
 {
+    tensor_shape.print();
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
     func = NULL;
