@@ -187,6 +187,10 @@ Tensor::Tensor()
     */
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
+
+    data[0] = 1;
+    grad[0] = 1;
+    
     func = NULL;
     requires_grad = true;
 }
@@ -620,7 +624,7 @@ void Tensor::dot(const Tensor &a)
         }
     }
 
-    tensor_shape.init(shape_, 2);
+    tensor_shape.reshape(shape_, 2);
 
     delete[] data;
     data = data_;
@@ -656,7 +660,7 @@ void Tensor::grad_dot(const Tensor &a)
         }
     }
 
-    tensor_shape.init(shape_, 2);
+    tensor_shape.reshape(shape_, 2);
 
     delete[] grad;
     grad = grad_;
