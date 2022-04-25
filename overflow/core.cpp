@@ -516,6 +516,12 @@ void Tensor::init_like(const double data_, const Shape& shape_)
     if (tensor_shape != shape_)
     {
         tensor_shape = shape_;
+
+        delete[] data;
+        delete[] grad;
+
+        data = new double[tensor_shape.size];
+        grad = new double[tensor_shape.size];
     }
 
     for (int i = 0; i < tensor_shape.size; i++)
