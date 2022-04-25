@@ -66,6 +66,7 @@ public:
     void operator=(const Tensor &a);
     Tensor operator+(const Tensor &a);
     Tensor operator-(const Tensor &a);
+    Tensor operator^(const Tensor &a);
     Tensor operator^(int k);
     // void operator*(const Tensor& c);
 

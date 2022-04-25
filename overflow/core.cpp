@@ -402,7 +402,7 @@ Tensor Tensor::operator^(const Tensor &a)
 {
     if (a.tensor_shape.dim != 0)
     {
-        std::cerr << "Dimension Error : a's dimension has to be 0." << std::endl;
+        std::cerr << "Dimension Error : a's dimension has to be 0, which means scalar." << std::endl;
     }
 
     int k = (int)(a.data[0]);
@@ -455,7 +455,7 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
     }
 }
 
-void Tensor::random_init(const int *shape_, const int dim_, char init_)
+void Tensor::random(const int *shape_, const int dim_, char init_)
 {
     tensor_shape.reshape(shape_, dim_);
 
@@ -490,7 +490,7 @@ void Tensor::random_init(const int *shape_, const int dim_, char init_)
     }
 }
 
-void Tensor::random_init(char init_)
+void Tensor::random(char init_)
 {
     // init_ == 'n' : normal distribution
     // init_ == 'u' : uniform distribution
