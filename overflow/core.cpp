@@ -453,6 +453,43 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
         data[i] = data_;
         grad[i] = 1;
     }
+
+    func = NULL;
+    requires_grad = true;
+}
+
+void Tensor::init_like(const double data_, const Shape& shape_)
+{
+    if (tensor_shape != shape_)
+    {
+        tensor_shape = shape_;
+    }
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data[i] = data_;
+        grad[i] = 1;
+    }
+
+    func = NULL;
+    requires_grad = true;
+}
+
+void Tensor::init_like(const double data_, const Tensor &a)
+{
+    if (tensor_shape != a.tensor_shape)
+    {
+        tensor_shape = a.tensor_shape;
+    }
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data[i] = data_;
+        grad[i] = 1;
+    }
+
+    func = NULL;
+    requires_grad = true;
 }
 
 void Tensor::random(const int *shape_, const int dim_, char init_)

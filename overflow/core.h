@@ -71,8 +71,10 @@ public:
     // void operator*(const Tensor& c);
 
     void init(const double data_, const int *shape_, const int dim_);
-    void random_init(const int *shape_, const int dim_, char init_);
-    void random_init(char init_);
+    void init_like(const double data_, const Shape& shape_);
+    void init_like(const double data_, const Tensor& a);
+    void random(const int *shape_, const int dim_, char init_);
+    void random(char init_);
     // void init(); // randomized initialization
 
     double sum(int axis = -1); // 수정해야 됨.
