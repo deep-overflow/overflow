@@ -265,6 +265,25 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
     requires_grad = true;
 }
 
+Tensor::Tensor(const int *shape_, const int dim_)
+{
+    tensor_shape.reshape(shape_, dim_);
+
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    std::normal_distribution<double> normal(0, 1);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data[i] = normal(rng);
+        grad[i] = 1;
+    }
+
+    func = NULL;
+    requires_grad = true;
+}
+
 Tensor::Tensor(const double data_, const Shape &shape_)
 {
     tensor_shape = shape_;
@@ -277,6 +296,25 @@ Tensor::Tensor(const double data_, const Shape &shape_)
         data[i] = data_;
         grad[i] = 1;
     }
+    func = NULL;
+    requires_grad = true;
+}
+
+Tensor::Tensor(const Shape &shape_)
+{
+    tensor_shape = shape_;
+
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    std::normal_distribution<double> normal(0, 1);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data[i] = normal(rng);
+        grad[i] = 1;
+    }
+
     func = NULL;
     requires_grad = true;
 }
