@@ -332,6 +332,9 @@ Tensor::Tensor(const Shape &shape_)
 {
     tensor_shape = shape_;
 
+    data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
+
     std::random_device rd;
     std::mt19937 rng(rd());
 
