@@ -79,23 +79,23 @@ public:
     void random(char init_='n');
 
     Tensor index(int arg_num, ...) const; // not general 수정 필요.
-    double index_(int arg, ...) const; // general
-    double grad_index(int arg, ...) const; // general
+    double index_(int arg, ...) const;
+    double grad_index(int arg, ...) const;
 
     double sum_(int axis = -1, ...); // 수정해야 됨.
     Tensor sum(int axis = -1); // 수정해야 됨.
-    void append(const Tensor &a, bool new_axis = true); // shape이 일치하는 지 확인하는 부분 필요.
+    void append(const Tensor &a, bool new_axis = true);
 
     void backward();
     void zero_grad();
 
-    void dot(const Tensor &a);
-    void grad_dot(const Tensor &a);
-    void T();
+    void dot(const Tensor &a); // not generalized: for matrix
+    void grad_dot(const Tensor &a); // not generalized: for matrix
+    void T(); // not generalized: for matrix
 
-    void print(); // general
+    void print();
 
-    // variable
+    // ===== variable =====
     double *data;
     double *grad;
     Shape tensor_shape;

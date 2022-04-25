@@ -1038,6 +1038,7 @@ Function::Function()
     input2 = NULL;
     output = NULL;
     has_params = false;
+    name = "function";
 }
 
 Tensor *Function::operator()(Tensor *input_)
@@ -1065,7 +1066,6 @@ void Function::zero_grad()
 Tensor *Function::return_params()
 {
     std::cerr << "Not Implemented Error" << std::endl;
-
     return NULL;
 }
 
