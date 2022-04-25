@@ -36,13 +36,13 @@ public:
     Shape(const Shape& a);
 
     void operator=(const Shape &a);
-    bool operator==(const Shape &a);
-    bool operator!=(const Shape &a);
+    bool operator==(const Shape &a) const;
+    bool operator!=(const Shape &a) const;
 
     void reshape(const int *shape_, const int dim_);
     void reshape(const Shape &a);
     void T();
-    Shape index(int s, int e);
+    Shape index(int s, int e) const;
 
     void print();
 

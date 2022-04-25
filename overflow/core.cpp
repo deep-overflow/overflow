@@ -115,7 +115,7 @@ void Shape::operator=(const Shape &a)
     }
 }
 
-bool Shape::operator==(const Shape &a)
+bool Shape::operator==(const Shape &a) const
 {
     if (dim != a.dim)
     {
@@ -138,7 +138,7 @@ bool Shape::operator==(const Shape &a)
     return true;
 }
 
-bool Shape::operator!=(const Shape &a)
+bool Shape::operator!=(const Shape &a) const
 {
     if (operator==(a))
     {
@@ -207,11 +207,11 @@ void Shape::T()
     shape = shape_;
 }
 
-Shape Shape::index(int s, int e)
+Shape Shape::index(int s, int e) const
 {
     int dim_ = e - s;
     int *shape_ = new int[dim_];
-    
+
     for (int i = s; i < e; i++)
     {
         shape_[i - s] = shape[i];
@@ -729,7 +729,10 @@ void Tensor::append(const Tensor &a, bool new_axis)
         new_axis가 true이면, batch를 사용한다.
     */
 
-    
+    if (a.tensor_shape == tensor_shape.index(1, -1))
+    {
+        std::cerr << "Dimension Error : Unmatching Dimension for append" << std::endl;
+    }
 
     int size = tensor_shape.size + a.tensor_shape.size;
     double *data_ = new double[size];
