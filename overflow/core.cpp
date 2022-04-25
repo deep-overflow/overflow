@@ -461,6 +461,37 @@ Tensor Tensor::operator^(int k)
     return c;
 }
 
+Tensor Tensor::operator*(const Tensor &a)
+{
+    if (a.tensor_shape.dim != 0)
+    {
+        std::cerr << "Dimension Error : a's dimension has to be 0, which means scalar." << std::endl;
+    }
+
+    double k = a.data[0];
+
+    Tensor c(0.0, tensor_shape);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        c.data[i] = k * data[i];
+    }
+
+    return c;
+}
+
+Tensor Tensor::operator*(double k)
+{
+    Tensor c(0.0, tensor_shape);
+
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        c.data[i] = k * data[i];
+    }
+
+    return c;
+}
+
 void Tensor::init(const double data_, const int *shape_, const int dim_)
 {
     tensor_shape.reshape(shape_, dim_);

@@ -69,7 +69,8 @@ public:
     Tensor operator-(const Tensor &a);
     Tensor operator^(const Tensor &a);
     Tensor operator^(int k);
-    // void operator*(const Tensor& c);
+    Tensor operator*(const Tensor& a);
+    Tensor operator*(double k);
 
     void init(const double data_, const int *shape_, const int dim_);
     void init_like(const double data_, const Shape& shape_);
