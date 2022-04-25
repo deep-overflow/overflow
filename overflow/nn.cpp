@@ -12,7 +12,7 @@ Linear::Linear(int in_features_, int out_features_, char init_)
 
     if (init)
     {
-        params.random_init(init);
+        params.random(init);
     }
 
     has_params = true;
@@ -67,7 +67,7 @@ void Linear::backward()
                 for (int t = 0; t < k; t++)
                 {
                     // (n x k) * (k x m) -> n x m
-                    value += output->grad_index(i, t) * input->index(t, j);
+                    value += output->grad_index(i, t) * input->index_(t, j);
                 }
                 int index_ = i * m + j;
                 params.grad[index_] = value;
@@ -86,7 +86,7 @@ void Linear::backward()
             for (int t = 0; t < n; t++)
             {
                 // (m x n) * (n x k) -> m x k
-                value += params.index(i, t) * output->grad_index(t, j);
+                value += params.index_(i, t) * output->grad_index(t, j);
             }
             int index_ = i * k + j;
             input->grad[index_] = value;
