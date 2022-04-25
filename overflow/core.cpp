@@ -625,6 +625,15 @@ void Tensor::random(char init_)
     random(tensor_shape, init_);
 }
 
+void Tensor::arange()
+{
+    for (int i = 0; i < tensor_shape.size; i++)
+    {
+        data[i] = i;
+        grad[i] = 1;
+    }
+}
+
 Tensor Tensor::index(int arg_num, ...) const
 {
     va_list list;

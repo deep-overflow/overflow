@@ -75,9 +75,10 @@ public:
     void init(const double data_, const int *shape_, const int dim_);
     void init_like(const double data_, const Shape &shape_);
     void init_like(const double data_, const Tensor &a);
-    void random(const int *shape_, const int dim_, char init_='n');
-    void random(const Shape &shape_, char init_='n');
+    void random(const int *shape_, const int dim_, char init_ = 'n');
+    void random(const Shape &shape_, char init_ = 'n');
     void random(char init_='n');
+    void arange();
 
     Tensor index(int arg_num, ...) const; // not general 수정 필요.
     double index_(int arg, ...) const;
