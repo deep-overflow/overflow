@@ -477,19 +477,7 @@ void Tensor::init_like(const double data_, const Shape& shape_)
 
 void Tensor::init_like(const double data_, const Tensor &a)
 {
-    if (tensor_shape != a.tensor_shape)
-    {
-        tensor_shape = a.tensor_shape;
-    }
-
-    for (int i = 0; i < tensor_shape.size; i++)
-    {
-        data[i] = data_;
-        grad[i] = 1;
-    }
-
-    func = NULL;
-    requires_grad = true;
+    init_like(data_, a.tensor_shape);
 }
 
 void Tensor::random(const int *shape_, const int dim_, char init_)
@@ -525,6 +513,50 @@ void Tensor::random(const int *shape_, const int dim_, char init_)
             grad[i] = 1;
         }
     }
+
+    func = NULL;
+    requires_grad = true;
+}
+
+void Tensor::random(const Shape &shape_, char init_)
+{
+    if (tensor_shape != shape_)
+    {
+        tensor_shape = shape_;
+        
+        delete[] data;
+        delete[] grad;
+
+        data = new double[tensor_shape.size];
+        grad = new double[tensor_shape.size];
+    }
+
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    if (init_ == 'n')
+    {
+        std::normal_distribution<double> normal(0, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = normal(rng);
+            grad[i] = 1;
+        }
+    }
+    else if (init_ == 'u')
+    {
+        std::uniform_real_distribution<double> uniform(-1, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = uniform(rng);
+            grad[i] = 1;
+        }
+    }
+
+    func = NULL;
+    requires_grad = true;
 }
 
 void Tensor::random(char init_)
