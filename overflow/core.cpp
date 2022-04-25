@@ -654,7 +654,7 @@ Tensor Tensor::index(int arg_num, ...) const
 
     for (int i = arg_num; i < tensor_shape.dim; i++)
     {
-        shape_[i + 1 - arg_num] = tensor_shape.shape[i];
+        shape_[i - arg_num] = tensor_shape.shape[i];
         size *= tensor_shape.shape[i];
     }
 
@@ -747,19 +747,15 @@ double Tensor::grad_index(int arg, ...) const
     return grad[index_];
 }
 
-double Tensor::sum_(int axis, ...)
+double Tensor::sum_()
 {
-    if (axis == -1)
+    double value = 0;
+    for (int i = 0; i < tensor_shape.size; i++)
     {
-        double value = 0;
-        for (int i = 0; i < tensor_shape.size; i++)
-        {
-            value += data[i];
-        }
-
-        return value;
+        value += data[i];
     }
-    return 1.0;
+
+    return value;
 }
 
 // Tensor Tensor::sum(int axis)

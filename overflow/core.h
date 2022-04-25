@@ -80,11 +80,11 @@ public:
     void random(char init_='n');
     void arange();
 
-    Tensor index(int arg_num, ...) const; // not general 수정 필요.
-    double index_(int arg, ...) const;
+    Tensor index(int arg_num, ...) const; // 수정 여부 고민해보기.
+    double index_(int arg, ...) const; // 수정 여부 고민해보기.
     double grad_index(int arg, ...) const;
 
-    double sum_(int axis = -1, ...); // 수정해야 됨.
+    double sum_(); // 수정해야 됨.
     Tensor sum(int axis = -1); // 수정해야 됨.
     void append(const Tensor &a, bool new_axis = true);
 
