@@ -85,7 +85,7 @@ public:
     double grad_index(int arg, ...) const;
 
     double sum_(); // 수정해야 됨.
-    Tensor sum(int axis = -1); // 수정해야 됨.
+    // Tensor sum(int axis = -1); // 수정해야 됨.
     void append(const Tensor &a, bool new_axis = true);
 
     void backward();

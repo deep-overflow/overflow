@@ -209,6 +209,11 @@ void Shape::T()
 
 Shape Shape::index(int s, int e) const
 {
+    if (e == -1)
+    {
+        e = dim;
+    }
+
     int dim_ = e - s;
     int *shape_ = new int[dim_];
 
@@ -757,21 +762,21 @@ double Tensor::sum_()
 
     return value;
 }
+/*
+Tensor Tensor::sum(int axis)
+{
+    Tensor c;
 
-// Tensor Tensor::sum(int axis)
-// {
-//     Tensor c;
+    if (axis == -1)
+    {
+        c.data[0] = 
+    }
+    else
+    {
 
-//     if (axis == -1)
-//     {
-//         c.data[0] = 
-//     }
-//     else
-//     {
-
-//     }
-// }
-
+    }
+}
+*/
 void Tensor::append(const Tensor &a, bool new_axis)
 {
     /*
