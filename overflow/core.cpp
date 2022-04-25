@@ -79,6 +79,18 @@ Shape::Shape(const int *shape_, const int dim_)
     }
 }
 
+Shape::Shape(const Shape& a)
+{
+    dim = a.dim;
+    size = 1;
+    shape = new int[dim];
+    for (int i = 0; i < dim; i++)
+    {
+        shape[i] = a.shape[i];
+        size *= shape[i];
+    }
+}
+
 void Shape::operator=(const Shape &a)
 {
     /*
@@ -188,9 +200,9 @@ Tensor::Tensor()
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
 
-    data[0] = 1;
-    grad[0] = 1;
-    
+    data[0] = 1; // random init 하고 싶다.
+    grad[0] = 1; // random init 하고 싶다.
+
     func = NULL;
     requires_grad = true;
 }
