@@ -294,6 +294,9 @@ Tensor::Tensor(const int *shape_, const int dim_)
 {
     tensor_shape.reshape(shape_, dim_);
 
+    data = new double[tensor_shape.size];
+    grad = new double[tensor_shape.size];
+
     std::random_device rd;
     std::mt19937 rng(rd());
 
@@ -346,6 +349,7 @@ Tensor::Tensor(const Shape &shape_)
 
 Tensor::~Tensor()
 {
+    std::cout << "Tensor::~Tensor()" << std::endl;
     if (data != NULL)
     {
         delete[] data;
