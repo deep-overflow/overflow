@@ -120,7 +120,7 @@ void Shape::operator=(const Shape &a)
         dim = a.dim;
         size = 1;
 
-        std::cout << "Re-Allocation" << std::endl;
+        std::cout << "Re-Allocation in Shape" << std::endl;
 
         delete[] shape;
         shape = new int[dim];
@@ -199,7 +199,7 @@ void Shape::reshape(const int *shape_, const int dim_)
         dim = dim_;
         size = 1;
 
-        std::cout << "Re-Allocation" << std::endl;
+        std::cout << "Re-Allocation in Shape" << std::endl;
         
         delete[] shape;
         shape = new int[dim];
@@ -225,7 +225,7 @@ void Shape::reshape(const Shape &a)
         dim = a.dim;
         size = 1;
 
-        std::cout << "Re-Allocation" << std::endl;
+        std::cout << "Re-Allocation in Shape" << std::endl;
 
         delete[] shape;
         shape = new int[dim];
@@ -411,7 +411,7 @@ Tensor::Tensor(const double data_, const Shape &shape_)
 Tensor::Tensor(const Shape &shape_)
 {
     std::cout << "Tensor::Tensor(const Shape &shape_)" << std::endl;
-    
+
     tensor_shape = shape_;
 
     data = new double[tensor_shape.size];
@@ -442,13 +442,18 @@ Tensor::~Tensor()
 
 void Tensor::operator=(const Tensor &a)
 {
-    if (!(tensor_shape == a.tensor_shape))
+    std::cout << "void Tensor::operator=(const Tensor &a)" << std::endl;
+
+    if (tensor_shape != a.tensor_shape)
     {
         tensor_shape = a.tensor_shape;
     }
 
+    std::cout << "Re-Allocation in Tensor" << std::endl;
+
     delete[] data;
     delete[] grad;
+
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
 
@@ -464,7 +469,9 @@ void Tensor::operator=(const Tensor &a)
 
 Tensor Tensor::operator+(const Tensor &a)
 {
-    if (!(tensor_shape == a.tensor_shape))
+    std::cout << "Tensor Tensor::operator+(const Tensor &a)" << std::endl;
+
+    if (tensor_shape != a.tensor_shape)
     {
         std::cerr << "Dimension Error in element-wise add" << std::endl;
     }
@@ -481,7 +488,9 @@ Tensor Tensor::operator+(const Tensor &a)
 
 Tensor Tensor::operator-(const Tensor &a)
 {
-    if (!(tensor_shape == a.tensor_shape))
+    std::cout << "Tensor Tensor::operator-(const Tensor &a)" << std::endl;
+
+    if (tensor_shape != a.tensor_shape)
     {
         std::cerr << "Dimension Error in element-wise substract" << std::endl;
     }
@@ -498,6 +507,8 @@ Tensor Tensor::operator-(const Tensor &a)
 
 Tensor Tensor::operator^(const Tensor &a)
 {
+    std::cout << "Tensor Tensor::operator^(const Tensor &a)" << std::endl;
+    
     if (a.tensor_shape.dim != 0)
     {
         std::cerr << "Dimension Error : a's dimension has to be 0, which means scalar." << std::endl;
@@ -522,6 +533,8 @@ Tensor Tensor::operator^(const Tensor &a)
 
 Tensor Tensor::operator^(int k)
 {
+    std::cout << "Tensor Tensor::operator^(int k)" << std::endl;
+    
     Tensor c(0.0, tensor_shape);
 
     for (int i = 0; i < tensor_shape.size; i++)
@@ -539,18 +552,18 @@ Tensor Tensor::operator^(int k)
 
 Tensor Tensor::operator*(const Tensor &a)
 {
-    if (a.tensor_shape.dim != 0)
-    {
-        std::cerr << "Dimension Error : a's dimension has to be 0, which means scalar." << std::endl;
-    }
+    std::cout << "Tensor Tensor::operator*(const Tensor &a)" << std::endl;
 
-    double k = a.data[0];
+    if (tensor_shape != a.tensor_shape)
+    {
+        std::cerr << "Dimension Error in element-wise multiplication" << std::endl;
+    }
 
     Tensor c(0.0, tensor_shape);
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
-        c.data[i] = k * data[i];
+        c.data[i] = data[i] * a.data[i];
     }
 
     return c;
@@ -558,6 +571,8 @@ Tensor Tensor::operator*(const Tensor &a)
 
 Tensor Tensor::operator*(double k)
 {
+    std::cout << "Tensor Tensor::operator*(double k)" << std::endl;
+
     Tensor c(0.0, tensor_shape);
 
     for (int i = 0; i < tensor_shape.size; i++)
