@@ -119,6 +119,9 @@ void Shape::operator=(const Shape &a)
     {
         dim = a.dim;
         size = 1;
+
+        std::cout << "Re-Allocation" << std::endl;
+
         delete[] shape;
         shape = new int[dim];
     }
@@ -185,6 +188,8 @@ void Shape::reshape(const int *shape_, const int dim_)
     /*
         No Memory Share.
     */
+    std::cout << "void Shape::reshape(const int *shape_, const int dim_)" << std::endl;
+
     if (dim == dim_)
     {
         size = 1;
@@ -193,6 +198,9 @@ void Shape::reshape(const int *shape_, const int dim_)
     {
         dim = dim_;
         size = 1;
+
+        std::cout << "Re-Allocation" << std::endl;
+        
         delete[] shape;
         shape = new int[dim];
     }
@@ -206,6 +214,8 @@ void Shape::reshape(const int *shape_, const int dim_)
 
 void Shape::reshape(const Shape &a)
 {
+    std::cout << "void Shape::reshape(const Shape &a)" << std::endl;
+
     if (dim == a.dim)
     {
         size = 1;
@@ -214,6 +224,9 @@ void Shape::reshape(const Shape &a)
     {
         dim = a.dim;
         size = 1;
+
+        std::cout << "Re-Allocation" << std::endl;
+
         delete[] shape;
         shape = new int[dim];
     }
@@ -227,6 +240,8 @@ void Shape::reshape(const Shape &a)
 
 void Shape::T()
 {
+    std::cout << "void Shape::T()" << std::endl;
+
     int *shape_;
     shape_ = new int[dim];
 
@@ -241,6 +256,8 @@ void Shape::T()
 
 Shape Shape::index(int s, int e) const
 {
+    std::cout << "Shape Shape::index(int s, int e) const" << std::endl;
+
     if (e == -1)
     {
         e = dim;
@@ -248,12 +265,17 @@ Shape Shape::index(int s, int e) const
 
     if (s >= e)
     {
-        std::cerr << "Argument Error : s must be larger than e." << std::endl;
+        std::cerr << "Argument Error : s < e" << std::endl;
     }
 
-    if (s >= dim || e >= dim)
+    if (s < 0 || dim <= s)
     {
-        std::cerr << "Argument Error : s and e must be smaller than dim." << std::endl;
+        std::cerr << "Argument Error : 0 <= s < dim" << std::endl;
+    }
+
+    if (e < 0 || dim < e)
+    {
+        std::cerr << "Argument Error : 0 <= e <= dim" << std::endl;
     }
 
     int dim_ = e - s;
