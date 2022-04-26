@@ -164,7 +164,7 @@ bool Shape::operator!=(const Shape &a) const
         return true;
     }
 
-    if (size != a.dim)
+    if (size != a.size)
     {
         return true;
     }
