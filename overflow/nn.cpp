@@ -7,6 +7,8 @@ Linear::Linear(int in_features_, int out_features_, char init_)
     /*
         O [batch, out_features] = I [batch, in_features] * P [in_features, out_features]
     */
+    std::cout << "Linear::Linear(int in_features_, int out_features_, char init_)" << std::endl;
+
     init = init_;
 
     int shape_[] = {in_features_, out_features_};
@@ -22,15 +24,13 @@ Linear::Linear(int in_features_, int out_features_, char init_)
 
     has_params = true;
 
-    input = NULL;
-    input2 = NULL;
-    output = new Tensor;
-
     name = "< Linear class : Function class >";
 }
 
 Tensor *Linear::operator()(Tensor *input_)
 {
+    std::cout << "Tensor *Linear::operator()(Tensor *input_)" << std::endl;
+    
     if (output == NULL)
     {
         output = new Tensor;
