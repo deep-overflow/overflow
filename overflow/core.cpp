@@ -71,6 +71,8 @@ Shape::Shape(const int *shape_, const int dim_)
         If dim_ = 2, Matrix.
         If dim_ >= 3, Tensor.
     */
+    std::cout << "Shape::Shape(const int *shape_, const int dim_)" << std::endl;
+
     dim = dim_;
     size = 1;
     shape = new int[dim];
@@ -81,8 +83,10 @@ Shape::Shape(const int *shape_, const int dim_)
     }
 }
 
-Shape::Shape(const Shape& a)
+Shape::Shape(const Shape &a)
 {
+    std::cout << "Shape::Shape(const Shape &a)" << std::endl;
+
     dim = a.dim;
     size = 1;
     shape = new int[dim];
@@ -96,14 +100,17 @@ Shape::Shape(const Shape& a)
 Shape::~Shape()
 {
     std::cout << "Shape::~Shape()" << std::endl;
-    
+
     delete[] shape;
 }
+
 void Shape::operator=(const Shape &a)
 {
     /*
         No Memory Share.
     */
+    std::cout << "void Shape::operator=(const Shape &a)" << std::endl;
+
     if (dim == a.dim)
     {
         size = 1;
@@ -125,6 +132,8 @@ void Shape::operator=(const Shape &a)
 
 bool Shape::operator==(const Shape &a) const
 {
+    std::cout << "bool Shape::operator==(const Shape &a) const" << std::endl;
+
     if (dim != a.dim)
     {
         return false;
@@ -148,9 +157,27 @@ bool Shape::operator==(const Shape &a) const
 
 bool Shape::operator!=(const Shape &a) const
 {
-    bool check = Shape::operator==(a);
+    std::cout << "bool Shape::operator!=(const Shape &a) const" << std::endl;
 
-    return !check;
+    if (dim != a.dim)
+    {
+        return true;
+    }
+
+    if (size != a.dim)
+    {
+        return true;
+    }
+
+    for (int i = 0; i < dim; i++)
+    {
+        if (shape[i] != a.shape[i])
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Shape::reshape(const int *shape_, const int dim_)
