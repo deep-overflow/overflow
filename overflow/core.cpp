@@ -312,6 +312,9 @@ Tensor::Tensor()
         This Initializer is for 0 dimension Tensor,
         which means scalar.
     */
+
+    std::cout << "Tensor::Tensor()" << std::endl;
+
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
 
@@ -422,15 +425,9 @@ Tensor::Tensor(const Shape &shape_)
 Tensor::~Tensor()
 {
     std::cout << "Tensor::~Tensor()" << std::endl;
-    if (data != NULL)
-    {
-        delete[] data;
-    }
-
-    if (grad != NULL)
-    {
-        delete[] grad;
-    }
+    
+    delete[] data;
+    delete[] grad;
 }
 
 void Tensor::operator=(const Tensor &a)
