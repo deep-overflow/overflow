@@ -83,18 +83,18 @@ public:
 
     Tensor index(int arg_num, ...) const; // 수정 여부 고민해보기.
     double index_(int arg, ...) const; // 수정 여부 고민해보기.
-    double grad_index(int arg, ...) const;
+    double grad_index(int arg, ...) const; // 수정 여부 고민해보기.
 
     double sum_(); // 수정해야 됨.
     // Tensor sum(int axis = -1); // 수정해야 됨.
-    void append(const Tensor &a, bool new_axis = true);
+    void append(const Tensor &a, bool new_axis = true); // 수정해야 됨.
 
     void backward();
     void zero_grad();
 
-    void dot(const Tensor &a); // not generalized: for matrix
-    void grad_dot(const Tensor &a); // not generalized: for matrix
-    void T(); // not generalized: for matrix
+    void dot(const Tensor &a); // not generalized: for matrix 수정 여부 고민해보기.
+    void grad_dot(const Tensor &a); // not generalized: for matrix 수정 여부 고민해보기.
+    void T(); // not generalized: for matrix 수정 여부 고민해보기
 
     void print();
 

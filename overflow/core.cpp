@@ -750,6 +750,8 @@ void Tensor::arange()
 
 Tensor Tensor::index(int arg_num, ...) const
 {
+    std::cout << "Tensor Tensor::index(int arg_num, ...) const" << std::endl;
+
     va_list list;
     va_start(list, arg_num);
 
@@ -759,8 +761,6 @@ Tensor Tensor::index(int arg_num, ...) const
     {
         arg[i] = va_arg(list, int); // 인덱싱
     }
-
-    Tensor result;
 
     int size = 1; // result.data의 크기
     int dim_ = tensor_shape.dim - arg_num;
@@ -772,7 +772,7 @@ Tensor Tensor::index(int arg_num, ...) const
         size *= tensor_shape.shape[i];
     }
 
-    result.init(1.0, shape_, dim_);
+    Tensor result(1.0, shape_, dim_);
 
     int start = arg[0];
 
@@ -806,6 +806,7 @@ double Tensor::index_(int arg, ...) const
     //     2. -1
     // - The maximum number of axis is 4,
     // - So there is 4 Axis class.
+    std::cout << "double Tensor::index_(int arg, ...) const" << std::endl;
 
     va_list list;
     va_start(list, arg);
@@ -835,6 +836,8 @@ double Tensor::index_(int arg, ...) const
 
 double Tensor::grad_index(int arg, ...) const
 {
+    std::cout << "double Tensor::grad_index(int arg, ...) const" << std::endl;
+
     va_list list;
     va_start(list, arg);
 
@@ -891,6 +894,7 @@ void Tensor::append(const Tensor &a, bool new_axis)
     /*
         new_axis가 true이면, batch를 사용한다.
     */
+    std::cout << "void Tensor::append(const Tensor &a, bool new_axis)" << std::endl;
 
     if (tensor_shape.dim > 1)
     {
@@ -901,11 +905,21 @@ void Tensor::append(const Tensor &a, bool new_axis)
     }
 
     int size = tensor_shape.size + a.tensor_shape.size;
+
+    std::cout << "Re-Allocation in Tensor" << std::endl;
+
     double *data_ = new double[size];
     double *grad_ = new double[size];
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
+        if (tensor_shape.dim == 0)
+        {
+            data_[0] = a.data[0];
+            grad_[0] = 1;
+            break;
+        }
+
         data_[i] = data[i];
         grad_[i] = 1;
     }
@@ -967,11 +981,8 @@ void Tensor::append(const Tensor &a, bool new_axis)
     std::cout << "tensor_shape" << std::endl;
     tensor_shape.print();
 
-    if (data != NULL)
-    {
-        delete[] data;
-        delete[] grad;
-    }
+    delete[] data;
+    delete[] grad;
 
     data = data_;
     grad = grad_;
@@ -1000,6 +1011,8 @@ void Tensor::zero_grad()
 
 void Tensor::dot(const Tensor &a)
 { // not generalized: for matrix
+    std::cout << "void Tensor::dot(const Tensor &a)" << std::endl;
+
     if (tensor_shape.shape[1] != a.tensor_shape.shape[0])
     {
         std::cerr << "Dimension Error in dot function" << std::endl;
@@ -1011,6 +1024,8 @@ void Tensor::dot(const Tensor &a)
     int k = a.tensor_shape.shape[1];
 
     int shape_[] = {m, k};
+
+    std::cout << "Re-Allocation in Tensor" << std::endl;
 
     double *data_ = new double[m * k];
 
@@ -1036,6 +1051,8 @@ void Tensor::dot(const Tensor &a)
 
 void Tensor::grad_dot(const Tensor &a)
 { // not generalized: for matrix
+    std::cout << "void Tensor::grad_dot(const Tensor &a)" << std::endl;
+
     if (tensor_shape.shape[1] != a.tensor_shape.shape[0])
     {
         std::cerr << "Dimension Error in dot function" << std::endl;
@@ -1048,6 +1065,7 @@ void Tensor::grad_dot(const Tensor &a)
 
     int shape_[] = {m, k};
 
+    std::cout << "Re-Allocation in Tensor" << std::endl;
     double *grad_ = new double[m * k];
 
     for (int i = 0; i < m; i++)
@@ -1072,6 +1090,9 @@ void Tensor::grad_dot(const Tensor &a)
 
 void Tensor::T()
 { // not generalized: for matrix
+    std::cout << "void Tensor::T()" << std::endl;
+
+    std::cout << "Re-Allocation in Tensor" << std::endl;
 
     double *data_;
     double *grad_;
@@ -1164,6 +1185,7 @@ void Tensor::print()
 
 Tensor dot(const Tensor &a, const Tensor &b)
 { // not generalized: for matrix
+    std::cout << "Tensor dot(const Tensor &a, const Tensor &b)" << std::endl;
 
     if (a.tensor_shape.shape[1] != b.tensor_shape.shape[0])
     {
@@ -1202,6 +1224,8 @@ Tensor dot(const Tensor &a, const Tensor &b)
 
 Function::Function()
 {
+    std::cout << "Function::Function()" << std::endl;
+
     input = NULL;
     input2 = NULL;
     output = NULL;
@@ -1211,33 +1235,45 @@ Function::Function()
 
 Tensor *Function::operator()(Tensor *input_)
 {
+    std::cout << "Tensor *Function::operator()(Tensor *input_)" << std::endl;
+
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;
 }
 
 Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)
 {
+    std::cout << "Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
+
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;
 }
 
 void Function::backward()
 {
+    std::cout << "void Function::backward()" << std::endl;
+
     std::cerr << "Not Implemented Error" << std::endl;
 }
 
 void Function::zero_grad()
 {
+    std::cout << "void Function::zero_grad()" << std::endl;
+
     std::cerr << "Not Implemented Error" << std::endl;
 }
 
 Tensor *Function::return_params()
 {
+    std::cout << "Tensor *Function::return_params()" << std::endl;
+
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;
 }
 
 void Function::print()
 {
+    std::cout << "void Function::print()" << std::endl;
+    
     std::cerr << "Not Implemented Error" << std::endl;
 }
