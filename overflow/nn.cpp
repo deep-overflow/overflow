@@ -26,7 +26,7 @@ Linear::Linear(int in_features_, int out_features_, char init_)
     input2 = NULL;
     output = NULL;
 
-    name = "linear";
+    name = "< Linear class : Function class >";
 }
 
 Tensor *Linear::operator()(Tensor *input_)
@@ -36,10 +36,11 @@ Tensor *Linear::operator()(Tensor *input_)
         output = new Tensor;
     }
 
+    
     // O [batch, out_feaures] = I [batch, in_features] * P [in_features, out_features]
     *output = dot(*input_, params);
     output->func = this;
-
+    
     input = input_;
 
     return output;
@@ -140,7 +141,7 @@ ReLU::ReLU()
     input2 = NULL;
     output = NULL;
 
-    name = "relu";
+    name = "< ReLU class : Function class >";
 }
 
 Tensor *ReLU::operator()(Tensor *input_)
@@ -210,7 +211,7 @@ MSELoss::MSELoss()
     input2 = NULL;
     output = NULL;
 
-    name = "mseloss";
+    name = "< MSELoss class : Function class >";
 }
 
 Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
