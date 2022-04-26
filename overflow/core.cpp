@@ -332,6 +332,8 @@ Tensor::Tensor()
 
 Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
 {
+    std::cout << "Tensor::Tensor(const double *data_, const int *shape_, const int dim_)" << std::endl;
+
     tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
@@ -348,6 +350,8 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
 
 Tensor::Tensor(const double data_, const int *shape_, const int dim_)
 {
+    std::cout << "Tensor::Tensor(const double data_, const int *shape_, const int dim_)" << std::endl;
+
     tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
@@ -364,6 +368,8 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
 
 Tensor::Tensor(const int *shape_, const int dim_)
 {
+    std::cout << "Tensor::Tensor(const int *shape_, const int dim_)" << std::endl;
+
     tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
@@ -386,6 +392,8 @@ Tensor::Tensor(const int *shape_, const int dim_)
 
 Tensor::Tensor(const double data_, const Shape &shape_)
 {
+    std::cout << "Tensor::Tensor(const double data_, const Shape &shape_)" << std::endl;
+
     tensor_shape = shape_;
 
     data = new double[tensor_shape.size];
@@ -402,6 +410,8 @@ Tensor::Tensor(const double data_, const Shape &shape_)
 
 Tensor::Tensor(const Shape &shape_)
 {
+    std::cout << "Tensor::Tensor(const Shape &shape_)" << std::endl;
+    
     tensor_shape = shape_;
 
     data = new double[tensor_shape.size];
