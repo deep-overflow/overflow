@@ -24,7 +24,7 @@ Linear::Linear(int in_features_, int out_features_, char init_)
 
     input = NULL;
     input2 = NULL;
-    output = NULL;
+    output = new Tensor;
 
     name = "< Linear class : Function class >";
 }
@@ -39,6 +39,7 @@ Tensor *Linear::operator()(Tensor *input_)
     // O [batch, out_feaures] = I [batch, in_features] * P [in_features, out_features]
     *output = dot(*input_, params);
     output->func = this;
+    output->print();
     
     input = input_;
 

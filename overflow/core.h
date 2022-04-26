@@ -34,6 +34,7 @@ public:
     Shape();
     Shape(const int *shape_, const int dim_);
     Shape(const Shape &a);
+    ~Shape();
 
     void operator=(const Shape &a);
     bool operator==(const Shape &a) const;

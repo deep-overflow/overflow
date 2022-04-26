@@ -56,6 +56,8 @@ Shape::Shape()
         This Initializer is for 0 dimension Tensor,
         which means scalar.
     */
+    std::cout << "Shape::Shape()" << std::endl;
+
     dim = 0;
     size = 1;
     shape = new int[dim];
@@ -91,6 +93,12 @@ Shape::Shape(const Shape& a)
     }
 }
 
+Shape::~Shape()
+{
+    std::cout << "Shape::~Shape()" << std::endl;
+    
+    delete[] shape;
+}
 void Shape::operator=(const Shape &a)
 {
     /*
