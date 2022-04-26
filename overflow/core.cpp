@@ -585,10 +585,15 @@ Tensor Tensor::operator*(double k)
 
 void Tensor::init(const double data_, const int *shape_, const int dim_)
 {
+    std::cout << "void Tensor::init(const double data_, const int *shape_, const int dim_)" << std::endl;
+
     tensor_shape.reshape(shape_, dim_);
+
+    std::cout << "Re-Allocation in Tensor" << std::endl;
 
     delete[] data;
     delete[] grad;
+
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
 
@@ -604,9 +609,13 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
 
 void Tensor::init_like(const double data_, const Shape& shape_)
 {
+    std::cout << "void Tensor::init_like(const double data_, const Shape& shape_)" << std::endl;
+
     if (tensor_shape != shape_)
     {
         tensor_shape = shape_;
+
+        std::cout << "Re-Allocation in Tensor" << std::endl;
 
         delete[] data;
         delete[] grad;
@@ -627,12 +636,18 @@ void Tensor::init_like(const double data_, const Shape& shape_)
 
 void Tensor::init_like(const double data_, const Tensor &a)
 {
+    std::cout << "void Tensor::init_like(const double data_, const Tensor &a)" << std::endl;
+
     init_like(data_, a.tensor_shape);
 }
 
 void Tensor::random(const int *shape_, const int dim_, char init_)
 {
+    std::cout << "void Tensor::random(const int *shape_, const int dim_, char init_)" << std::endl;
+
     tensor_shape.reshape(shape_, dim_);
+
+    std::cout << "Re-Allocation in Tensor" << std::endl;
 
     delete[] data;
     delete[] grad;
@@ -670,9 +685,13 @@ void Tensor::random(const int *shape_, const int dim_, char init_)
 
 void Tensor::random(const Shape &shape_, char init_)
 {
+    std::cout << "void Tensor::random(const Shape &shape_, char init_)" << std::endl;
+
     if (tensor_shape != shape_)
     {
         tensor_shape = shape_;
+
+        std::cout << "Re-Allocation in Tensor" << std::endl;
         
         delete[] data;
         delete[] grad;
@@ -713,14 +732,18 @@ void Tensor::random(char init_)
 {
     // init_ == 'n' : normal distribution
     // init_ == 'u' : uniform distribution
+    std::cout << "void Tensor::random(char init_)" << std::endl;
+
     random(tensor_shape, init_);
 }
 
 void Tensor::arange()
 {
+    std::cout << "void Tensor::arange()" << std::endl;
+
     for (int i = 0; i < tensor_shape.size; i++)
     {
-        data[i] = i;
+        data[i] = i + 1;
         grad[i] = 1;
     }
 }
