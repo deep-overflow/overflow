@@ -1228,7 +1228,7 @@ Function::Function()
 
     input = NULL;
     input2 = NULL;
-    output = NULL;
+    output = new Tensor;
     has_params = false;
     name = "function";
 }

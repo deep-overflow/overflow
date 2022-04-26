@@ -33,7 +33,9 @@ Tensor *Linear::operator()(Tensor *input_)
     
     if (output == NULL)
     {
-        output = new Tensor;
+        std::cout << "new Tensor" << std::endl;
+        output = new Tensor();
+        std::cout << "new Tensor" << std::endl;
     }
 
     // O [batch, out_feaures] = I [batch, in_features] * P [in_features, out_features]
@@ -128,6 +130,55 @@ Tensor *Linear::return_params()
 void Linear::print()
 {
     std::cout << name << std::endl;
+
+    if (init == 0)
+    {
+        std::cout << "params init : NULL" << std::endl
+                  << std::endl;
+    }
+    else if (init == 'n')
+    {
+        std::cout << "params init : normal" << std::endl
+                  << std::endl;
+    }
+    else if (init == 'u')
+    {
+        std::cout << "params init : uniform" << std::endl
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "params init : Unknown" << std::endl
+                  << std::endl;
+    }
+
+    if (input == NULL)
+    {
+        std::cout << "input : NULL" << std::endl;
+    }
+    else
+    {
+        input->print();
+    }
+
+    if (input2 == NULL)
+    {
+        std::cout << "input2 : NULL" << std::endl;
+    }
+    else
+    {
+        input2->print();
+    }
+
+    if (output == NULL)
+    {
+        std::cout << "output : NULL" << std::endl;
+    }
+    else
+    {
+        output->print();
+    }
+
     params.print();
 }
 
