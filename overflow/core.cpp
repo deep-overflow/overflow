@@ -280,8 +280,15 @@ void Shape::T()
         shape_[i] = shape[dim - 1 - i];
     }
 
-    delete[] shape;
-    shape = shape_;
+    if (shape == NULL)
+    {
+        shape = shape_;
+    }
+    else
+    {
+        delete[] shape;
+        shape = shape_;
+    }
 }
 
 Shape Shape::index(int s, int e) const
