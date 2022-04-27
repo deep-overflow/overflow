@@ -314,17 +314,15 @@ void ReLU::print()
 
 MSELoss::MSELoss()
 {
-    has_params = false;
-
-    input = NULL;
-    input2 = NULL;
-    output = NULL;
-
+    std::cout << "MSELoss::MSELoss()" << std::endl;
+    
     name = "< MSELoss class : Function class >";
 }
 
 Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
 {
+    std::cout << "Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
+
     if (output == NULL)
     {
         output = new Tensor;
@@ -341,6 +339,8 @@ Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
 
 void MSELoss::backward()
 {
+    std::cout << "void MSELoss::backward()" << std::endl;
+
     for (int i = 0; i < output->tensor_shape.size; i++)
     {
         double grad_input = 2 * (input->data[i] - input2->data[i]);
@@ -356,6 +356,7 @@ void MSELoss::backward()
     {
         input->backward();
     }
+
     if (input2->func != NULL)
     {
         input2->backward();
@@ -364,6 +365,8 @@ void MSELoss::backward()
 
 void MSELoss::zero_grad()
 {
+    std::cout << "void MSELoss::zero_grad()" << std::endl;
+
     delete output;
 
     input->zero_grad();
@@ -377,4 +380,34 @@ void MSELoss::zero_grad()
 void MSELoss::print()
 {
     std::cout << name << std::endl;
+
+    if (input == NULL)
+    {
+        std::cout << "input : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input :" << std::endl;
+        input->print();
+    }
+
+    if (input2 == NULL)
+    {
+        std::cout << "input2 : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input2 :" << std::endl;
+        input2->print();
+    }
+
+    if (output == NULL)
+    {
+        std::cout << "output : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "output :" << std::endl;
+        output->print();
+    }
 }
