@@ -2,14 +2,12 @@
 
 // Linear #################################################
 
-Linear::Linear(int in_features_, int out_features_, char init_)
+Linear::Linear(int in_features_, int out_features_, char init_) : init(init_)
 {
     /*
         O [batch, out_features] = I [batch, in_features] * P [in_features, out_features]
     */
     std::cout << "Linear::Linear(int in_features_, int out_features_, char init_)" << std::endl;
-
-    init = init_;
 
     int shape_[] = {in_features_, out_features_};
 
@@ -27,21 +25,28 @@ Linear::Linear(int in_features_, int out_features_, char init_)
     name = "< Linear class : Function class >";
 }
 
+Linear::~Linear()
+{
+    std::cout << "Linear::~Linear" << std::endl;
+
+    if (output != NULL)
+    {
+        delete output;
+    }
+}
+
 Tensor *Linear::operator()(Tensor *input_)
 {
     std::cout << "Tensor *Linear::operator()(Tensor *input_)" << std::endl;
     
     if (output == NULL)
     {
-        std::cout << "new Tensor" << std::endl;
         output = new Tensor();
-        std::cout << "new Tensor" << std::endl;
     }
 
     // O [batch, out_feaures] = I [batch, in_features] * P [in_features, out_features]
     *output = dot(*input_, params);
     output->func = this;
-    output->print();
     
     input = input_;
 

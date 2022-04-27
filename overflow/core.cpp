@@ -1291,15 +1291,9 @@ Tensor dot(const Tensor &a, const Tensor &b)
 
 // Function ###############################################
 
-Function::Function()
+Function::Function() : input(NULL), input2(NULL), output(NULL), has_params(false), name("function")
 {
     std::cout << "Function::Function()" << std::endl;
-
-    input = NULL;
-    input2 = NULL;
-    output = new Tensor;
-    has_params = false;
-    name = "function";
 }
 
 Tensor *Function::operator()(Tensor *input_)
