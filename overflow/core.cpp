@@ -784,7 +784,32 @@ void Tensor::random(char init_)
     // init_ == 'u' : uniform distribution
     std::cout << "void Tensor::random(char init_)" << std::endl;
 
-    random(tensor_shape, init_);
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    
+    if (init_ == 'n')
+    {
+        std::normal_distribution<double> normal(0, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = normal(rng);
+            grad[i] = 1;
+        }
+    }
+    else if (init_ == 'u')
+    {
+        std::uniform_real_distribution<double> uniform(-1, 1);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = uniform(rng);
+            grad[i] = 1;
+        }
+    }
+
+    func = NULL;
+    requires_grad = true;
 }
 
 void Tensor::arange()
