@@ -129,14 +129,14 @@ void Shape::operator=(const Shape &a)
         dim = a.dim;
         size = 1;
 
-        std::cout << "Re-Allocation in Shape" << std::endl;
-
         if (shape == NULL)
         {
             shape = new int[dim];
         }
         else
         {
+            std::cout << "Re-Allocation in Shape" << std::endl;
+
             delete[] shape;
             shape = new int[dim];
         }
@@ -215,14 +215,14 @@ void Shape::reshape(const int *shape_, const int dim_)
         dim = dim_;
         size = 1;
 
-        std::cout << "Re-Allocation in Shape" << std::endl;
-        
         if (shape == NULL)
         {
             shape = new int[dim];
         }
         else
         {
+            std::cout << "Re-Allocation in Shape" << std::endl;
+
             delete[] shape;
             shape = new int[dim];
         }
@@ -248,10 +248,17 @@ void Shape::reshape(const Shape &a)
         dim = a.dim;
         size = 1;
 
-        std::cout << "Re-Allocation in Shape" << std::endl;
+        if (shape == NULL)
+        {
+            shape = new int[dim];
+        }
+        else
+        {
+            std::cout << "Re-Allocation in Shape" << std::endl;
 
-        delete[] shape;
-        shape = new int[dim];
+            delete[] shape;
+            shape = new int[dim];
+        }
     }
 
     for (int i = 0; i < dim; i++)
