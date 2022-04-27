@@ -183,6 +183,24 @@ bool Shape::operator!=(const Shape &a) const
     return false;
 }
 
+bool Shape::compare(const int *shape_, const int dim_)
+{
+    if (dim != dim_)
+    {
+        return false;
+    }
+
+    for (int i = 0; i < dim; i++)
+    {
+        if (shape[i] != shape_[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void Shape::reshape(const int *shape_, const int dim_)
 {
     /*

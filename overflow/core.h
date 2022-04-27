@@ -39,6 +39,7 @@ public:
     void operator=(const Shape &a);
     bool operator==(const Shape &a) const;
     bool operator!=(const Shape &a) const;
+    bool compare(const int *shape_, const int dim_);
 
     void reshape(const int *shape_, const int dim_);
     void reshape(const Shape &a);
