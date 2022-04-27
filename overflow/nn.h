@@ -31,6 +31,7 @@ class ReLU : public Function
 {
 public:
     ReLU();
+    ~ReLU();
 
     virtual Tensor *operator()(Tensor *input_);
 
@@ -44,6 +45,7 @@ class MSELoss : public Function
 {
 public:
     MSELoss();
+    ~MSELoss();
 
     virtual Tensor *operator()(Tensor *input_1, Tensor *input_2);
 

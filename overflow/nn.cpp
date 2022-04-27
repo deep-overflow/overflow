@@ -121,7 +121,7 @@ void Linear::backward()
 void Linear::zero_grad()
 {
     std::cout << "void Linear::zero_grad()" << std::endl;
-    
+
     delete output;
 
     params.zero_grad();
@@ -202,17 +202,25 @@ void Linear::print()
 
 ReLU::ReLU()
 {
-    has_params = false;
-
-    input = NULL;
-    input2 = NULL;
-    output = NULL;
+    std::cout << "ReLU::ReLU()" << std::endl;
 
     name = "< ReLU class : Function class >";
 }
 
+ReLU::~ReLU()
+{
+    std::cout << "ReLU::~ReLU()" << std::endl;
+
+    if (output != NULL)
+    {
+        delete output;
+    }
+}
+
 Tensor *ReLU::operator()(Tensor *input_)
 {
+    std::cout << "Tensor *ReLU::operator()(Tensor *input_)" << std::endl;
+
     if (output == NULL)
     {
         output = new Tensor;
@@ -235,6 +243,8 @@ Tensor *ReLU::operator()(Tensor *input_)
 
 void ReLU::backward()
 {
+    std::cout << "void ReLU::backward()" << std::endl;
+
     for (int i = 0; i < output->tensor_shape.size; i++)
     {
         if (output->data[i] > 0)
@@ -255,6 +265,8 @@ void ReLU::backward()
 
 void ReLU::zero_grad()
 {
+    std::cout << "void ReLU::zero_grad()" << std::endl;
+
     delete output;
 
     input->zero_grad();
