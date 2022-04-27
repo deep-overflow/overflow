@@ -96,7 +96,7 @@ public:
     void grad_dot(const Tensor &a); // not generalized: for matrix 수정 여부 고민해보기.
     void T(); // not generalized: for matrix 수정 여부 고민해보기
 
-    void print();
+    void print() const;
 
     // ===== variable =====
     double *data;

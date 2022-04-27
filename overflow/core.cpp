@@ -1118,7 +1118,7 @@ void Tensor::T()
     grad = grad_;
 }
 
-void Tensor::print()
+void Tensor::print() const
 { // not generalized: for matrix
     tensor_shape.print();
 
