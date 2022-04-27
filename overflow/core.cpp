@@ -786,7 +786,7 @@ void Tensor::random(char init_)
 
     std::random_device rd;
     std::mt19937 rng(rd());
-    
+
     if (init_ == 'n')
     {
         std::normal_distribution<double> normal(0, 1);
@@ -875,12 +875,6 @@ Tensor Tensor::index(int arg_num, ...) const
 
 double Tensor::index_(int arg, ...) const
 {
-    // indexing rule
-    // - two type of indexing expression
-    //     1. start:end:stride
-    //     2. -1
-    // - The maximum number of axis is 4,
-    // - So there is 4 Axis class.
     std::cout << "double Tensor::index_(int arg, ...) const" << std::endl;
 
     va_list list;
