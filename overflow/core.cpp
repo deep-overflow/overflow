@@ -786,7 +786,7 @@ void Tensor::random(char init_)
 
     std::random_device rd;
     std::mt19937 rng(rd());
-
+    
     if (init_ == 'n')
     {
         std::normal_distribution<double> normal(0, 1);
