@@ -480,7 +480,7 @@ void Tensor::operator=(const Tensor &a)
         if (tensor_shape.size != a.tensor_shape.size)
         {
             tensor_shape = a.tensor_shape;
-            
+
             std::cout << "Re-Allocation in Tensor" << std::endl;
 
             delete[] data;
@@ -511,7 +511,11 @@ Tensor Tensor::operator+(const Tensor &a)
 
     if (tensor_shape != a.tensor_shape)
     {
-        std::cerr << "Dimension Error in element-wise add" << std::endl;
+        std::cerr << "Dimension Error in element-wise addition" << std::endl;
+    }
+    else
+    {
+        std::cout << "Dimension Match in element-wise addition" << std::endl;
     }
 
     Tensor c(0.0, tensor_shape);
@@ -531,6 +535,10 @@ Tensor Tensor::operator-(const Tensor &a)
     if (tensor_shape != a.tensor_shape)
     {
         std::cerr << "Dimension Error in element-wise substract" << std::endl;
+    }
+    else
+    {
+        std::cout << "Dimension Match in element-wise subtraction" << std::endl;
     }
 
     Tensor c(0.0, tensor_shape);
