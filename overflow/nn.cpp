@@ -64,6 +64,8 @@ void Linear::backward()
     P.grad = O.grad I^T : (n x k) * (k x m) -> n x m
     I.grad = P^T O.grad : (m x n) * (n x k) -> m x k
     */
+    std::cout << "void Linear::backward()" << std::endl;
+
     int n = params.tensor_shape.shape[0];
     int m = params.tensor_shape.shape[1];
     int m_ = input->tensor_shape.shape[0];
@@ -72,6 +74,7 @@ void Linear::backward()
     // compute params.grad
     if (params.requires_grad)
     {
+        std::cout << "Compute params.grad" << std::endl;
         input->T();
         for (int i = 0; i < n; i++)
         {
@@ -117,6 +120,8 @@ void Linear::backward()
 
 void Linear::zero_grad()
 {
+    std::cout << "void Linear::zero_grad()" << std::endl;
+    
     delete output;
 
     params.zero_grad();
@@ -129,6 +134,8 @@ void Linear::zero_grad()
 
 Tensor *Linear::return_params()
 {
+    std::cout << "Tensor *Linear::return_params()" << std::endl;
+
     return &params;
 }
 
@@ -163,6 +170,7 @@ void Linear::print()
     }
     else
     {
+        std::cout << "input :" << std::endl;
         input->print();
     }
 
@@ -172,6 +180,7 @@ void Linear::print()
     }
     else
     {
+        std::cout << "input2 :" << std::endl;
         input2->print();
     }
 
@@ -181,9 +190,11 @@ void Linear::print()
     }
     else
     {
+        std::cout << "output :" << std::endl;
         output->print();
     }
 
+    std::cout << "params :" << std::endl;
     params.print();
 }
 

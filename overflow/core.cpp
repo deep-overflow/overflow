@@ -1059,6 +1059,8 @@ void Tensor::append(const Tensor &a, bool new_axis)
 
 void Tensor::backward()
 {
+    std::cout << "void Tensor::backward()" << std::endl;
+
     if (func != NULL)
     {
         func->backward();
@@ -1067,6 +1069,8 @@ void Tensor::backward()
 
 void Tensor::zero_grad()
 {
+    std::cout << "void Tensor::zero_grad()" << std::endl;
+
     for (int i = 0; i < tensor_shape.size; i++)
     {
         grad[i] = 1;
@@ -1075,6 +1079,7 @@ void Tensor::zero_grad()
     if (func != NULL)
     {
         func->zero_grad();
+        func = NULL;
     }
 }
 
