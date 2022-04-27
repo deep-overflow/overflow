@@ -274,7 +274,11 @@ void Shape::reshape(const Shape &a)
 {
     std::cout << "void Shape::reshape(const Shape &a)" << std::endl;
 
-
+    if (compare(a))
+    {
+        std::cout << "Same Shape : Not need to reshape" << std::endl;
+        return;
+    }
 
     if (dim == a.dim)
     {
