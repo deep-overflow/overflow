@@ -50,29 +50,18 @@
 
 // Shape ##################################################
 
-Shape::Shape()
+Shape::Shape() : dim(0), size(1), shape(NULL)
 {
     std::cout << "Shape::Shape()" << std::endl;
-
-    dim = 0;
-    size = 1;
-    shape = NULL;
 }
 
-Shape::Shape(const int *shape_, const int dim_)
+Shape::Shape(const int *shape_, const int dim_) : dim(dim_), size(1), shape(NULL)
 {
     std::cout << "Shape::Shape(const int *shape_, const int dim_)" << std::endl;
 
-    dim = dim_;
-    size = 1;
-    
     if (dim > 0)
     {
         shape = new int[dim];
-    }
-    else
-    {
-        shape = NULL;
     }
 
     for (int i = 0; i < dim; i++)
@@ -82,20 +71,15 @@ Shape::Shape(const int *shape_, const int dim_)
     }
 }
 
-Shape::Shape(const Shape &a)
+Shape::Shape(const Shape &a) : dim(a.dim), size(1), shape(NULL)
 {
     std::cout << "Shape::Shape(const Shape &a)" << std::endl;
 
-    dim = a.dim;
-    size = 1;
     if (dim > 0)
     {
         shape = new int[dim];
     }
-    else
-    {
-        shape = NULL;
-    }
+
     for (int i = 0; i < dim; i++)
     {
         shape[i] = a.shape[i];
@@ -345,7 +329,7 @@ void Shape::print() const
 
 // Tensor #################################################
 
-Tensor::Tensor()
+Tensor::Tensor() : func(NULL), requires_grad(true)
 {
     std::cout << "Tensor::Tensor()" << std::endl;
 
@@ -359,12 +343,9 @@ Tensor::Tensor()
 
     data[0] = normal(rng);
     grad[0] = 1;
-
-    func = NULL;
-    requires_grad = true;
 }
 
-Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_)
+Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true)
 {
     std::cout << "Tensor::Tensor(const double *data_, const int *shape_, const int dim_)" << std::endl;
 
@@ -376,11 +357,9 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_
         data[i] = data_[i];
         grad[i] = 1;
     }
-    func = NULL;
-    requires_grad = true;
 }
 
-Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_)
+Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), reuqires_grad(true)
 {
     std::cout << "Tensor::Tensor(const double data_, const int *shape_, const int dim_)" << std::endl;
 
@@ -392,11 +371,9 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_s
         data[i] = data_;
         grad[i] = 1;
     }
-    func = NULL;
-    requires_grad = true;
 }
 
-Tensor::Tensor(const int *shape_, const int dim_) : tensor_shape(shape_, dim_)
+Tensor::Tensor(const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true)
 {
     std::cout << "Tensor::Tensor(const int *shape_, const int dim_)" << std::endl;
 
@@ -413,12 +390,9 @@ Tensor::Tensor(const int *shape_, const int dim_) : tensor_shape(shape_, dim_)
         data[i] = normal(rng);
         grad[i] = 1;
     }
-
-    func = NULL;
-    requires_grad = true;
 }
 
-Tensor::Tensor(const double data_, const Shape &shape_) : tensor_shape(shape_)
+Tensor::Tensor(const double data_, const Shape &shape_) : tensor_shape(shape_), func(NULL), requires_grad(true)
 {
     std::cout << "Tensor::Tensor(const double data_, const Shape &shape_)" << std::endl;
 
@@ -430,11 +404,9 @@ Tensor::Tensor(const double data_, const Shape &shape_) : tensor_shape(shape_)
         data[i] = data_;
         grad[i] = 1;
     }
-    func = NULL;
-    requires_grad = true;
 }
 
-Tensor::Tensor(const Shape &shape_) : tensor_shape(shape_)
+Tensor::Tensor(const Shape &shape_) : tensor_shape(shape_), func(NULL), requires_grad(true)
 {
     std::cout << "Tensor::Tensor(const Shape &shape_)" << std::endl;
 
@@ -451,9 +423,6 @@ Tensor::Tensor(const Shape &shape_) : tensor_shape(shape_)
         data[i] = normal(rng);
         grad[i] = 1;
     }
-
-    func = NULL;
-    requires_grad = true;
 }
 
 Tensor::~Tensor()
@@ -577,6 +546,10 @@ Tensor Tensor::operator*(const Tensor &a)
     if (tensor_shape != a.tensor_shape)
     {
         std::cerr << "Dimension Error in element-wise multiplication" << std::endl;
+    }
+    else
+    {
+        std::cout << "Dimension Match in element-wise multiplication" << std::endl;
     }
 
     Tensor c(0.0, tensor_shape);
