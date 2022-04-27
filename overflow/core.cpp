@@ -185,6 +185,8 @@ bool Shape::operator!=(const Shape &a) const
 
 bool Shape::compare(const int *shape_, const int dim_)
 {
+    std::cout << "bool Shape::compare(const int *shape_, const int dim_)" << std::endl;
+
     if (dim != dim_)
     {
         return false;
@@ -201,12 +203,43 @@ bool Shape::compare(const int *shape_, const int dim_)
     return true;
 }
 
+bool Shape::compare(const Shape &a)
+{
+    std::cout << "bool Shape::compare(const Shape &a)" << std::endl;
+
+    if (dim != a.dim)
+    {
+        return false;
+    }
+
+    if (size != a.size)
+    {
+        return false;
+    }
+
+    for (int i = 0; i < dim; i++)
+    {
+        if (shape[i] != a.shape[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void Shape::reshape(const int *shape_, const int dim_)
 {
     /*
         No Memory Share.
     */
     std::cout << "void Shape::reshape(const int *shape_, const int dim_)" << std::endl;
+
+    if (compare(shape_, dim_))
+    {
+        std::cout << "Same Shape : Not need to reshape" << std::endl;
+        return;
+    }
 
     if (dim == dim_)
     {
@@ -240,6 +273,8 @@ void Shape::reshape(const int *shape_, const int dim_)
 void Shape::reshape(const Shape &a)
 {
     std::cout << "void Shape::reshape(const Shape &a)" << std::endl;
+
+
 
     if (dim == a.dim)
     {
