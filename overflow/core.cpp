@@ -359,7 +359,7 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_
     }
 }
 
-Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), reuqires_grad(true)
+Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true)
 {
     std::cout << "Tensor::Tensor(const double data_, const int *shape_, const int dim_)" << std::endl;
 
