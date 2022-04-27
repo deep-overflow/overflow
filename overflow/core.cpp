@@ -551,32 +551,6 @@ Tensor Tensor::operator-(const Tensor &a)
     return c;
 }
 
-Tensor Tensor::operator^(const Tensor &a)
-{
-    std::cout << "Tensor Tensor::operator^(const Tensor &a)" << std::endl;
-    
-    if (a.tensor_shape.dim != 0)
-    {
-        std::cerr << "Dimension Error : a's dimension has to be 0, which means scalar." << std::endl;
-    }
-
-    int k = (int)(a.data[0]);
-
-    Tensor c(0.0, tensor_shape);
-
-    for (int i = 0; i < tensor_shape.size; i++)
-    {
-        double value = 1;
-        for (int j = 0; j < k; j++)
-        {
-            value *= data[i];
-        }
-        c.data[i] = value;
-    }
-
-    return c;
-}
-
 Tensor Tensor::operator^(int k)
 {
     std::cout << "Tensor Tensor::operator^(int k)" << std::endl;
