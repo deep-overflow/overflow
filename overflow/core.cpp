@@ -217,8 +217,15 @@ void Shape::reshape(const int *shape_, const int dim_)
 
         std::cout << "Re-Allocation in Shape" << std::endl;
         
-        delete[] shape;
-        shape = new int[dim];
+        if (shape == NULL)
+        {
+            shape = new int[dim];
+        }
+        else
+        {
+            delete[] shape;
+            shape = new int[dim];
+        }
     }
 
     for (int i = 0; i < dim; i++)
