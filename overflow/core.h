@@ -11,22 +11,22 @@ class Shape;
 class Tensor;
 class Function;
 
-class Module
-{
-public:
-    Module();
+// class Module
+// {
+// public:
+//     Module();
 
-    Tensor *operator()(Tensor *input_);
+//     Tensor *operator()(Tensor *input_);
 
-    void add_params();
+//     void add_params();
 
-    void print();
+//     void print();
 
-    Function **func;
-    Tensor **params;
-    int n_func;
-    int n_params;
-};
+//     Function **func;
+//     Tensor **params;
+//     int n_func;
+//     int n_params;
+// };
 
 class Shape
 {

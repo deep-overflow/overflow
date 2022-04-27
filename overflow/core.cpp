@@ -2,80 +2,79 @@
 
 // Module #################################################
 
-Module::Module()
-{
-    func = NULL;
-    params = NULL;
-    n_func = 0;
-    n_params = 0;
-}
+// Module::Module()
+// {
+//     func = NULL;
+//     params = NULL;
+//     n_func = 0;
+//     n_params = 0;
+// }
 
-Tensor *Module::operator()(Tensor *input_)
-{
-    Tensor *output = input_;
+// Tensor *Module::operator()(Tensor *input_)
+// {
+//     Tensor *output = input_;
 
-    for (int i = 0; i < n_func; i++)
-    {
-        output = (*func[i])(output);
-    }
+//     for (int i = 0; i < n_func; i++)
+//     {
+//         output = (*func[i])(output);
+//     }
 
-    return output;
-}
+//     return output;
+// }
 
-void Module::add_params()
-{
-    int idx = 0;
+// void Module::add_params()
+// {
+//     int idx = 0;
 
-    for (int i = 0; i < n_func; i++)
-    {
-        if (func[i]->has_params)
-        {
-            params[idx] = func[i]->return_params();
-            idx++;
-        }
-    }
-}
+//     for (int i = 0; i < n_func; i++)
+//     {
+//         if (func[i]->has_params)
+//         {
+//             params[idx] = func[i]->return_params();
+//             idx++;
+//         }
+//     }
+// }
 
-void Module::print()
-{
-    std::cout << "==================== funcs ====================" << std::endl;
-    std::cout << n_func << " functions & " << n_params << " parameters" << std::endl;
-    for (int i = 0; i < n_func; i++)
-    {
-        std::cout << i + 1 << "th function" << std::endl;
-        func[i]->print();
-    }
-    std::cout << "==================== ***** ====================" << std::endl;
-}
+// void Module::print()
+// {
+//     std::cout << "==================== funcs ====================" << std::endl;
+//     std::cout << n_func << " functions & " << n_params << " parameters" << std::endl;
+//     for (int i = 0; i < n_func; i++)
+//     {
+//         std::cout << i + 1 << "th function" << std::endl;
+//         func[i]->print();
+//     }
+//     std::cout << "==================== ***** ====================" << std::endl;
+// }
 
 // Shape ##################################################
 
 Shape::Shape()
 {
-    /*
-        This Initializer is for 0 dimension Tensor,
-        which means scalar.
-    */
     std::cout << "Shape::Shape()" << std::endl;
 
     dim = 0;
     size = 1;
-    shape = new int[dim];
+    shape = NULL;
 }
 
 Shape::Shape(const int *shape_, const int dim_)
 {
-    /*
-        This Initializer is for dim_ dimension Tensor.
-        If dim_ = 1, Vector.
-        If dim_ = 2, Matrix.
-        If dim_ >= 3, Tensor.
-    */
     std::cout << "Shape::Shape(const int *shape_, const int dim_)" << std::endl;
 
     dim = dim_;
     size = 1;
-    shape = new int[dim];
+    
+    if (dim > 0)
+    {
+        shape = new int[dim];
+    }
+    else
+    {
+        shape = NULL;
+    }
+
     for (int i = 0; i < dim; i++)
     {
         shape[i] = shape_[i];
@@ -89,7 +88,14 @@ Shape::Shape(const Shape &a)
 
     dim = a.dim;
     size = 1;
-    shape = new int[dim];
+    if (dim > 0)
+    {
+        shape = new int[dim];
+    }
+    else
+    {
+        shape = NULL;
+    }
     for (int i = 0; i < dim; i++)
     {
         shape[i] = a.shape[i];
@@ -101,7 +107,10 @@ Shape::~Shape()
 {
     std::cout << "Shape::~Shape()" << std::endl;
 
-    delete[] shape;
+    if (shape != NULL)
+    {
+        delete[] shape;
+    }
 }
 
 void Shape::operator=(const Shape &a)
