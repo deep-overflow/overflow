@@ -477,16 +477,23 @@ void Tensor::operator=(const Tensor &a)
 
     if (tensor_shape != a.tensor_shape)
     {
-        tensor_shape = a.tensor_shape;
+        if (tensor_shape.size != a.tensor_shape.size)
+        {
+            tensor_shape = a.tensor_shape;
+            
+            std::cout << "Re-Allocation in Tensor" << std::endl;
+
+            delete[] data;
+            delete[] grad;
+
+            data = new double[tensor_shape.size];
+            grad = new double[tensor_shape.size];
+        }
+        else
+        {
+            tensor_shape = a.tensor_shape;
+        }
     }
-
-    std::cout << "Re-Allocation in Tensor" << std::endl;
-
-    delete[] data;
-    delete[] grad;
-
-    data = new double[tensor_shape.size];
-    grad = new double[tensor_shape.size];
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
