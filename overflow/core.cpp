@@ -300,11 +300,6 @@ Shape Shape::index(int s, int e) const
         e = dim;
     }
 
-    if (s >= e)
-    {
-        std::cerr << "Argument Error : s < e" << std::endl;
-    }
-
     if (s < 0 || dim <= s)
     {
         std::cerr << "Argument Error : 0 <= s < dim" << std::endl;
@@ -314,6 +309,13 @@ Shape Shape::index(int s, int e) const
     {
         std::cerr << "Argument Error : 0 <= e <= dim" << std::endl;
     }
+
+    if (s >= e)
+    {
+        std::cerr << "Argument Error : s < e" << std::endl;
+    }
+
+    // 0 <= s < e <= dim
 
     int dim_ = e - s;
     int *shape_ = new int[dim_];
@@ -345,11 +347,6 @@ void Shape::print() const
 
 Tensor::Tensor()
 {
-    /*
-        This Initializer is for 0 dimension Tensor,
-        which means scalar.
-    */
-
     std::cout << "Tensor::Tensor()" << std::endl;
 
     data = new double[tensor_shape.size];
@@ -367,11 +364,9 @@ Tensor::Tensor()
     requires_grad = true;
 }
 
-Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
+Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_)
 {
     std::cout << "Tensor::Tensor(const double *data_, const int *shape_, const int dim_)" << std::endl;
-
-    tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -385,11 +380,9 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_)
     requires_grad = true;
 }
 
-Tensor::Tensor(const double data_, const int *shape_, const int dim_)
+Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_)
 {
     std::cout << "Tensor::Tensor(const double data_, const int *shape_, const int dim_)" << std::endl;
-
-    tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -403,11 +396,9 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_)
     requires_grad = true;
 }
 
-Tensor::Tensor(const int *shape_, const int dim_)
+Tensor::Tensor(const int *shape_, const int dim_) : tensor_shape(shape_, dim_)
 {
     std::cout << "Tensor::Tensor(const int *shape_, const int dim_)" << std::endl;
-
-    tensor_shape.reshape(shape_, dim_);
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -427,11 +418,9 @@ Tensor::Tensor(const int *shape_, const int dim_)
     requires_grad = true;
 }
 
-Tensor::Tensor(const double data_, const Shape &shape_)
+Tensor::Tensor(const double data_, const Shape &shape_) : tensor_shape(shape_)
 {
     std::cout << "Tensor::Tensor(const double data_, const Shape &shape_)" << std::endl;
-
-    tensor_shape = shape_;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -445,11 +434,9 @@ Tensor::Tensor(const double data_, const Shape &shape_)
     requires_grad = true;
 }
 
-Tensor::Tensor(const Shape &shape_)
+Tensor::Tensor(const Shape &shape_) : tensor_shape(shape_)
 {
     std::cout << "Tensor::Tensor(const Shape &shape_)" << std::endl;
-
-    tensor_shape = shape_;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -473,8 +460,15 @@ Tensor::~Tensor()
 {
     std::cout << "Tensor::~Tensor()" << std::endl;
     
-    delete[] data;
-    delete[] grad;
+    if (data != NULL)
+    {
+        delete[] data;
+    }
+    
+    if (grad != NULL)
+    {
+        delete[] grad;
+    }
 }
 
 void Tensor::operator=(const Tensor &a)
