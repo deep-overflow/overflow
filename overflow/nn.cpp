@@ -278,6 +278,36 @@ void ReLU::zero_grad()
 void ReLU::print()
 {
     std::cout << name << std::endl;
+
+    if (input == NULL)
+    {
+        std::cout << "input : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input :" << std::endl;
+        input->print();
+    }
+
+    if (input2 == NULL)
+    {
+        std::cout << "input2 : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input2 :" << std::endl;
+        input2->print();
+    }
+
+    if (output == NULL)
+    {
+        std::cout << "output : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "output :" << std::endl;
+        output->print();
+    }
 }
 
 // MSELoss ################################################
