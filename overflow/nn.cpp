@@ -319,6 +319,16 @@ MSELoss::MSELoss()
     name = "< MSELoss class : Function class >";
 }
 
+MSELoss::~MSELoss()
+{
+    std::cout << "MSELoss::~MSELoss()" << std::endl;
+
+    if (output != NULL)
+    {
+        delete output;
+    }
+}
+
 Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
 {
     std::cout << "Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
