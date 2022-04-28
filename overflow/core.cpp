@@ -16,28 +16,21 @@ Module::~Module()
     if (func != NULL)
     {
         for (int i = 0; i < n_func; i++)
-        {
-            if (func[i] != NULL)
-            {
-                delete func[i];
-            }
-        }
+            delete func[i];
+        delete[] func;
     }
 
     if (params != NULL)
     {
-        for (int i = 0; i < n_params; i++)
-        {
-            if (params[i] != NULL)
-            {
-                delete params[i];
-            }
-        }
+        delete[] params;
     }
 }
 
 Tensor *Module::operator()(Tensor *input_)
 {
+    if (verbose)
+        std::cout << "Tensor *Module::operator()(Tensor *input_)" << std::endl;
+
     Tensor *output = input_;
 
     for (int i = 0; i < n_func; i++)
@@ -50,7 +43,12 @@ Tensor *Module::operator()(Tensor *input_)
 
 void Module::add_params()
 {
+    if (verbose)
+        std::cout << "void Module::add_params()" << std::endl;
+
     int idx = 0;
+
+    params = new Tensor *[n_params];
 
     for (int i = 0; i < n_func; i++)
     {
