@@ -59,58 +59,59 @@ Tensor *Linear::operator()(Tensor *input_)
 void Linear::backward()
 { // not generalized: for matrix
     /*
-    P : params, n x m
-    I : input, m x k
-    O : output, n x k
-    O = PI : (n x m) * (m x k) -> n x k
+    I : inputs, n x m
+    P : params, m x k
+    O : outputs, n x k
 
-    P.grad = O.grad I^T : (n x k) * (k x m) -> n x m
-    I.grad = P^T O.grad : (m x n) * (n x k) -> m x k
+    O = I P : (n x m) * (m x k) -> n x k
+
+    P.grad = I^T O.grad : (m x n) * (n x k) -> m x k
+    I.grad = O.grad P^T : (n x k) * (k x m) -> n x m
     */
     if (verbose)
         std::cout << "void Linear::backward()" << std::endl;
 
-    int n = params.tensor_shape.shape[0];
-    int m = params.tensor_shape.shape[1];
-    int m_ = input->tensor_shape.shape[0];
-    int k = input->tensor_shape.shape[1];
-
-    // compute params.grad
+    int n = input->tensor_shape.shape[0];
+    int m = input->tensor_shape.shape[1];
+    int m_ = params.tensor_shape.shape[0];
+    int k = params.tensor_shape.shape[1];
+    
+    // compute params.grad : (m x n) * (n x k) -> m x k
     if (params.requires_grad)
     {
         if (verbose)
             std::cout << "Compute params.grad" << std::endl;
         input->T();
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < m; i++)
         {
-            for (int j = 0; j < m; j++)
+            for (int j = 0; j < k; j++)
             {
                 double value = 0;
-                for (int t = 0; t < k; t++)
+                for (int t = 0; t < n; t++)
                 {
                     // (n x k) * (k x m) -> n x m
-                    value += output->grad_index(i, t) * input->index_(t, j);
+                    value += input->index_(i, t) * output->grad_index(t, j);
                 }
-                int index_ = i * m + j;
+                int index_ = i * k + j;
                 params.grad[index_] = value;
             }
         }
         input->T();
     }
 
-    // compute input->grad
+    // compute input->grad : (n x k) * (k x m) -> n x m
     params.T();
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < k; j++)
+        for (int j = 0; j < m; j++)
         {
             double value = 0;
-            for (int t = 0; t < n; t++)
+            for (int t = 0; t < k; t++)
             {
                 // (m x n) * (n x k) -> m x k
-                value += params.index_(i, t) * output->grad_index(t, j);
+                value += output->grad_index(i, t) * params.index_(t, j);
             }
-            int index_ = i * k + j;
+            int index_ = i * m + j;
             input->grad[index_] = value;
         }
     }

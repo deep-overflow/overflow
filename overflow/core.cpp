@@ -1316,9 +1316,10 @@ void Tensor::print() const
     std::cout << std::endl;
 }
 
-Tensor dot(const Tensor &a, const Tensor &b, bool verbose = false)
+Tensor dot(const Tensor &a, const Tensor &b, bool verbose)
 { // not generalized: for matrix
-    std::cout << "Tensor dot(const Tensor &a, const Tensor &b)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor dot(const Tensor &a, const Tensor &b)" << std::endl;
 
     if (a.tensor_shape.shape[1] != b.tensor_shape.shape[0])
     {
