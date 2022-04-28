@@ -62,14 +62,14 @@ void Module::add_params()
 
 void Module::print()
 {
-    std::cout << "==================== funcs ====================" << std::endl;
+    std::cout << "==================== module ====================" << std::endl;
     std::cout << n_func << " functions & " << n_params << " parameters" << std::endl;
     for (int i = 0; i < n_func; i++)
     {
         std::cout << i + 1 << "th function" << std::endl;
         func[i]->print();
     }
-    std::cout << "==================== ***** ====================" << std::endl;
+    std::cout << "==================== ****** ====================" << std::endl;
 }
 
 // Shape ##################################################
