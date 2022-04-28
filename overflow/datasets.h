@@ -18,6 +18,7 @@ public:
     Tensor *input;
     Tensor *output;
     int n_samples;
+    bool verbose;
 };
 
 class Sin : public Dataset
@@ -42,6 +43,7 @@ public:
     int batch_size;
     int *batch_idx;
     bool shuffle;
+    bool verbose;
 };
 
 #endif
