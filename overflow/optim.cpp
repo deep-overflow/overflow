@@ -4,7 +4,8 @@
 
 Optimizer::Optimizer() : params(NULL), num_params(0), verbose(false)
 {
-    std::cout << "Optimizer::Optimizer()" << std::endl;
+    if (verbose)
+        std::cout << "Optimizer::Optimizer()" << std::endl;
 
     name = "< Optimizer class >";
 }
@@ -19,8 +20,7 @@ void Optimizer::step()
 
 void Optimizer::print()
 {
-    if (verbose)
-        std::cout << name << std::endl;
+    std::cout << name << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
 }
