@@ -1316,7 +1316,7 @@ void Tensor::print() const
     std::cout << std::endl;
 }
 
-Tensor dot(const Tensor &a, const Tensor &b)
+Tensor dot(const Tensor &a, const Tensor &b, bool verbose = false)
 { // not generalized: for matrix
     std::cout << "Tensor dot(const Tensor &a, const Tensor &b)" << std::endl;
 

@@ -112,7 +112,7 @@ public:
     bool verbose;
 };
 
-Tensor dot(const Tensor &a, const Tensor &b);
+Tensor dot(const Tensor &a, const Tensor &b, bool verbose = false);
 
 class Function
 {

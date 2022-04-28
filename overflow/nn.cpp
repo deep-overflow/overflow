@@ -48,7 +48,7 @@ Tensor *Linear::operator()(Tensor *input_)
     }
 
     // O [batch, out_feaures] = I [batch, in_features] * P [in_features, out_features]
-    *output = dot(*input_, params);
+    *output = dot(*input_, params, verbose);
     output->func = this;
     
     input = input_;
