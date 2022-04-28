@@ -280,7 +280,10 @@ void ReLU::zero_grad()
     if (verbose)
         std::cout << "void ReLU::zero_grad()" << std::endl;
 
-    delete output;
+    if (output != NULL)
+    {
+        delete output;
+    }
 
     input->zero_grad();
 
@@ -289,6 +292,121 @@ void ReLU::zero_grad()
 }
 
 void ReLU::print()
+{
+    std::cout << name << std::endl;
+
+    if (input == NULL)
+    {
+        std::cout << "input : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input :" << std::endl;
+        input->print();
+    }
+
+    if (input2 == NULL)
+    {
+        std::cout << "input2 : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input2 :" << std::endl;
+        input2->print();
+    }
+
+    if (output == NULL)
+    {
+        std::cout << "output : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "output :" << std::endl;
+        output->print();
+    }
+}
+
+// Sigmoid ################################################
+
+Sigmoid::Sigmoid()
+{
+    if (verbose)
+        std::cout << "Sigmoid::Sigmoid()" << std::endl;
+    
+    name = "< Sigmoid class : Function class >";
+}
+
+Sigmoid::~Sigmoid()
+{
+    if (verbose)
+        std::cout << "Sigmoid::~Sigmoid()" << std::endl;
+    
+    if (output != NULL)
+    {
+        delete output;
+    }
+}
+
+Tensor *Sigmoid::operator()(Tensor *input_)
+{
+    if (verbose)
+        std::cout << "Tensor *Sigmoid::operator()(Tensor *input_)" << std::endl;
+    
+    if (output != NULL)
+    {
+        delete output;
+    }
+
+    output = new Tensor(input_->tensor_shape);
+
+    for (int i = 0; i < output->tensor_shape.size; i++)
+    {
+        double k = exp(input_->data[i]);
+        output->data[i] = k / (1 + k);
+    }
+
+    output->func = this;
+
+    input = input_;
+
+    return output;
+}
+
+void Sigmoid::backward()
+{
+    if (verbose)
+        std::cout << "void Sigmoid::backward()" << std::endl;
+    
+    for (int i = 0; i < output->tensor_shape.size; i++)
+    {
+        double k = output->data[i];
+        k = k * (1 - k);
+        input->grad[i] = k * output->grad[i];
+    }
+
+    if (input->func != NULL)
+    {
+        input->backward();
+    }
+}
+
+void Sigmoid::zero_grad()
+{
+    if (verbose)
+        std::cout << "void Sigmoid::zero_grad()" << std::endl;
+    
+    if (output != NULL)
+    {
+        delete output;
+    }
+
+    input->zero_grad();
+
+    output = NULL;
+    input = NULL;
+}
+
+void Sigmoid::print()
 {
     std::cout << name << std::endl;
 

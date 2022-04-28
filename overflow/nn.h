@@ -41,6 +41,19 @@ public:
     virtual void print();
 };
 
+class Sigmoid : public Function
+{
+public:
+    Sigmoid();
+    ~Sigmoid();
+
+    virtual Tensor *operator()(Tensor *input_);
+    virtual void backward();
+    virtual void zero_grad();
+
+    virtual void print();
+};
+
 class MSELoss : public Function
 {
 public:
