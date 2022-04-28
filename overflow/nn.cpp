@@ -7,7 +7,8 @@ Linear::Linear(int in_features_, int out_features_, char init_) : init(init_)
     /*
         O [batch, out_features] = I [batch, in_features] * P [in_features, out_features]
     */
-    std::cout << "Linear::Linear(int in_features_, int out_features_, char init_)" << std::endl;
+    if (verbose)
+        std::cout << "Linear::Linear(int in_features_, int out_features_, char init_)" << std::endl;
 
     int shape_[] = {in_features_, out_features_};
 
@@ -27,7 +28,8 @@ Linear::Linear(int in_features_, int out_features_, char init_) : init(init_)
 
 Linear::~Linear()
 {
-    std::cout << "Linear::~Linear" << std::endl;
+    if (verbose)
+        std::cout << "Linear::~Linear" << std::endl;
 
     if (output != NULL)
     {
@@ -37,7 +39,8 @@ Linear::~Linear()
 
 Tensor *Linear::operator()(Tensor *input_)
 {
-    std::cout << "Tensor *Linear::operator()(Tensor *input_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor *Linear::operator()(Tensor *input_)" << std::endl;
     
     if (output == NULL)
     {
@@ -64,7 +67,8 @@ void Linear::backward()
     P.grad = O.grad I^T : (n x k) * (k x m) -> n x m
     I.grad = P^T O.grad : (m x n) * (n x k) -> m x k
     */
-    std::cout << "void Linear::backward()" << std::endl;
+    if (verbose)
+        std::cout << "void Linear::backward()" << std::endl;
 
     int n = params.tensor_shape.shape[0];
     int m = params.tensor_shape.shape[1];
@@ -74,7 +78,8 @@ void Linear::backward()
     // compute params.grad
     if (params.requires_grad)
     {
-        std::cout << "Compute params.grad" << std::endl;
+        if (verbose)
+            std::cout << "Compute params.grad" << std::endl;
         input->T();
         for (int i = 0; i < n; i++)
         {
@@ -120,7 +125,8 @@ void Linear::backward()
 
 void Linear::zero_grad()
 {
-    std::cout << "void Linear::zero_grad()" << std::endl;
+    if (verbose)
+        std::cout << "void Linear::zero_grad()" << std::endl;
 
     delete output;
 
@@ -134,7 +140,8 @@ void Linear::zero_grad()
 
 Tensor *Linear::return_params()
 {
-    std::cout << "Tensor *Linear::return_params()" << std::endl;
+    if (verbose)
+        std::cout << "Tensor *Linear::return_params()" << std::endl;
 
     return &params;
 }
@@ -202,14 +209,16 @@ void Linear::print()
 
 ReLU::ReLU()
 {
-    std::cout << "ReLU::ReLU()" << std::endl;
+    if (verbose)
+        std::cout << "ReLU::ReLU()" << std::endl;
 
     name = "< ReLU class : Function class >";
 }
 
 ReLU::~ReLU()
 {
-    std::cout << "ReLU::~ReLU()" << std::endl;
+    if (verbose)
+        std::cout << "ReLU::~ReLU()" << std::endl;
 
     if (output != NULL)
     {
@@ -219,7 +228,8 @@ ReLU::~ReLU()
 
 Tensor *ReLU::operator()(Tensor *input_)
 {
-    std::cout << "Tensor *ReLU::operator()(Tensor *input_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor *ReLU::operator()(Tensor *input_)" << std::endl;
 
     if (output == NULL)
     {
@@ -243,7 +253,8 @@ Tensor *ReLU::operator()(Tensor *input_)
 
 void ReLU::backward()
 {
-    std::cout << "void ReLU::backward()" << std::endl;
+    if (verbose)
+        std::cout << "void ReLU::backward()" << std::endl;
 
     for (int i = 0; i < output->tensor_shape.size; i++)
     {
@@ -265,7 +276,8 @@ void ReLU::backward()
 
 void ReLU::zero_grad()
 {
-    std::cout << "void ReLU::zero_grad()" << std::endl;
+    if (verbose)
+        std::cout << "void ReLU::zero_grad()" << std::endl;
 
     delete output;
 
@@ -314,14 +326,16 @@ void ReLU::print()
 
 MSELoss::MSELoss()
 {
-    std::cout << "MSELoss::MSELoss()" << std::endl;
+    if (verbose)
+        std::cout << "MSELoss::MSELoss()" << std::endl;
     
     name = "< MSELoss class : Function class >";
 }
 
 MSELoss::~MSELoss()
 {
-    std::cout << "MSELoss::~MSELoss()" << std::endl;
+    if (verbose)
+        std::cout << "MSELoss::~MSELoss()" << std::endl;
 
     if (output != NULL)
     {
@@ -331,7 +345,8 @@ MSELoss::~MSELoss()
 
 Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
 {
-    std::cout << "Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
 
     if (output == NULL)
     {
@@ -349,7 +364,8 @@ Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
 
 void MSELoss::backward()
 {
-    std::cout << "void MSELoss::backward()" << std::endl;
+    if (verbose)
+        std::cout << "void MSELoss::backward()" << std::endl;
 
     for (int i = 0; i < output->tensor_shape.size; i++)
     {
@@ -375,7 +391,8 @@ void MSELoss::backward()
 
 void MSELoss::zero_grad()
 {
-    std::cout << "void MSELoss::zero_grad()" << std::endl;
+    if (verbose)
+        std::cout << "void MSELoss::zero_grad()" << std::endl;
 
     delete output;
 
