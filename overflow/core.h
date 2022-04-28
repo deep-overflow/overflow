@@ -53,6 +53,8 @@ public:
     int *shape;
     int dim;
     int size;
+
+    bool verbose;
 };
 
 class Tensor
@@ -106,6 +108,8 @@ public:
     bool requires_grad;
 
     Function *func;
+
+    bool verbose;
 };
 
 Tensor dot(const Tensor &a, const Tensor &b);
@@ -131,6 +135,8 @@ public:
     Tensor *output;
     bool has_params;
     std::string name;
+
+    bool verbose;
 };
 
 #endif

@@ -50,14 +50,16 @@
 
 // Shape ##################################################
 
-Shape::Shape() : dim(0), size(1), shape(NULL)
+Shape::Shape() : dim(0), size(1), shape(NULL), verbose(false)
 {
-    std::cout << "Shape::Shape()" << std::endl;
+    if (verbose)
+        std::cout << "Shape::Shape()" << std::endl;
 }
 
-Shape::Shape(const int *shape_, const int dim_) : dim(dim_), size(1), shape(NULL)
+Shape::Shape(const int *shape_, const int dim_) : dim(dim_), size(1), shape(NULL), verbose(false)
 {
-    std::cout << "Shape::Shape(const int *shape_, const int dim_)" << std::endl;
+    if (verbose)
+        std::cout << "Shape::Shape(const int *shape_, const int dim_)" << std::endl;
 
     if (dim > 0)
     {
@@ -71,10 +73,11 @@ Shape::Shape(const int *shape_, const int dim_) : dim(dim_), size(1), shape(NULL
     }
 }
 
-Shape::Shape(const Shape &a) : dim(a.dim), size(1), shape(NULL)
+Shape::Shape(const Shape &a) : dim(a.dim), size(1), shape(NULL), verbose(false)
 {
-    std::cout << "Shape::Shape(const Shape &a)" << std::endl;
-
+    if (verbose)
+        std::cout << "Shape::Shape(const Shape &a)" << std::endl;
+    
     if (dim > 0)
     {
         shape = new int[dim];
@@ -89,7 +92,8 @@ Shape::Shape(const Shape &a) : dim(a.dim), size(1), shape(NULL)
 
 Shape::~Shape()
 {
-    std::cout << "Shape::~Shape()" << std::endl;
+    if (verbose)
+        std::cout << "Shape::~Shape()" << std::endl;
 
     if (shape != NULL)
     {
@@ -102,7 +106,8 @@ void Shape::operator=(const Shape &a)
     /*
         No Memory Share.
     */
-    std::cout << "void Shape::operator=(const Shape &a)" << std::endl;
+    if (verbose)
+        std::cout << "void Shape::operator=(const Shape &a)" << std::endl;
 
     if (dim == a.dim)
     {
@@ -119,7 +124,8 @@ void Shape::operator=(const Shape &a)
         }
         else
         {
-            std::cout << "Re-Allocation in Shape" << std::endl;
+            if (verbose)
+                std::cout << "Re-Allocation in Shape" << std::endl;
 
             delete[] shape;
             shape = new int[dim];
@@ -135,7 +141,8 @@ void Shape::operator=(const Shape &a)
 
 bool Shape::operator==(const Shape &a) const
 {
-    std::cout << "bool Shape::operator==(const Shape &a) const" << std::endl;
+    if (verbose)
+        std::cout << "bool Shape::operator==(const Shape &a) const" << std::endl;
 
     if (dim != a.dim)
     {
@@ -160,8 +167,9 @@ bool Shape::operator==(const Shape &a) const
 
 bool Shape::operator!=(const Shape &a) const
 {
-    std::cout << "bool Shape::operator!=(const Shape &a) const" << std::endl;
-
+    if (verbose)
+        std::cout << "bool Shape::operator!=(const Shape &a) const" << std::endl;
+    
     if (dim != a.dim)
     {
         return true;
@@ -185,8 +193,9 @@ bool Shape::operator!=(const Shape &a) const
 
 bool Shape::compare(const int *shape_, const int dim_)
 {
-    std::cout << "bool Shape::compare(const int *shape_, const int dim_)" << std::endl;
-
+    if (verbose)
+        std::cout << "bool Shape::compare(const int *shape_, const int dim_)" << std::endl;
+    
     if (dim != dim_)
     {
         return false;
@@ -205,8 +214,9 @@ bool Shape::compare(const int *shape_, const int dim_)
 
 bool Shape::compare(const Shape &a)
 {
-    std::cout << "bool Shape::compare(const Shape &a)" << std::endl;
-
+    if (verbose)
+        std::cout << "bool Shape::compare(const Shape &a)" << std::endl;
+    
     if (dim != a.dim)
     {
         return false;
@@ -233,11 +243,14 @@ void Shape::reshape(const int *shape_, const int dim_)
     /*
         No Memory Share.
     */
-    std::cout << "void Shape::reshape(const int *shape_, const int dim_)" << std::endl;
-
+    if (verbose)
+        std::cout << "void Shape::reshape(const int *shape_, const int dim_)" << std::endl;
+    
     if (compare(shape_, dim_))
     {
-        std::cout << "Same Shape : Not need to reshape" << std::endl;
+        if (verbose)
+            std::cout << "Same Shape : Not need to reshape" << std::endl;
+        
         return;
     }
 
@@ -256,8 +269,9 @@ void Shape::reshape(const int *shape_, const int dim_)
         }
         else
         {
-            std::cout << "Re-Allocation in Shape" << std::endl;
-
+            if (verbose)
+                std::cout << "Re-Allocation in Shape" << std::endl;
+            
             delete[] shape;
             shape = new int[dim];
         }
@@ -272,11 +286,14 @@ void Shape::reshape(const int *shape_, const int dim_)
 
 void Shape::reshape(const Shape &a)
 {
-    std::cout << "void Shape::reshape(const Shape &a)" << std::endl;
+    if (verbose)
+        std::cout << "void Shape::reshape(const Shape &a)" << std::endl;
 
     if (compare(a))
     {
-        std::cout << "Same Shape : Not need to reshape" << std::endl;
+        if (verbose)
+            std::cout << "Same Shape : Not need to reshape" << std::endl;
+
         return;
     }
 
@@ -295,7 +312,8 @@ void Shape::reshape(const Shape &a)
         }
         else
         {
-            std::cout << "Re-Allocation in Shape" << std::endl;
+            if (verbose)
+                std::cout << "Re-Allocation in Shape" << std::endl;
 
             delete[] shape;
             shape = new int[dim];
@@ -311,7 +329,8 @@ void Shape::reshape(const Shape &a)
 
 void Shape::T()
 {
-    std::cout << "void Shape::T()" << std::endl;
+    if (verbose)
+        std::cout << "void Shape::T()" << std::endl;
 
     int *shape_;
     shape_ = new int[dim];
@@ -334,7 +353,8 @@ void Shape::T()
 
 Shape Shape::index(int s, int e) const
 {
-    std::cout << "Shape Shape::index(int s, int e) const" << std::endl;
+    if (verbose)
+        std::cout << "Shape Shape::index(int s, int e) const" << std::endl;
 
     if (e == -1)
     {
@@ -386,9 +406,10 @@ void Shape::print() const
 
 // Tensor #################################################
 
-Tensor::Tensor() : func(NULL), requires_grad(true)
+Tensor::Tensor() : func(NULL), requires_grad(true), verbose(false)
 {
-    std::cout << "Tensor::Tensor()" << std::endl;
+    if (verbose)
+        std::cout << "Tensor::Tensor()" << std::endl;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -402,9 +423,10 @@ Tensor::Tensor() : func(NULL), requires_grad(true)
     grad[0] = 1;
 }
 
-Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true)
+Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true), verbose(false)
 {
-    std::cout << "Tensor::Tensor(const double *data_, const int *shape_, const int dim_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor::Tensor(const double *data_, const int *shape_, const int dim_)" << std::endl;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -416,9 +438,10 @@ Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_
     }
 }
 
-Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true)
+Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true), verbose(false)
 {
-    std::cout << "Tensor::Tensor(const double data_, const int *shape_, const int dim_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor::Tensor(const double data_, const int *shape_, const int dim_)" << std::endl;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -430,9 +453,10 @@ Tensor::Tensor(const double data_, const int *shape_, const int dim_) : tensor_s
     }
 }
 
-Tensor::Tensor(const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true)
+Tensor::Tensor(const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true), verbose(false)
 {
-    std::cout << "Tensor::Tensor(const int *shape_, const int dim_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor::Tensor(const int *shape_, const int dim_)" << std::endl;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -449,9 +473,10 @@ Tensor::Tensor(const int *shape_, const int dim_) : tensor_shape(shape_, dim_), 
     }
 }
 
-Tensor::Tensor(const double data_, const Shape &shape_) : tensor_shape(shape_), func(NULL), requires_grad(true)
+Tensor::Tensor(const double data_, const Shape &shape_) : tensor_shape(shape_), func(NULL), requires_grad(true), verbose(false)
 {
-    std::cout << "Tensor::Tensor(const double data_, const Shape &shape_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor::Tensor(const double data_, const Shape &shape_)" << std::endl;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -463,9 +488,10 @@ Tensor::Tensor(const double data_, const Shape &shape_) : tensor_shape(shape_), 
     }
 }
 
-Tensor::Tensor(const Shape &shape_) : tensor_shape(shape_), func(NULL), requires_grad(true)
+Tensor::Tensor(const Shape &shape_) : tensor_shape(shape_), func(NULL), requires_grad(true), verbose(false)
 {
-    std::cout << "Tensor::Tensor(const Shape &shape_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor::Tensor(const Shape &shape_)" << std::endl;
 
     data = new double[tensor_shape.size];
     grad = new double[tensor_shape.size];
@@ -484,7 +510,8 @@ Tensor::Tensor(const Shape &shape_) : tensor_shape(shape_), func(NULL), requires
 
 Tensor::~Tensor()
 {
-    std::cout << "Tensor::~Tensor()" << std::endl;
+    if (verbose)
+        std::cout << "Tensor::~Tensor()" << std::endl;
     
     if (data != NULL)
     {
@@ -499,15 +526,17 @@ Tensor::~Tensor()
 
 void Tensor::operator=(const Tensor &a)
 {
-    std::cout << "void Tensor::operator=(const Tensor &a)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::operator=(const Tensor &a)" << std::endl;
 
     if (tensor_shape != a.tensor_shape)
     {
         if (tensor_shape.size != a.tensor_shape.size)
         {
             tensor_shape = a.tensor_shape;
-
-            std::cout << "Re-Allocation in Tensor" << std::endl;
+            
+            if (verbose)
+                std::cout << "Re-Allocation in Tensor" << std::endl;
 
             delete[] data;
             delete[] grad;
@@ -533,7 +562,8 @@ void Tensor::operator=(const Tensor &a)
 
 Tensor Tensor::operator+(const Tensor &a)
 {
-    std::cout << "Tensor Tensor::operator+(const Tensor &a)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor Tensor::operator+(const Tensor &a)" << std::endl;
 
     if (tensor_shape != a.tensor_shape)
     {
@@ -541,7 +571,8 @@ Tensor Tensor::operator+(const Tensor &a)
     }
     else
     {
-        std::cout << "Dimension Match in element-wise addition" << std::endl;
+        if (verbose)
+            std::cout << "Dimension Match in element-wise addition" << std::endl;
     }
 
     Tensor c(0.0, tensor_shape);
@@ -556,7 +587,8 @@ Tensor Tensor::operator+(const Tensor &a)
 
 Tensor Tensor::operator-(const Tensor &a)
 {
-    std::cout << "Tensor Tensor::operator-(const Tensor &a)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor Tensor::operator-(const Tensor &a)" << std::endl;
 
     if (tensor_shape != a.tensor_shape)
     {
@@ -564,7 +596,8 @@ Tensor Tensor::operator-(const Tensor &a)
     }
     else
     {
-        std::cout << "Dimension Match in element-wise subtraction" << std::endl;
+        if (verbose)
+            std::cout << "Dimension Match in element-wise subtraction" << std::endl;
     }
 
     Tensor c(0.0, tensor_shape);
@@ -579,7 +612,8 @@ Tensor Tensor::operator-(const Tensor &a)
 
 Tensor Tensor::operator^(int k)
 {
-    std::cout << "Tensor Tensor::operator^(int k)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor Tensor::operator^(int k)" << std::endl;
     
     Tensor c(0.0, tensor_shape);
 
@@ -598,7 +632,8 @@ Tensor Tensor::operator^(int k)
 
 Tensor Tensor::operator*(const Tensor &a)
 {
-    std::cout << "Tensor Tensor::operator*(const Tensor &a)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor Tensor::operator*(const Tensor &a)" << std::endl;
 
     if (tensor_shape != a.tensor_shape)
     {
@@ -606,7 +641,8 @@ Tensor Tensor::operator*(const Tensor &a)
     }
     else
     {
-        std::cout << "Dimension Match in element-wise multiplication" << std::endl;
+        if (verbose)
+            std::cout << "Dimension Match in element-wise multiplication" << std::endl;
     }
 
     Tensor c(0.0, tensor_shape);
@@ -621,7 +657,8 @@ Tensor Tensor::operator*(const Tensor &a)
 
 Tensor Tensor::operator*(double k)
 {
-    std::cout << "Tensor Tensor::operator*(double k)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor Tensor::operator*(double k)" << std::endl;
 
     Tensor c(0.0, tensor_shape);
 
@@ -635,11 +672,13 @@ Tensor Tensor::operator*(double k)
 
 void Tensor::init(const double data_, const int *shape_, const int dim_)
 {
-    std::cout << "void Tensor::init(const double data_, const int *shape_, const int dim_)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::init(const double data_, const int *shape_, const int dim_)" << std::endl;
 
     tensor_shape.reshape(shape_, dim_);
 
-    std::cout << "Re-Allocation in Tensor" << std::endl;
+    if (verbose)
+        std::cout << "Re-Allocation in Tensor" << std::endl;
 
     delete[] data;
     delete[] grad;
@@ -659,13 +698,15 @@ void Tensor::init(const double data_, const int *shape_, const int dim_)
 
 void Tensor::init_like(const double data_, const Shape& shape_)
 {
-    std::cout << "void Tensor::init_like(const double data_, const Shape& shape_)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::init_like(const double data_, const Shape& shape_)" << std::endl;
 
     if (tensor_shape != shape_)
     {
         tensor_shape = shape_;
 
-        std::cout << "Re-Allocation in Tensor" << std::endl;
+        if (verbose)
+            std::cout << "Re-Allocation in Tensor" << std::endl;
 
         delete[] data;
         delete[] grad;
@@ -686,18 +727,21 @@ void Tensor::init_like(const double data_, const Shape& shape_)
 
 void Tensor::init_like(const double data_, const Tensor &a)
 {
-    std::cout << "void Tensor::init_like(const double data_, const Tensor &a)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::init_like(const double data_, const Tensor &a)" << std::endl;
 
     init_like(data_, a.tensor_shape);
 }
 
 void Tensor::random(const int *shape_, const int dim_, char init_)
 {
-    std::cout << "void Tensor::random(const int *shape_, const int dim_, char init_)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::random(const int *shape_, const int dim_, char init_)" << std::endl;
 
     tensor_shape.reshape(shape_, dim_);
 
-    std::cout << "Re-Allocation in Tensor" << std::endl;
+    if (verbose)
+        std::cout << "Re-Allocation in Tensor" << std::endl;
 
     delete[] data;
     delete[] grad;
@@ -735,13 +779,15 @@ void Tensor::random(const int *shape_, const int dim_, char init_)
 
 void Tensor::random(const Shape &shape_, char init_)
 {
-    std::cout << "void Tensor::random(const Shape &shape_, char init_)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::random(const Shape &shape_, char init_)" << std::endl;
 
     if (tensor_shape != shape_)
     {
         tensor_shape = shape_;
 
-        std::cout << "Re-Allocation in Tensor" << std::endl;
+        if (verbose)
+            std::cout << "Re-Allocation in Tensor" << std::endl;
         
         delete[] data;
         delete[] grad;
@@ -782,7 +828,8 @@ void Tensor::random(char init_)
 {
     // init_ == 'n' : normal distribution
     // init_ == 'u' : uniform distribution
-    std::cout << "void Tensor::random(char init_)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::random(char init_)" << std::endl;
 
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -814,7 +861,8 @@ void Tensor::random(char init_)
 
 void Tensor::arange()
 {
-    std::cout << "void Tensor::arange()" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::arange()" << std::endl;
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
@@ -825,7 +873,8 @@ void Tensor::arange()
 
 Tensor Tensor::index(int arg_num, ...) const
 {
-    std::cout << "Tensor Tensor::index(int arg_num, ...) const" << std::endl;
+    if (verbose)
+        std::cout << "Tensor Tensor::index(int arg_num, ...) const" << std::endl;
 
     va_list list;
     va_start(list, arg_num);
@@ -875,7 +924,8 @@ Tensor Tensor::index(int arg_num, ...) const
 
 double Tensor::index_(int arg, ...) const
 {
-    std::cout << "double Tensor::index_(int arg, ...) const" << std::endl;
+    if (verbose)
+        std::cout << "double Tensor::index_(int arg, ...) const" << std::endl;
 
     va_list list;
     va_start(list, arg);
@@ -905,7 +955,8 @@ double Tensor::index_(int arg, ...) const
 
 double Tensor::grad_index(int arg, ...) const
 {
-    std::cout << "double Tensor::grad_index(int arg, ...) const" << std::endl;
+    if (verbose)
+        std::cout << "double Tensor::grad_index(int arg, ...) const" << std::endl;
 
     va_list list;
     va_start(list, arg);
@@ -963,7 +1014,8 @@ void Tensor::append(const Tensor &a, bool new_axis)
     /*
         new_axis가 true이면, batch를 사용한다.
     */
-    std::cout << "void Tensor::append(const Tensor &a, bool new_axis)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::append(const Tensor &a, bool new_axis)" << std::endl;
 
     if (tensor_shape.dim > 1)
     {
@@ -975,7 +1027,8 @@ void Tensor::append(const Tensor &a, bool new_axis)
 
     int size = tensor_shape.size + a.tensor_shape.size;
 
-    std::cout << "Re-Allocation in Tensor" << std::endl;
+    if (verbose)
+        std::cout << "Re-Allocation in Tensor" << std::endl;
 
     double *data_ = new double[size];
     double *grad_ = new double[size];
@@ -1047,8 +1100,6 @@ void Tensor::append(const Tensor &a, bool new_axis)
             tensor_shape.reshape(shape_, dim_);
         }
     }
-    std::cout << "tensor_shape" << std::endl;
-    tensor_shape.print();
 
     delete[] data;
     delete[] grad;
@@ -1059,7 +1110,8 @@ void Tensor::append(const Tensor &a, bool new_axis)
 
 void Tensor::backward()
 {
-    std::cout << "void Tensor::backward()" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::backward()" << std::endl;
 
     if (func != NULL)
     {
@@ -1069,7 +1121,8 @@ void Tensor::backward()
 
 void Tensor::zero_grad()
 {
-    std::cout << "void Tensor::zero_grad()" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::zero_grad()" << std::endl;
 
     for (int i = 0; i < tensor_shape.size; i++)
     {
@@ -1085,7 +1138,8 @@ void Tensor::zero_grad()
 
 void Tensor::dot(const Tensor &a)
 { // not generalized: for matrix
-    std::cout << "void Tensor::dot(const Tensor &a)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::dot(const Tensor &a)" << std::endl;
 
     if (tensor_shape.shape[1] != a.tensor_shape.shape[0])
     {
@@ -1099,7 +1153,8 @@ void Tensor::dot(const Tensor &a)
 
     int shape_[] = {m, k};
 
-    std::cout << "Re-Allocation in Tensor" << std::endl;
+    if (verbose)
+        std::cout << "Re-Allocation in Tensor" << std::endl;
 
     double *data_ = new double[m * k];
 
@@ -1125,7 +1180,8 @@ void Tensor::dot(const Tensor &a)
 
 void Tensor::grad_dot(const Tensor &a)
 { // not generalized: for matrix
-    std::cout << "void Tensor::grad_dot(const Tensor &a)" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::grad_dot(const Tensor &a)" << std::endl;
 
     if (tensor_shape.shape[1] != a.tensor_shape.shape[0])
     {
@@ -1139,7 +1195,8 @@ void Tensor::grad_dot(const Tensor &a)
 
     int shape_[] = {m, k};
 
-    std::cout << "Re-Allocation in Tensor" << std::endl;
+    if (verbose)
+        std::cout << "Re-Allocation in Tensor" << std::endl;
     double *grad_ = new double[m * k];
 
     for (int i = 0; i < m; i++)
@@ -1164,9 +1221,11 @@ void Tensor::grad_dot(const Tensor &a)
 
 void Tensor::T()
 { // not generalized: for matrix
-    std::cout << "void Tensor::T()" << std::endl;
+    if (verbose)
+        std::cout << "void Tensor::T()" << std::endl;
 
-    std::cout << "Re-Allocation in Tensor" << std::endl;
+    if (verbose)
+        std::cout << "Re-Allocation in Tensor" << std::endl;
 
     double *data_;
     double *grad_;
@@ -1296,14 +1355,16 @@ Tensor dot(const Tensor &a, const Tensor &b)
 
 // Function ###############################################
 
-Function::Function() : input(NULL), input2(NULL), output(NULL), has_params(false), name("function")
+Function::Function() : input(NULL), input2(NULL), output(NULL), has_params(false), name("function"), verbose(false)
 {
-    std::cout << "Function::Function()" << std::endl;
+    if (verbose)
+        std::cout << "Function::Function()" << std::endl;
 }
 
 Tensor *Function::operator()(Tensor *input_)
 {
-    std::cout << "Tensor *Function::operator()(Tensor *input_)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor *Function::operator()(Tensor *input_)" << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;
@@ -1311,7 +1372,8 @@ Tensor *Function::operator()(Tensor *input_)
 
 Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)
 {
-    std::cout << "Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
+    if (verbose)
+        std::cout << "Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;
@@ -1319,21 +1381,24 @@ Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)
 
 void Function::backward()
 {
-    std::cout << "void Function::backward()" << std::endl;
+    if (verbose)
+        std::cout << "void Function::backward()" << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
 }
 
 void Function::zero_grad()
 {
-    std::cout << "void Function::zero_grad()" << std::endl;
+    if (verbose)
+        std::cout << "void Function::zero_grad()" << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
 }
 
 Tensor *Function::return_params()
 {
-    std::cout << "Tensor *Function::return_params()" << std::endl;
+    if (verbose)
+        std::cout << "Tensor *Function::return_params()" << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;
@@ -1341,7 +1406,8 @@ Tensor *Function::return_params()
 
 void Function::print()
 {
-    std::cout << "void Function::print()" << std::endl;
+    if (verbose)
+        std::cout << "void Function::print()" << std::endl;
     
     std::cerr << "Not Implemented Error" << std::endl;
 }
