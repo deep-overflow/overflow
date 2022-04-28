@@ -19,7 +19,7 @@ public:
     int num_params;
 };
 
-class SGD : Optimizer
+class SGD : public Optimizer
 {
 public:
     SGD(Tensor **params_, int num_params_, double lr_ = 0.001, bool l2_reg_ = true);
