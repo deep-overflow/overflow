@@ -27,6 +27,7 @@ public:
     Tensor **params;
     int n_func;
     int n_params;
+    bool verbose;
 };
 
 class Shape

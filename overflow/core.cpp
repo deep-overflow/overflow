@@ -2,12 +2,38 @@
 
 // Module #################################################
 
-Module::Module()
+Module::Module() : func(NULL), params(NULL), n_func(0), n_params(0), verbose(false)
 {
-    func = NULL;
-    params = NULL;
-    n_func = 0;
-    n_params = 0;
+    if (verbose)
+        std::cout << "Module::Module()" << std::endl;
+}
+
+Module::~Module()
+{
+    if (verbose)
+        std::cout << "Module::~Module()" << std::endl;
+
+    if (func != NULL)
+    {
+        for (int i = 0; i < n_func; i++)
+        {
+            if (func[i] != NULL)
+            {
+                delete func[i];
+            }
+        }
+    }
+
+    if (params != NULL)
+    {
+        for (int i = 0; i < n_params; i++)
+        {
+            if (params[i] != NULL)
+            {
+                delete params[i];
+            }
+        }
+    }
 }
 
 Tensor *Module::operator()(Tensor *input_)
