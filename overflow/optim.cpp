@@ -2,7 +2,7 @@
 
 // Optimizer ##############################################
 
-Optimizer::Optimizer() : params(NULL), num_params(0)
+Optimizer::Optimizer() : params(NULL), num_params(0), verbose(false)
 {
     std::cout << "Optimizer::Optimizer()" << std::endl;
 
@@ -11,14 +11,16 @@ Optimizer::Optimizer() : params(NULL), num_params(0)
 
 void Optimizer::step()
 {
-    std::cout << "void Optimizer::step()" << std::endl;
+    if (verbose)
+        std::cout << "void Optimizer::step()" << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
 }
 
 void Optimizer::print()
 {
-    std::cout << name << std::endl;
+    if (verbose)
+        std::cout << name << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
 }
@@ -27,7 +29,8 @@ void Optimizer::print()
 
 SGD::SGD(Tensor **params_, int num_params_, double lr_, bool l2_reg_) : lr(lr_), l2_reg(l2_reg_)
 {
-    std::cout << "SGD::SGD(Tensor **params_, int num_params_, double lr_, bool l2_reg_)" << std::endl;
+    if (verbose)
+        std::cout << "SGD::SGD(Tensor **params_, int num_params_, double lr_, bool l2_reg_)" << std::endl;
 
     params = params_;
     num_params = num_params_;
@@ -36,7 +39,8 @@ SGD::SGD(Tensor **params_, int num_params_, double lr_, bool l2_reg_) : lr(lr_),
 
 void SGD::step()
 {
-    std::cout << "void SGD::step()" << std::endl;
+    if (verbose)
+        std::cout << "void SGD::step()" << std::endl;
 
     Tensor *param;
     for (int i = 0; i < num_params; i++)

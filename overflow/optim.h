@@ -21,6 +21,8 @@ public:
     int num_params;
 
     std::string name;
+
+    bool verbose;
 };
 
 class SGD : public Optimizer
