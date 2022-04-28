@@ -2,51 +2,51 @@
 
 // Module #################################################
 
-// Module::Module()
-// {
-//     func = NULL;
-//     params = NULL;
-//     n_func = 0;
-//     n_params = 0;
-// }
+Module::Module()
+{
+    func = NULL;
+    params = NULL;
+    n_func = 0;
+    n_params = 0;
+}
 
-// Tensor *Module::operator()(Tensor *input_)
-// {
-//     Tensor *output = input_;
+Tensor *Module::operator()(Tensor *input_)
+{
+    Tensor *output = input_;
 
-//     for (int i = 0; i < n_func; i++)
-//     {
-//         output = (*func[i])(output);
-//     }
+    for (int i = 0; i < n_func; i++)
+    {
+        output = (*func[i])(output);
+    }
 
-//     return output;
-// }
+    return output;
+}
 
-// void Module::add_params()
-// {
-//     int idx = 0;
+void Module::add_params()
+{
+    int idx = 0;
 
-//     for (int i = 0; i < n_func; i++)
-//     {
-//         if (func[i]->has_params)
-//         {
-//             params[idx] = func[i]->return_params();
-//             idx++;
-//         }
-//     }
-// }
+    for (int i = 0; i < n_func; i++)
+    {
+        if (func[i]->has_params)
+        {
+            params[idx] = func[i]->return_params();
+            idx++;
+        }
+    }
+}
 
-// void Module::print()
-// {
-//     std::cout << "==================== funcs ====================" << std::endl;
-//     std::cout << n_func << " functions & " << n_params << " parameters" << std::endl;
-//     for (int i = 0; i < n_func; i++)
-//     {
-//         std::cout << i + 1 << "th function" << std::endl;
-//         func[i]->print();
-//     }
-//     std::cout << "==================== ***** ====================" << std::endl;
-// }
+void Module::print()
+{
+    std::cout << "==================== funcs ====================" << std::endl;
+    std::cout << n_func << " functions & " << n_params << " parameters" << std::endl;
+    for (int i = 0; i < n_func; i++)
+    {
+        std::cout << i + 1 << "th function" << std::endl;
+        func[i]->print();
+    }
+    std::cout << "==================== ***** ====================" << std::endl;
+}
 
 // Shape ##################################################
 
