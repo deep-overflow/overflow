@@ -28,7 +28,14 @@ Sin::Sin(double start_, double end_, int n_samples_) : start(start_), end(end_)
     {
         double k = (double)i;
         input->data[i] = start + (end - start) * k / div;
-        output->data[i] = sin(input->data[i]);
+        if (sin(input->data[i]) > 0)
+        {
+            output->data[i] = 1.0;
+        }
+        else
+        {
+            output->data[i] = 0.0;
+        }
     }
 }
 
