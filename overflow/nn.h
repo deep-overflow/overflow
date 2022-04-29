@@ -30,7 +30,7 @@ public:
 class Dropout : public Function
 {
 public:
-    Dropout();
+    Dropout(double ratio_);
     ~Dropout();
 
     virtual Tensor *operator()(Tensor *input_);
@@ -38,9 +38,11 @@ public:
     virtual void backward();
     virtual void zero_grad();
 
-    virtual Tensor *return_params();
-
     virtual void print();
+
+    double ratio;
+    int n_drop;
+    Tensor *dropout;
 };
 
 class ReLU : public Function

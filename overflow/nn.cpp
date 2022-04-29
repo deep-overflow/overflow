@@ -208,7 +208,7 @@ void Linear::print()
 
 // DropOut ################################################
 
-Dropout::Dropout()
+Dropout::Dropout(double ratio_) : ratio(ratio_), dropout(NULL), n_drop(0)
 {
     if (verbose)
         std::cout << "DropOut::DropOut()" << std::endl;
@@ -224,6 +224,130 @@ Dropout::~Dropout()
     if (output != NULL)
     {
         delete output;
+    }
+
+    if (dropout != NULL)
+    {
+        delete dropout;
+    }
+}
+
+Tensor *Dropout::operator()(Tensor *input_)
+{
+    if (verbose)
+        std::cout << "Tensor *Dropout::operator()(Tensor *input_)" << std::endl;
+    
+    if (output == NULL)
+    {
+        output = new Tensor;
+    }
+
+    *output = *input_;
+
+    if (dropout == NULL)
+    {
+        dropout = new Tensor(1.0, input_->tensor_shape);
+    }
+    else
+    {
+        dropout->init_like(1.0, input_->tensor_shape);
+    }
+
+    int batch_size = dropout->tensor_shape.shape[0];
+    int n_features = dropout->tensor_shape.size;
+    n_features /= batch_size;
+    n_drop = n_features * ratio;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dis(0, n_features - 1);
+
+    for (int batch = 0; batch < batch_size; batch++)
+    {
+        for (int i = 0; i < n_drop; i++)
+        {
+            int idx = batch * n_features;
+            idx += dis(gen);
+
+            dropout->data[idx] = 0;
+        }
+    }
+
+    *output = *output * *dropout;
+
+    output->func = this;
+
+    input = input_;
+
+    return output;
+}
+
+void Dropout::backward()
+{  
+    if (verbose)
+        std::cout << "void Dropout::backward()" << std::endl;
+    
+    for (int i = 0; i < output->tensor_shape.size; i++)
+    {
+        input->grad[i] = output->grad[i] * dropout->data[i];
+    }
+
+    if (input->func != NULL)
+    {
+        input->backward();
+    }
+}
+
+void Dropout::zero_grad()
+{
+    if (verbose)
+        std::cout << "void Dropout::zero_grad()" << std::endl;
+
+    if (output != NULL)
+    {
+        delete output;
+    }
+
+    input->zero_grad();
+
+    output = NULL;
+    input = NULL;
+}
+
+void Dropout::print()
+{
+    std::cout << name << std::endl;
+    std::cout << "ratio : " << ratio << std::endl;
+    std::cout << "n_drop : " << n_drop << std::endl;
+
+    if (input == NULL)
+    {
+        std::cout << "input : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input :" << std::endl;
+        input->print();
+    }
+
+    if (input2 == NULL)
+    {
+        std::cout << "input2 : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input2 :" << std::endl;
+        input2->print();
+    }
+
+    if (output == NULL)
+    {
+        std::cout << "output : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "output :" << std::endl;
+        output->print();
     }
 }
 
