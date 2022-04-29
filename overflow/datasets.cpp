@@ -93,6 +93,8 @@ Circle::Circle(double radius_, int n_x, int n_y) : radius(radius_)
 
 MNIST::MNIST(std::string path_, std::string type_) : path(path_), type(type_)
 {
+    std::cout << "MNIST::MNIST(std::string path_, std::string type_)" << std::endl;
+    
     if (type == "train")
     {
         path += "train.csv";
@@ -122,22 +124,52 @@ MNIST::MNIST(std::string path_, std::string type_) : path(path_), type(type_)
 
     getline(fs, buffer);
 
-    while (!fs.eof())
+    for (int sample = 0; sample < n_samples; sample++)
     {
-        
+        // Label
         getline(fs, buffer, ',');
 
-        std::stringstream rawdata(buffer);
-        rawdata >> data;
+        std::stringstream rawdata1(buffer);
+        rawdata1 >> data;
 
-        if (rawdata.fail())
+        if (rawdata1.fail())
         {
             std::cerr << "Data Processing Fail : String to Numeric" << std::endl;
         }
         else
         {
-
+            output->data[sample] = data;
         }
+
+        // Input
+        for (int i = 0; i < 28 * 28; i++)
+        {
+            getline(fs, buffer, ',');
+
+            std::stringstream rawdata2(buffer);
+            rawdata2 >> data;
+
+            if (rawdata2.fail())
+            {
+                std::cerr << "Data Processing Fail : String to Numeric" << std::endl;
+            }
+            else
+            {
+                int idx = sample * 28 * 28 + i;
+                input->data[idx] = data;
+            }
+        }
+    }
+
+    if (fs.eof())
+    {
+        std::cout << "Data Processing Complete" << std::endl;
+        fs.close();
+    }
+    else
+    {
+        std::cout << "Data Processing Not Complete" << std::endl;
+        fs.close();
     }
 }
 
