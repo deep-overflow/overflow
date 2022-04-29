@@ -216,6 +216,17 @@ Dropout::Dropout()
     name = "< DropOut class : Function class >";
 }
 
+Dropout::~Dropout()
+{
+    if (verbose)
+        std::cout << "Dropout::~Dropout()" << std::endl;
+    
+    if (output != NULL)
+    {
+        delete output;
+    }
+}
+
 // ReLU ###################################################
 
 ReLU::ReLU()
