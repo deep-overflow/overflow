@@ -27,6 +27,22 @@ public:
     char init;
 };
 
+class Dropout : public Function
+{
+public:
+    Dropout();
+    ~Dropout();
+
+    virtual Tensor *operator()(Tensor *input_);
+
+    virtual void backward();
+    virtual void zero_grad();
+
+    virtual Tensor *return_params();
+
+    virtual void print();
+};
+
 class ReLU : public Function
 {
 public:

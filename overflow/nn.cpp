@@ -206,6 +206,16 @@ void Linear::print()
     params.print();
 }
 
+// DropOut ################################################
+
+Dropout::Dropout()
+{
+    if (verbose)
+        std::cout << "DropOut::DropOut()" << std::endl;
+    
+    name = "< DropOut class : Function class >";
+}
+
 // ReLU ###################################################
 
 ReLU::ReLU()
