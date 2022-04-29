@@ -586,6 +586,149 @@ void Sigmoid::print()
     }
 }
 
+// Softmax ################################################
+
+Softmax::Softmax()
+{
+    if (verbose)
+        std::cout << "Softmax::Softmax()" << std::endl;
+    
+    name = "< Softmax class : Function class >";
+}
+
+Softmax::~Softmax()
+{
+    if (verbose)
+        std::cout << "Softmax::~Softmax()" << std::endl;
+    
+    if (output != NULL)
+    {
+        delete output;
+    }
+}
+
+Tensor *Softmax::operator()(Tensor *input_)
+{
+    if (verbose)
+        std::cout << "Tensor *Softmax::operator()(Tensor *input_)" << std::endl;
+
+    if (output != NULL)
+    {
+        delete output;
+    }
+
+    output = new Tensor(input_->tensor_shape);
+
+    int batch_size = output->tensor_shape.shape[0];
+    int n_features = output->tensor_shape.size / batch_size;
+
+    int shape_[] = {batch_size, 1};
+    Tensor sum(0.0, shape_, 2);
+
+    for (int batch = 0; batch < batch_size; batch++)
+    {
+        for (int i = 0; i < n_features; i++)
+        {
+            int idx_ = batch * n_features + i;
+            output->data[idx_] = exp(input_->data[idx_]);
+            sum.data[batch] += output->data[idx_];
+        }
+    }
+
+    for (int batch = 0; batch < batch_size; batch++)
+    {
+        for (int i = 0; i < n_features; i++)
+        {
+            int idx_ = batch * n_features + i;
+
+            output->data[idx_] /= sum.data[batch];
+        }
+    }
+
+    output->func = this;
+
+    input = input_;
+
+    return output;
+}
+
+void Softmax::backward()
+{
+    if (verbose)
+        std::cout << "void Softmax::backward()" << std::endl;
+
+    int batch_size = output->tensor_shape.shape[0];
+    int n_features = output->tensor_shape.size / batch_size;
+
+    for (int batch = 0; batch < batch_size; batch++)
+    {
+        for (int i = 0; i < n_features; i++)
+        {
+            int idx = batch * n_features + i;
+
+            double grad = output->data[idx] * (1 - output->data[idx]);
+
+            input->grad[idx] = output->grad[idx] * grad;
+        }
+    }
+
+    if (input->func != NULL)
+    {
+        input->backward();
+    }
+}
+
+void Softmax::zero_grad()
+{
+    if (verbose)
+        std::cout << "void Softmax::zero_grad()" << std::endl;
+    
+    if (output != NULL)
+    {
+        delete output;
+    }
+
+    input->zero_grad();
+
+    output = NULL;
+    input = NULL;
+}
+
+void Softmax::print()
+{
+    std::cout << name << std::endl;
+
+    if (input == NULL)
+    {
+        std::cout << "input : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input :" << std::endl;
+        input->print();
+    }
+
+    if (input2 == NULL)
+    {
+        std::cout << "input2 : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input2 :" << std::endl;
+        input2->print();
+    }
+
+    if (output == NULL)
+    {
+        std::cout << "output : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "output :" << std::endl;
+        output->print();
+    }
+}
+
 // MSELoss ################################################
 
 MSELoss::MSELoss()

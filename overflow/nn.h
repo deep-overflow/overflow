@@ -72,6 +72,19 @@ public:
     virtual void print();
 };
 
+class Softmax : public Function
+{
+public:
+    Softmax();
+    ~Softmax();
+
+    virtual Tensor *operator()(Tensor *input_);
+    virtual void backward();
+    virtual void zero_grad();
+
+    virtual void print();
+};
+
 class MSELoss : public Function
 {
 public:
