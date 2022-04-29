@@ -2,6 +2,9 @@
 #define __DATASETS_H__
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include <cmath>
 #include <random>
 #include "core.h"
@@ -42,6 +45,17 @@ public:
     Circle(double radius_, int n_x = 1000, int n_y = 1000);
 
     double radius;
+};
+
+// MNIST ##################################################
+
+class MNIST : public Dataset
+{
+public:
+    MNIST(std::string path_, std::string type_ = "train");
+
+    std::string type;
+    std::string path;
 };
 
 // DataLoader #############################################

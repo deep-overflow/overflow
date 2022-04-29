@@ -89,6 +89,58 @@ Circle::Circle(double radius_, int n_x, int n_y) : radius(radius_)
     }
 }
 
+// MNIST ##################################################
+
+MNIST::MNIST(std::string path_, std::string type_) : path(path_), type(type_)
+{
+    if (type == "train")
+    {
+        path += "train.csv";
+        n_samples = 60000;
+    }
+    else if (type == "test")
+    {
+        path += "test.csv";
+        n_samples = 10000;
+    }
+    else
+    {
+        std::cerr << "Type Error : type must be train or test" << std::endl;
+    }
+
+    int shape_i[] = {n_samples, 28, 28, 1};
+    int shape_o[] = {n_samples, 1};
+
+    input = new Tensor(shape_i, 4);
+    output = new Tensor(shape_o, 2);
+
+    std::string buffer;
+    std::fstream fs;
+    double data;
+
+    fs.open(path, std::ios::in);
+
+    getline(fs, buffer);
+
+    while (!fs.eof())
+    {
+        
+        getline(fs, buffer, ',');
+
+        std::stringstream rawdata(buffer);
+        rawdata >> data;
+
+        if (rawdata.fail())
+        {
+            std::cerr << "Data Processing Fail : String to Numeric" << std::endl;
+        }
+        else
+        {
+
+        }
+    }
+}
+
 // DataLoader #############################################
 
 DataLoader::DataLoader(Dataset *dataset_, int batch_size_, bool shuffle_) : dataset(dataset_), batch_size(batch_size_), shuffle(shuffle_), verbose(false)
