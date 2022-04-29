@@ -796,6 +796,20 @@ void Tensor::random(const int *shape_, const int dim_, char init_)
             grad[i] = 1;
         }
     }
+    else if (init_ == 'h')
+    {
+        std::cout << "He initialization" << std::endl;
+        
+        double n_in = (double)tensor_shape.shape[0];
+        double var = sqrt(2) / sqrt(n_in);
+        std::normal_distribution<double> normal(0, var);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = normal(rng);
+            grad[i] = 1;
+        }
+    }
 
     func = NULL;
     requires_grad = true;
@@ -840,6 +854,18 @@ void Tensor::random(const Shape &shape_, char init_)
         for (int i = 0; i < tensor_shape.size; i++)
         {
             data[i] = uniform(rng);
+            grad[i] = 1;
+        }
+    }
+    else if (init_ == 'h')
+    {
+        double n_in = (double)tensor_shape.shape[0];
+        double var = sqrt(2) / sqrt(n_in);
+        std::normal_distribution<double> normal(0, var);
+
+        for (int i = 0; i < tensor_shape.size; i++)
+        {
+            data[i] = normal(rng);
             grad[i] = 1;
         }
     }
