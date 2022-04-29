@@ -125,7 +125,7 @@ public:
     Function();
 
     virtual Tensor *operator()(Tensor *input_);
-    virtual Tensor *operator()(Tensor *input_1, Tensor *input_2);
+    virtual Tensor *operator()(Tensor *output_, Tensor *label_);
 
     virtual void backward();
     virtual void zero_grad();

@@ -607,7 +607,7 @@ MSELoss::~MSELoss()
     }
 }
 
-Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
+Tensor *MSELoss::operator()(Tensor *output_, Tensor *label_)
 {
     if (verbose)
         std::cout << "Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
@@ -617,11 +617,11 @@ Tensor *MSELoss::operator()(Tensor *input_1, Tensor *input_2)
         output = new Tensor;
     }
 
-    *output = (*input_1 - *input_2) ^ 2;
+    *output = (*output_ - *label_) ^ 2;
     output->func = this;
 
-    input = input_1;
-    input2 = input_2;
+    input = output_;
+    input2 = label_;
 
     return output;
 }
@@ -669,6 +669,116 @@ void MSELoss::zero_grad()
 }
 
 void MSELoss::print()
+{
+    std::cout << name << std::endl;
+
+    if (input == NULL)
+    {
+        std::cout << "input : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input :" << std::endl;
+        input->print();
+    }
+
+    if (input2 == NULL)
+    {
+        std::cout << "input2 : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "input2 :" << std::endl;
+        input2->print();
+    }
+
+    if (output == NULL)
+    {
+        std::cout << "output : NULL" << std::endl;
+    }
+    else
+    {
+        std::cout << "output :" << std::endl;
+        output->print();
+    }
+}
+
+// CrossEntropyLoss #######################################
+
+CrossEntropyLoss::CrossEntropyLoss()
+{
+    if (verbose)
+        std::cout << "CrossEntropyLoss::CrossEntropyLoss()" << std::endl;
+    
+    name = "< CrossEntropyLoss class : Function class >";
+}
+
+CrossEntropyLoss::~CrossEntropyLoss()
+{
+    if (verbose)
+        std::cout << "CrossEntropyLoss::~CrossEntropyLoss()" << std::endl;
+
+    if (output != NULL)
+    {
+        delete output;
+    }
+}
+
+Tensor *CrossEntropyLoss::operator()(Tensor *output_, Tensor *label_)
+{
+    if (verbose)
+        std::cout << "Tensor *CrossEntropyLoss::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
+
+    if (output == NULL)
+    {
+        output = new Tensor;
+    }
+
+    //
+    //
+
+    output->func = this;
+
+    input = output_;
+    input2 = label_;
+
+    return output;
+}
+
+void CrossEntropyLoss::backward()
+{
+    if (verbose)
+        std::cout << "void CrossEntropyLoss::backward()" << std::endl;
+
+    //
+    //
+
+    if (input->func != NULL)
+    {
+        input->backward();
+    }
+    if (input2->func != NULL)
+    {
+        input2->backward();
+    }
+}
+
+void CrossEntropyLoss::zero_grad()
+{
+    if (verbose)
+        std::cout << "void CrossEntropyLoss::zero_grad()" << std::endl;
+    
+    delete output;
+
+    input->zero_grad();
+    input2->zero_grad();
+
+    output = NULL;
+    input = NULL;
+    input2 = NULL;
+}
+
+void CrossEntropyLoss::print()
 {
     std::cout << name << std::endl;
 

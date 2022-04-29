@@ -1458,10 +1458,10 @@ Tensor *Function::operator()(Tensor *input_)
     return NULL;
 }
 
-Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)
+Tensor *Function::operator()(Tensor *output_, Tensor *label_)
 {
     if (verbose)
-        std::cout << "Tensor *Function::operator()(Tensor *input_1, Tensor *input_2)" << std::endl;
+        std::cout << "Tensor *Function::operator()(Tensor *output_, Tensor *label_)" << std::endl;
 
     std::cerr << "Not Implemented Error" << std::endl;
     return NULL;

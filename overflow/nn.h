@@ -78,7 +78,21 @@ public:
     MSELoss();
     ~MSELoss();
 
-    virtual Tensor *operator()(Tensor *input_1, Tensor *input_2);
+    virtual Tensor *operator()(Tensor *output_, Tensor *label_);
+
+    virtual void backward();
+    virtual void zero_grad();
+
+    virtual void print();
+};
+
+class CrossEntropyLoss : public Function
+{
+public:
+    CrossEntropyLoss();
+    ~CrossEntropyLoss();
+
+    virtual Tensor *operator()(Tensor *output_, Tensor *label_);
 
     virtual void backward();
     virtual void zero_grad();
