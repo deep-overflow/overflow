@@ -1243,6 +1243,43 @@ void Tensor::grad_dot(const Tensor &a)
     grad = grad_;
 }
 
+void Tensor::reshape(const int *shape_, const int dim_)
+{
+    if (verbose)
+        std::cout << "void Tensor::reshape(const int *shape_, const int dim_)" << std::endl;
+    
+    int size = 1;
+
+    for (int i = 0; i < dim_; i++)
+    {
+        size *= shape_[i];
+    }
+
+    if (size != tensor_shape.size)
+    {
+        std::cerr << "Reshape Unavailable" << std::endl;
+    }
+    else
+    {
+        tensor_shape.reshape(shape_, dim_);
+    }
+}
+
+void Tensor::reshape(const Shape &a)
+{
+    if (verbose)
+        std::cout << "void Tensor::reshape(const Shape &a)" << std::endl;
+    
+    if (a.size != tensor_shape.size)
+    {
+        std::cerr << "Reshape Unavailable" << std::endl;
+    }
+    else
+    {
+        tensor_shape.reshape(a);
+    }
+}
+
 void Tensor::T()
 { // not generalized: for matrix
     if (verbose)

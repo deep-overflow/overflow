@@ -99,6 +99,9 @@ public:
 
     void dot(const Tensor &a); // not generalized: for matrix 수정 여부 고민해보기.
     void grad_dot(const Tensor &a); // not generalized: for matrix 수정 여부 고민해보기.
+
+    void reshape(const int *shape_, const int dim_);
+    void reshape(const Shape &a);
     void T(); // not generalized: for matrix 수정 여부 고민해보기 + 속도 개선하기
 
     void print() const; // 수정하기 : 줄바꿈이 이상함.
