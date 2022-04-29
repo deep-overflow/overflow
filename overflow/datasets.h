@@ -10,6 +10,8 @@ class Dataset;
 class Sin;
 class DataLoader;
 
+// Dataset ################################################
+
 class Dataset
 {
 public:
@@ -21,6 +23,8 @@ public:
     bool verbose;
 };
 
+// Sin ####################################################
+
 class Sin : public Dataset
 {
 public:
@@ -29,6 +33,18 @@ public:
     double start;
     double end;
 };
+
+// Dataset ################################################
+
+class Circle : public Dataset
+{
+public:
+    Circle(double radius_, int n_x = 1000, int n_y = 1000);
+
+    double radius;
+};
+
+// DataLoader #############################################
 
 class DataLoader
 {

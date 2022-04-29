@@ -39,9 +39,55 @@ Sin::Sin(double start_, double end_, int n_samples_) : start(start_), end(end_)
     }
 }
 
-// Sin ####################################################
+// Circle #################################################
 
+Circle::Circle(double radius_, int n_x, int n_y) : radius(radius_)
+{
+    if (verbose)
+        std::cout << "Circle::Circle(double radius_, int n_samples_)" << std::endl;
+    
+    n_samples = n_x * n_y;
 
+    int shape_i[] = {n_samples, 2};
+    int shape_o[] = {n_samples, 1};
+
+    input = new Tensor(0.0, shape_i, 2);
+    output = new Tensor(0.0, shape_o, 2);
+
+    double min = -2 * radius;
+    double max = 2 * radius;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(min, max);
+
+    for (int i = 0; i < input->tensor_shape.size; i++)
+    {
+        input->data[i] = dis(gen);
+    }
+
+    radius_ *= radius_;
+
+    for (int i = 0; i < output->tensor_shape.shape[0]; i++)
+    {
+        Tensor I = input->index(1, i);
+
+        double x = I.data[0];
+        double y = I.data[1];
+
+        x *= x;
+        y *= y;
+
+        if (x + y < radius_)
+        {
+            output->data[i] = 1;
+        }
+        else
+        {
+            output->data[i] = 0;
+        }
+    }
+}
 
 // DataLoader #############################################
 
