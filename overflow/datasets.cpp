@@ -173,6 +173,38 @@ MNIST::MNIST(std::string path_, std::string type_) : path(path_), type(type_)
     }
 }
 
+void MNIST::visualize(int idx_)
+{
+    Tensor I = input->index(1, idx_);
+    Tensor O = output->index(1, idx_);
+
+    int shape_[] = {28, 28};
+    I.reshape(shape_, 2);
+
+    std::cout << "input :" << std::endl;
+
+    for (int i = 0; i < 28; i++)
+    {
+        for (int j = 0; j < 28; j++)
+        {
+            int idx = i * 28 + j;
+
+            if (I.data[idx] > 0)
+            {
+                std::cout << '*';
+            }
+            else
+            {
+                std::cout << ' ';
+            }
+        }
+
+        std::cout << std::endl;
+    }
+
+    std::cout << "label : " << O.data[0] << std::endl;
+}
+
 // DataLoader #############################################
 
 DataLoader::DataLoader(Dataset *dataset_, int batch_size_, bool shuffle_) : dataset(dataset_), batch_size(batch_size_), shuffle(shuffle_), verbose(false)

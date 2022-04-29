@@ -54,6 +54,8 @@ class MNIST : public Dataset
 public:
     MNIST(std::string path_, std::string type_ = "train");
 
+    void visualize(int idx_);
+
     std::string type;
     std::string path;
 };
