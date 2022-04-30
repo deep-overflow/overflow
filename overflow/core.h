@@ -86,6 +86,7 @@ public:
     void random(char init_='n');
     void arange();
 
+    Tensor argmax() const; // 수정 여부 고민해보기.
     Tensor index(int arg_num, ...) const; // 수정 여부 고민해보기.
     double index_(int arg, ...) const; // 수정 여부 고민해보기.
     double grad_index(int arg, ...) const; // 수정 여부 고민해보기.

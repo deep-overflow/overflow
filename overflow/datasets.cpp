@@ -156,7 +156,7 @@ MNIST::MNIST(std::string path_, std::string type_) : path(path_), type(type_)
             else
             {
                 int idx = sample * 28 * 28 + i;
-                input->data[idx] = data;
+                input->data[idx] = data / 255.0;
             }
         }
     }

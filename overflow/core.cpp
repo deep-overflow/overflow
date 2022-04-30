@@ -36,6 +36,13 @@ Tensor *Module::operator()(Tensor *input_)
     for (int i = 0; i < n_func; i++)
     {
         output = (*func[i])(output);
+
+        if (i == 9)
+        {
+            std::cout << "==============================" << std::endl;
+            output->print();
+            std::cout << "==============================" << std::endl;
+        }
     }
 
     return output;
@@ -919,6 +926,34 @@ void Tensor::arange()
         data[i] = i + 1;
         grad[i] = 1;
     }
+}
+
+Tensor Tensor::argmax() const
+{
+    int batch_size = tensor_shape.shape[0];
+    int n_features = tensor_shape.size / batch_size;
+
+    int shape_[] = {batch_size, 1};
+    Tensor c(0.0, shape_, 2);
+
+    for (int batch = 0; batch < batch_size; batch++)
+    {
+        double score = 0.0;
+        
+        for (int i = 0; i < n_features; i++)
+        {
+            int idx = batch * n_features + i;
+
+            if (score < data[idx])
+            {
+                score = data[idx];
+
+                c.data[batch] = i;
+            }
+        }
+    }
+
+    return c;
 }
 
 Tensor Tensor::index(int arg_num, ...) const

@@ -931,16 +931,10 @@ void CrossEntropyLoss::backward()
     {
         if (output->data[i] > 0)
         {
-            std::cout << "output->data[i] : " << output->data[i] << std::endl;
-            std::cout << "exp(-output->data[i]) : " << exp(-output->data[i]) << std::endl;
-
             double grad = (double)1 / exp(-output->data[i]);
-
-            std::cout << "1 / exp(-output->data[i]) : " << grad << std::endl;
+            grad = -grad;
 
             input->grad[i] = output->grad[i] * grad;
-
-            std::cout << "output->grad[i] * grad : " << input->grad[i] << std::endl;
         }
         else
         {
