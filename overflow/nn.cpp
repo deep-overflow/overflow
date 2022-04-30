@@ -848,7 +848,7 @@ void MSELoss::print()
 
 // CrossEntropyLoss #######################################
 
-CrossEntropyLoss::CrossEntropyLoss()
+CrossEntropyLoss::CrossEntropyLoss() : label(NULL)
 {
     if (verbose)
         std::cout << "CrossEntropyLoss::CrossEntropyLoss()" << std::endl;
@@ -865,6 +865,11 @@ CrossEntropyLoss::~CrossEntropyLoss()
     {
         delete output;
     }
+
+    if (label != NULL)
+    {
+        delete label;
+    }
 }
 
 Tensor *CrossEntropyLoss::operator()(Tensor *output_, Tensor *label_)
@@ -877,8 +882,35 @@ Tensor *CrossEntropyLoss::operator()(Tensor *output_, Tensor *label_)
         output = new Tensor;
     }
 
-    //
-    //
+    if (label == NULL)
+    {
+        label = new Tensor(0.0, output_->tensor_shape);
+    }
+
+    int batch_size = output_->tensor_shape.shape[0];
+    int n_features = output_->tensor_shape.size / batch_size;
+
+    *output = *output_;
+
+    for (int batch = 0; batch < batch_size; batch++)
+    {
+        int gt_idx = label_->data[batch];
+
+        for (int i = 0; i < n_features; i++)
+        {
+            int idx = batch * n_features + i;
+
+            if (i != gt_idx)
+            {
+                output->data[idx] = 0;
+            }
+            else
+            {
+                std::cout << "asdf : " << output->data[idx] << std::endl;
+                output->data[idx] = -log10(output->data[idx]);
+            }
+        }
+    }
 
     output->func = this;
 
@@ -893,8 +925,9 @@ void CrossEntropyLoss::backward()
     if (verbose)
         std::cout << "void CrossEntropyLoss::backward()" << std::endl;
 
-    //
-    //
+    int batch_size = output->tensor_shape.shape[0];
+    int n_features = output->tensor_shape.size / batch_size;
+
 
     if (input->func != NULL)
     {

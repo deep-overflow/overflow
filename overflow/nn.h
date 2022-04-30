@@ -78,8 +78,8 @@ public:
     Softmax();
     ~Softmax();
 
-    virtual Tensor *operator()(Tensor *input_);
-    virtual void backward();
+    virtual Tensor *operator()(Tensor *input_); // 구현한 식이 약간 헷갈림
+    virtual void backward();                    // 구현한 식이 약간 헷갈림
     virtual void zero_grad();
 
     virtual void print();
@@ -111,6 +111,9 @@ public:
     virtual void zero_grad();
 
     virtual void print();
+
+    Softmax softmax;
+    Tensor *label;
 };
 
 #endif
