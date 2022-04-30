@@ -797,9 +797,7 @@ void Tensor::random(const int *shape_, const int dim_, char init_)
         }
     }
     else if (init_ == 'h')
-    {
-        std::cout << "He initialization" << std::endl;
-        
+    {        
         double n_in = (double)tensor_shape.shape[0];
         double var = sqrt(2) / sqrt(n_in);
         std::normal_distribution<double> normal(0, var);
