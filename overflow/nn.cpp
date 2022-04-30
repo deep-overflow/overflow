@@ -906,8 +906,7 @@ Tensor *CrossEntropyLoss::operator()(Tensor *output_, Tensor *label_)
             }
             else
             {
-                std::cout << "asdf : " << output->data[idx] << std::endl;
-                output->data[idx] = -log10(output->data[idx]);
+                output->data[idx] = -log(output->data[idx]);
             }
         }
     }
@@ -928,6 +927,26 @@ void CrossEntropyLoss::backward()
     int batch_size = output->tensor_shape.shape[0];
     int n_features = output->tensor_shape.size / batch_size;
 
+    for (int i = 0; i < input->tensor_shape.size; i++)
+    {
+        if (output->data[i] > 0)
+        {
+            std::cout << "output->data[i] : " << output->data[i] << std::endl;
+            std::cout << "exp(-output->data[i]) : " << exp(-output->data[i]) << std::endl;
+
+            double grad = (double)1 / exp(-output->data[i]);
+
+            std::cout << "1 / exp(-output->data[i]) : " << grad << std::endl;
+
+            input->grad[i] = output->grad[i] * grad;
+
+            std::cout << "output->grad[i] * grad : " << input->grad[i] << std::endl;
+        }
+        else
+        {
+            input->grad[i] = 0;
+        }
+    }
 
     if (input->func != NULL)
     {
