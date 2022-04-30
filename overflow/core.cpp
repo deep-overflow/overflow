@@ -36,13 +36,6 @@ Tensor *Module::operator()(Tensor *input_)
     for (int i = 0; i < n_func; i++)
     {
         output = (*func[i])(output);
-
-        if (i == 9)
-        {
-            std::cout << "==============================" << std::endl;
-            output->print();
-            std::cout << "==============================" << std::endl;
-        }
     }
 
     return output;
