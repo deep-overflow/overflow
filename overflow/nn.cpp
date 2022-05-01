@@ -14,11 +14,11 @@ Linear::Linear(int in_features_, int out_features_, char init_) : init(init_)
 
     if (init)
     {
-        params.random(shape_, 2, init);
+        weights.random(shape_, 2, init);
     }
     else
     {
-        params.init(1.0, shape_, 2);
+        weights.init(1.0, shape_, 2);
     }
 
     has_params = true;
@@ -48,7 +48,7 @@ Tensor *Linear::operator()(Tensor *input_)
     }
 
     // O [batch, out_feaures] = I [batch, in_features] * P [in_features, out_features]
-    *output = dot(*input_, params, verbose);
+    *output = dot(*input_, weights, verbose);
     output->func = this;
     
     input = input_;
@@ -73,11 +73,11 @@ void Linear::backward()
 
     int n = input->tensor_shape.shape[0];
     int m = input->tensor_shape.shape[1];
-    int m_ = params.tensor_shape.shape[0];
-    int k = params.tensor_shape.shape[1];
-    
+    int m_ = weights.tensor_shape.shape[0];
+    int k = weights.tensor_shape.shape[1];
+
     // compute params.grad : (m x n) * (n x k) -> m x k
-    if (params.requires_grad)
+    if (weights.requires_grad)
     {
         if (verbose)
             std::cout << "Compute params.grad" << std::endl;
@@ -93,14 +93,14 @@ void Linear::backward()
                     value += input->index_(i, t) * output->grad_index(t, j);
                 }
                 int index_ = i * k + j;
-                params.grad[index_] = value;
+                weights.grad[index_] = value;
             }
         }
         input->T();
     }
 
     // compute input->grad : (n x k) * (k x m) -> n x m
-    params.T();
+    weights.T();
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; j++)
@@ -109,13 +109,13 @@ void Linear::backward()
             for (int t = 0; t < k; t++)
             {
                 // (m x n) * (n x k) -> m x k
-                value += output->grad_index(i, t) * params.index_(t, j);
+                value += output->grad_index(i, t) * weights.index_(t, j);
             }
             int index_ = i * m + j;
             input->grad[index_] = value;
         }
     }
-    params.T();
+    weights.T();
 
     // execute input->backward()
     if (input->func != NULL)
@@ -131,8 +131,8 @@ void Linear::zero_grad()
 
     delete output;
 
-    params.zero_grad();
-    
+    weights.zero_grad();
+
     input->zero_grad();
 
     output = NULL;
@@ -144,7 +144,7 @@ Tensor *Linear::return_params()
     if (verbose)
         std::cout << "Tensor *Linear::return_params()" << std::endl;
 
-    return &params;
+    return &weights;
 }
 
 void Linear::print()
@@ -203,7 +203,7 @@ void Linear::print()
     }
 
     std::cout << "params :" << std::endl;
-    params.print();
+    weights.print();
 }
 
 // DropOut ################################################

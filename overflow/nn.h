@@ -27,7 +27,8 @@ public:
 
     virtual void print();
 
-    Tensor params;
+    Tensor weights;
+    Tensor bias;
     char init;
 };
 
