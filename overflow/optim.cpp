@@ -84,3 +84,43 @@ void SGD::print()
         params[i]->print();
     }
 }
+
+// Linear #################################################
+
+Adam::Adam(Tensor **params_, int num_params_, double lr_ = 0.001, double beta1_ = 0.9, double beta2_ = 0.999,
+           double eps_ = 1e-8, double weight_decay_ = 0, bool amsgrad_ = false, bool maximize_ = false)
+    : lr(lr_), beta1(beta1_), beta2(beta2_), eps(eps_), weight_decay(weight_decay_), amsgrad(amsgrad_), maximize(maximize_)
+{
+    if (verbose)
+        std::cout << "Adam::Adam(Tensor **params_, int num_params_, double lr_ = 0.001, double beta1_ = 0.9, double beta2_ = 0.999, double eps_ = 1e-8, double weight_decay_ = 0, bool amsgrad_ = false, bool maximize_ = false)" << std::endl;
+
+    params = params_;
+    num_params = num_params_;
+    name = "< Adam class : Optimizer class >";
+}
+
+void Adam::step()
+{
+    if (verbose)
+        std::cout << "void Adam::step()" << std::endl;
+}
+
+void Adam::print()
+{
+    std::cout << name << std::endl;
+    std::cout << "lr : " << lr << std::endl;
+    std::cout << "beta1 : " << beta1 << std::endl;
+    std::cout << "beta2 : " << beta2 << std::endl;
+    std::cout << "eps : " << eps << std::endl;
+    std::cout << "weight_decay : " << weight_decay << std::endl;
+
+    if (amsgrad)
+        std::cout << "amsgrad : true" << std::endl;
+    else
+        std::cout << "amsgrad : false" << std::endl;
+
+    if (maximize)
+        std::cout << "maximize : true" << std::endl;
+    else
+        std::cout << "maximize : false" << std::endl;
+}
