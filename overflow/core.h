@@ -63,6 +63,7 @@ class Tensor
 {
 public:
     Tensor();
+    Tensor(int dim_, int shape_, ...);
     Tensor(const double *data_, const int *shape_, const int dim_);
     Tensor(const double data_, const int *shape_, const int dim_);
     Tensor(const int *shape_, const int dim_);
@@ -81,9 +82,9 @@ public:
     void init(const double data_, const int *shape_, const int dim_);
     void init_like(const double data_, const Shape &shape_);
     void init_like(const double data_, const Tensor &a);
-    void random(const int *shape_, const int dim_, char init_ = 'n');
-    void random(const Shape &shape_, char init_ = 'n');
-    void random(char init_='n');
+    void random(const int *shape_, const int dim_, char init_ = 'h');
+    void random(const Shape &shape_, char init_ = 'h');
+    void random(char init_='h');
     void arange();
 
     Tensor argmax() const; // 수정 여부 고민해보기.

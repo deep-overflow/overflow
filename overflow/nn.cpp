@@ -209,6 +209,25 @@ void Linear::print()
     weights.print();
 }
 
+// Conv2d ##################################################
+
+Conv2d::Conv2d(int in_channels_, int out_channels_, int kernel_size_, int stride_,
+               int padding_, int dilation_, bool use_bias_, std::string padding_mode_)
+    : stride(stride_), padding(padding_), dilation(dilation_), use_bias(use_bias_), padding_mode(padding_mode_)
+{
+    int shape_w[] = {out_channels_, in_channels_, kernel_size_, kernel_size_};
+    int shape_b[] = {1, out_channels_};
+
+    weights.random(shape_w, 4);
+
+    if (use_bias)
+        bias.init(0.0, shape_b, 2);
+
+    has_params = true;
+
+    name = "< Conv2d class : Function class";
+}
+
 // DropOut ################################################
 
 Dropout::Dropout(double ratio_) : ratio(ratio_), dropout(NULL), n_drop(0)

@@ -5,6 +5,7 @@
 #include "core.h"
 
 class Linear;
+class Conv2d;
 class Dropout;
 class ReLU;
 class Sigmoid;
@@ -29,6 +30,32 @@ public:
 
     Tensor weights;
     Tensor bias;
+    char init;
+};
+
+class Conv2d : public Function
+{
+public:
+    Conv2d(int in_channels_, int out_channels_, int kernel_size_, int stride_ = 1,
+           int padding_ = 0, int dilation_ = 1, bool use_bias_ = true, std::string padding_mode_ = "zeros");
+    ~Conv2d();
+
+    virtual Tensor *operator()(Tensor *input_);
+
+    virtual void backward();
+    virtual void zero_grad();
+
+    virtual Tensor *return_params();
+
+    virtual void print();
+
+    Tensor weights;
+    Tensor bias;
+    int stride;
+    int padding;
+    int dilation;
+    bool use_bias;
+    std::string padding_mode;
     char init;
 };
 

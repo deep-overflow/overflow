@@ -447,6 +447,11 @@ Tensor::Tensor() : func(NULL), requires_grad(true), verbose(false)
     grad[0] = 1;
 }
 
+Tensor::Tensor(int dim_, int shape_, ...)
+{
+
+}
+
 Tensor::Tensor(const double *data_, const int *shape_, const int dim_) : tensor_shape(shape_, dim_), func(NULL), requires_grad(true), verbose(false)
 {
     if (verbose)
