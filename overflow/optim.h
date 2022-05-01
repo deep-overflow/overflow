@@ -6,6 +6,7 @@
 
 class Optimizer;
 class SGD;
+class Adam;
 
 class Optimizer
 {

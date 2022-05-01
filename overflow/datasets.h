@@ -11,9 +11,9 @@
 
 class Dataset;
 class Sin;
+class Circle;
+class MNIST;
 class DataLoader;
-
-// Dataset ################################################
 
 class Dataset
 {
@@ -26,8 +26,6 @@ public:
     bool verbose;
 };
 
-// Sin ####################################################
-
 class Sin : public Dataset
 {
 public:
@@ -37,8 +35,6 @@ public:
     double end;
 };
 
-// Dataset ################################################
-
 class Circle : public Dataset
 {
 public:
@@ -46,8 +42,6 @@ public:
 
     double radius;
 };
-
-// MNIST ##################################################
 
 class MNIST : public Dataset
 {
@@ -59,8 +53,6 @@ public:
     std::string type;
     std::string path;
 };
-
-// DataLoader #############################################
 
 class DataLoader
 {

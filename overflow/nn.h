@@ -5,8 +5,12 @@
 #include "core.h"
 
 class Linear;
+class Dropout;
 class ReLU;
+class Sigmoid;
+class Softmax;
 class MSELoss;
+class CrossEntropyLoss;
 
 class Linear : public Function
 {
