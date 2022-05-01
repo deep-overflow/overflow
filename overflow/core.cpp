@@ -262,6 +262,24 @@ bool Shape::compare(const Shape &a)
     return true;
 }
 
+bool Shape::broadcast_available(const Shape &a)
+{
+    if (dim != a.dim)
+    {
+        return false;
+    }
+
+    for (int i = 0; i < dim; i++)
+    {
+        if (shape[i] != a.shape[i] && shape[i] != 1 && a.shape[i] != 1)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void Shape::reshape(const int *shape_, const int dim_)
 {
     /*

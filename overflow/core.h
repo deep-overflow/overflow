@@ -43,6 +43,8 @@ public:
     bool operator!=(const Shape &a) const;
     bool compare(const int *shape_, const int dim_);
     bool compare(const Shape &a);
+    
+    bool broadcast_available(const Shape &a);
 
     void reshape(const int *shape_, const int dim_);
     void reshape(const Shape &a);

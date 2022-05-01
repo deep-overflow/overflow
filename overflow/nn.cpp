@@ -10,16 +10,19 @@ Linear::Linear(int in_features_, int out_features_, char init_) : init(init_)
     if (verbose)
         std::cout << "Linear::Linear(int in_features_, int out_features_, char init_)" << std::endl;
 
-    int shape_[] = {in_features_, out_features_};
+    int shape_w[] = {in_features_, out_features_};
+    int shape_b[] = {1, out_features_};
 
     if (init)
     {
-        weights.random(shape_, 2, init);
+        weights.random(shape_w, 2, init);
     }
     else
     {
-        weights.init(1.0, shape_, 2);
+        weights.init(1.0, shape_w, 2);
     }
+
+    bias.init(0.0, shape_b, 2);
 
     has_params = true;
 
