@@ -87,8 +87,8 @@ void SGD::print()
 
 // Linear #################################################
 
-Adam::Adam(Tensor **params_, int num_params_, double lr_ = 0.001, double beta1_ = 0.9, double beta2_ = 0.999,
-           double eps_ = 1e-8, double weight_decay_ = 0, bool amsgrad_ = false, bool maximize_ = false)
+Adam::Adam(Tensor **params_, int num_params_, double lr_, double beta1_, double beta2_,
+           double eps_, double weight_decay_, bool amsgrad_, bool maximize_)
     : lr(lr_), beta1(beta1_), beta2(beta2_), eps(eps_), weight_decay(weight_decay_), amsgrad(amsgrad_), maximize(maximize_)
 {
     if (verbose)
