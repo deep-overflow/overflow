@@ -97,12 +97,12 @@ MNIST::MNIST(std::string path_, std::string type_) : path(path_), type(type_)
     
     if (type == "train")
     {
-        path += "train.csv";
+        path += "mnist_train.csv";
         n_samples = 60000;
     }
     else if (type == "test")
     {
-        path += "test.csv";
+        path += "mnist_test.csv";
         n_samples = 10000;
     }
     else
@@ -174,6 +174,122 @@ MNIST::MNIST(std::string path_, std::string type_) : path(path_), type(type_)
 }
 
 void MNIST::visualize(int idx_)
+{
+    Tensor I = input->index(1, idx_);
+    Tensor O = output->index(1, idx_);
+
+    int shape_[] = {28, 28};
+    I.reshape(shape_, 2);
+
+    std::cout << "input :" << std::endl;
+
+    for (int i = 0; i < 28; i++)
+    {
+        for (int j = 0; j < 28; j++)
+        {
+            int idx = i * 28 + j;
+
+            if (I.data[idx] > 0)
+            {
+                std::cout << '*';
+            }
+            else
+            {
+                std::cout << ' ';
+            }
+        }
+
+        std::cout << std::endl;
+    }
+
+    std::cout << "label : " << O.data[0] << std::endl;
+}
+
+// FashionMNIST ###########################################
+
+FashionMNIST::FashionMNIST(std::string path_, std::string type_) : path(path_), type(type_)
+{
+    std::cout << "FashionMNIST::FashionMNIST(std::string path_, std::string type_)" << std::endl;
+
+    if (type == "train")
+    {
+        path += "fashion_mnist_train.csv";
+        n_samples = 50000;
+    }
+    else if (type == "test")
+    {
+        path += "fashion_mnist_test.csv";
+        n_samples = 10000;
+    }
+    else
+    {
+        std::cerr << "Type Error : type must be train or test" << std::endl;
+    }
+
+    int shape_i[] = {n_samples, 28, 28, 1};
+    int shape_o[] = {n_samples, 1};
+
+    input = new Tensor(shape_i, 4);
+    output = new Tensor(shape_o, 2);
+
+    std::string buffer;
+    std::fstream fs;
+    double data;
+
+    fs.open(path, std::ios::in);
+
+    getline(fs, buffer);
+
+    for (int sample = 0; sample < n_samples; sample++)
+    {
+        getline(fs, buffer, ',');
+        getline(fs, buffer, ',');
+
+        std::stringstream rawdata1(buffer);
+        rawdata1 >> data;
+
+        if (rawdata1.fail())
+        {
+            std::cerr << "Data Processing Fail : String to Numeric" << std::endl;
+        }
+        else
+        {
+            output->data[sample] = data;
+        }
+
+        // Input
+        for (int i = 0; i < 28 * 28; i++)
+        {
+            getline(fs, buffer, ',');
+
+            std::stringstream rawdata2(buffer);
+            rawdata2 >> data;
+
+            if (rawdata2.fail())
+            {
+                std::cerr << "Data Processing Fail : String to Numeric" << std::endl;
+            }
+            else
+            {
+                int idx = sample * 28 * 28 + i;
+                input->data[idx] = data / 255.0;
+            }
+        }
+    }
+
+    if (fs.eof())
+    {
+        std::cout << "Data Processing Complete" << std::endl;
+        fs.close();
+    }
+    else
+    {
+        std::cout << "DataProcessing Not Complete" << std::endl;
+        fs.close();
+    }
+}
+
+void FashionMNIST::visualize(int idx_)
 {
     Tensor I = input->index(1, idx_);
     Tensor O = output->index(1, idx_);

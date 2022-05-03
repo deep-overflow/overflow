@@ -13,6 +13,7 @@ class Dataset;
 class Sin;
 class Circle;
 class MNIST;
+class FashionMNIST;
 class DataLoader;
 
 class Dataset
@@ -47,6 +48,17 @@ class MNIST : public Dataset
 {
 public:
     MNIST(std::string path_, std::string type_ = "train");
+
+    void visualize(int idx_);
+
+    std::string type;
+    std::string path;
+};
+
+class FashionMNIST : public Dataset
+{
+public:
+    FashionMNIST(std::string path_, std::string type_ = "train");
 
     void visualize(int idx_);
 
