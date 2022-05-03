@@ -25,3 +25,8 @@ DEV Plan
 4. datasets.h
 - class Dataset
 - class Sin
+
+==================================================
+
+new Tensor is needed.
+Check the algorithms

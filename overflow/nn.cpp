@@ -210,7 +210,7 @@ void Linear::print()
 }
 
 // Conv2d ##################################################
-
+/*
 Conv2d::Conv2d(int in_channels_, int out_channels_, int kernel_size_, int stride_,
                int padding_, int dilation_, bool use_bias_, std::string padding_mode_)
     : stride(stride_), padding(padding_), dilation(dilation_), use_bias(use_bias_), padding_mode(padding_mode_)
@@ -227,7 +227,7 @@ Conv2d::Conv2d(int in_channels_, int out_channels_, int kernel_size_, int stride
 
     name = "< Conv2d class : Function class";
 }
-
+*/
 // DropOut ################################################
 
 Dropout::Dropout(double ratio_) : ratio(ratio_), dropout(NULL), n_drop(0)

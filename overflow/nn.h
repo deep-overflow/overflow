@@ -32,7 +32,7 @@ public:
     Tensor bias;
     char init;
 };
-
+/*
 class Conv2d : public Function
 {
 public:
@@ -58,7 +58,7 @@ public:
     std::string padding_mode;
     char init;
 };
-
+*/
 class Dropout : public Function
 {
 public:
