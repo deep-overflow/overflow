@@ -1453,19 +1453,33 @@ Tensor dot(const Tensor &a, const Tensor &b, bool verbose)
 
     Tensor c(0.0, shape_, 2);
 
+    // for (int i = 0; i < m; i++)
+    // {
+    //     for (int j = 0; j < k; j++)
+    //     {
+    //         double value = 0;
+    //         for (int t = 0; t < n; t++)
+    //         {
+    //             double a_ = a.index_(i, t);
+    //             double b_ = b.index_(t, j);
+    //             value += a_ * b_;
+    //         }
+    //         int index_ = i * c.tensor_shape.shape[1] + j;
+    //         c.data[index_] = value;
+    //     }
+    // }
+
     for (int i = 0; i < m; i++)
     {
-        for (int j = 0; j < k; j++)
+        for (int j = 0; j < n; j++)
         {
-            double value = 0;
-            for (int t = 0; t < n; t++)
+            double value = a.index_(i, j);
+            for (int t = 0; t < k; t++)
             {
-                double a_ = a.index_(i, t);
-                double b_ = b.index_(t, j);
-                value += a_ * b_;
+                int idx_c = i * k + t;
+                int idx_b = j * k + t;
+                c.data[idx_c] += value * b.data[idx_b];
             }
-            int index_ = i * c.tensor_shape.shape[1] + j;
-            c.data[index_] = value;
         }
     }
 
